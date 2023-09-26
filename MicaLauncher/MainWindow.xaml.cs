@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.Input;
+using MicaLauncher.Services;
 using MicaLauncher.ViewModels;
 
 namespace MicaLauncher
@@ -23,14 +24,18 @@ namespace MicaLauncher
     public partial class MainWindow : Window
     {
         public MainWindow(
-            MainViewModel viewModel)
+            MainViewModel viewModel,
+            ConfigService configService)
         {
             InitializeComponent();
 
-            DataContext = this;
+            AppConfig = configService.Config;
             ViewModel = viewModel;
+
+            DataContext = this;
         }
 
+        public AppConfig AppConfig { get; }
         public MainViewModel ViewModel { get; }
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)

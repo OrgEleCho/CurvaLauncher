@@ -30,6 +30,7 @@ namespace MicaLauncher
 
             services.AddSingleton<PathService>();
             services.AddSingleton<PluginService>();
+            services.AddSingleton<ConfigService>();
 
             return services.BuildServiceProvider();
         }
@@ -98,6 +99,9 @@ namespace MicaLauncher
         {
             var mainWindow =
                 ServiceProvider.GetRequiredService<MainWindow>();
+
+            mainWindow.Left = (SystemParameters.PrimaryScreenWidth - mainWindow.AppConfig.LauncherWidth) / 2;
+            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 3;
 
             mainWindow.Show();
             mainWindow.Activate();

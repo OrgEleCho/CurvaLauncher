@@ -10,8 +10,8 @@
         xmlns:models="clr-namespace:MicaLauncher.Models"
         xmlns:condition="clr-namespace:EleCho.WpfUtilities.ConditionControls;assembly=EleCho.WpfUtilities.ConditionControls"
         mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance Type=local:MainWindow}"
-        Title="MainWindow" Height="Auto" Width="800" Topmost="True"
+        d:DataContext="{d:DesignInstance Type=local:MainWindow}" d:Width="800"
+        Title="MainWindow" Height="Auto" Width="{Binding AppConfig.LauncherWidth}" Topmost="True"
         WindowStyle="None" AllowsTransparency="True" SizeToContent="Height"
         FocusManager.FocusedElement="{Binding ElementName=QueryBox}" 
         TextOptions.TextRenderingMode="ClearType">
@@ -53,9 +53,10 @@
                 </Border>
                 <condition:IfControl Condition="{Binding ViewModel.HasQueryResult}">
                     <condition:IfControl.Then>
-                        <ListBox Margin="0 5 0 0" BorderThickness="0" SelectedIndex="0"
-                         ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
-                         SelectedItem="{Binding ViewModel.SelectedQueryResult}">
+                        <ListBox Margin="0 5 0 0" BorderThickness="0"
+                                 ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
+                                 SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
+                                 SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:QueryResultModel">
                                     <Border Padding="{DynamicResource QueryResultPaddingThickness}">
@@ -74,8 +75,8 @@
                                                 </Grid.ColumnDefinitions>
 
                                                 <Image Width="{DynamicResource QueryResultImageSize}" 
-                                               Height="{DynamicResource QueryResultImageSize}" 
-                                               Source="{Binding Icon}"/>
+                                                       Height="{DynamicResource QueryResultImageSize}" 
+                                                       Source="{Binding Icon}"/>
                                                 <Grid Grid.Column="2">
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition/>

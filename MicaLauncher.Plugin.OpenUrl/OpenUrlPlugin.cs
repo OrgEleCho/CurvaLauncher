@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows.Media;
 using System.Windows.Threading;
+using MicaLauncher.Common;
 using MicaLauncher.Data;
 
 namespace MicaLauncher.Plugin.OpenUrl
@@ -12,7 +13,7 @@ namespace MicaLauncher.Plugin.OpenUrl
 
         public ImageSource Icon => null!;
 
-        public IEnumerable<QueryResult> Query(Dispatcher uiDispatcher, string query)
+        public IEnumerable<QueryResult> Query(MicaLauncherContext context, string query)
         {
             if (!UrlRegex.IsMatch(query))
                 yield break;
@@ -22,7 +23,7 @@ namespace MicaLauncher.Plugin.OpenUrl
                 !uri.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
                 yield break;
 
-            yield return new OpenUrlQueryResult(uiDispatcher, uri);
+            yield return new OpenUrlQueryResult(context, uri);
         }
     }
 }

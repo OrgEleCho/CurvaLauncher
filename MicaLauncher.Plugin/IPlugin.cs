@@ -1,5 +1,6 @@
 ﻿using System.Windows.Media;
 using System.Windows.Threading;
+using MicaLauncher.Common;
 using MicaLauncher.Data;
 
 namespace MicaLauncher.Plugin
@@ -8,6 +9,6 @@ namespace MicaLauncher.Plugin
     {
         public ImageSource Icon { get; }
 
-        public IEnumerable<QueryResult> Query(Dispatcher uiDispatcher, string query);
+        public IEnumerable<QueryResult> Query(MicaLauncherContext context, string query);
     }
 }

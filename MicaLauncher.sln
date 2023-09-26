@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{BAAC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicaLauncher.Plugin.Calculator", "MicaLauncher.Plugin.Calculator\MicaLauncher.Plugin.Calculator.csproj", "{C20DA5C5-0683-4997-8628-61337A0772FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicaLauncher.Plugin.OpenUrl", "MicaLauncher.Plugin.OpenUrl\MicaLauncher.Plugin.OpenUrl.csproj", "{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicaLauncher.Plugin.OpenUrl", "MicaLauncher.Plugin.OpenUrl\MicaLauncher.Plugin.OpenUrl.csproj", "{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicaLauncher.Plugin.RunProgram", "MicaLauncher.Plugin.RunProgram\MicaLauncher.Plugin.RunProgram.csproj", "{C4629C9C-ACAD-4062-968C-ACF8E38D4331}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4629C9C-ACAD-4062-968C-ACF8E38D4331}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4629C9C-ACAD-4062-968C-ACF8E38D4331}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4629C9C-ACAD-4062-968C-ACF8E38D4331}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4629C9C-ACAD-4062-968C-ACF8E38D4331}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C20DA5C5-0683-4997-8628-61337A0772FF} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
+		{C4629C9C-ACAD-4062-968C-ACF8E38D4331} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3FC4E11A-3D67-43DE-84D8-DCA1841F0D71}

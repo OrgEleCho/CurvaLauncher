@@ -1,5 +1,6 @@
 ﻿using System.Windows.Media;
 using System.Windows.Threading;
+using MicaLauncher.Common;
 using MicaLauncher.Data;
 using NCalculatorLib;
 
@@ -13,7 +14,7 @@ namespace MicaLauncher.Plugin.Calculator
 
         public ImageSource Icon => null!;
 
-        public IEnumerable<QueryResult> Query(Dispatcher uiDispatcher, string query)
+        public IEnumerable<QueryResult> Query(MicaLauncherContext context, string query)
         {
             if (!query.StartsWith(Prefix))
                 yield break;

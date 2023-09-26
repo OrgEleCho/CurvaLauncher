@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MicaLauncher.Common;
 using MicaLauncher.Data;
 using MicaLauncher.Models;
 using MicaLauncher.Services;
@@ -17,18 +19,20 @@ namespace MicaLauncher.ViewModels
     public partial class MainViewModel : ObservableObject
     {
         private readonly PluginService _pluginService;
+        private readonly ConfigService _configService;
 
         public MainViewModel(
-            PluginService pluginService)
+            PluginService pluginService,
+            ConfigService configService)
         {
             _pluginService = pluginService;
+            _configService = configService;
         }
 
         [ObservableProperty]
         private string queryText = string.Empty;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(HasQueryResult))]
         private ObservableCollection<QueryResultModel> queryResults = new();
 
         [ObservableProperty]
@@ -43,16 +47,22 @@ namespace MicaLauncher.ViewModels
         public async Task QueryCore(CancellationToken cancellationToken)
         {
             QueryResults.Clear();
+            SelectedQueryResult = null;
 
             var dispatcher = Dispatcher.CurrentDispatcher;
             var queryText = QueryText;
+
+            var context = new MicaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize);
 
             await Task.Run(() =>
             {
                 foreach (var plugin in _pluginService.Plugins)
                 {
-                    foreach (var result in plugin.Query(dispatcher, queryText))
+                    foreach (var result in plugin.Query(context, queryText))
                     {
+                        if (cancellationToken.IsCancellationRequested)
+                            return;
+
                         var model = QueryResultModel.FromQueryResult(result);
 
                         if (model.Icon == null)
@@ -63,17 +73,16 @@ namespace MicaLauncher.ViewModels
                             QueryResults.Add(model);
 
                             if (SelectedQueryResult == null)
-                                SelectedQueryResult = QueryResults[0];
+                                SelectedQueryResultIndex = 0;
                         });
-
-                        if (cancellationToken.IsCancellationRequested)
-                            return;
                     }
 
                     if (cancellationToken.IsCancellationRequested)
                         return;
                 }
             });
+
+            OnPropertyChanged(nameof(HasQueryResult));
         }
 
         [RelayCommand]

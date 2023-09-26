@@ -3,17 +3,18 @@ using System.Net.Cache;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using MicaLauncher.Common;
 using MicaLauncher.Data;
 
 namespace MicaLauncher.Plugin.OpenUrl
 {
     public class OpenUrlQueryResult : QueryResult
     {
-        public OpenUrlQueryResult(Dispatcher uiDispatcher, Uri url)
+        public OpenUrlQueryResult(MicaLauncherContext context, Uri url)
         {
             Url = url;
 
-            uiDispatcher.Invoke(() =>
+            context.Dispatcher.Invoke(() =>
             {
                 icon = new BitmapImage(
                     new Uri(url, "favicon.ico"),
