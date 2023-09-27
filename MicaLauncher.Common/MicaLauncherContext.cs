@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace MicaLauncher.Common
+namespace MicaLauncher
 {
     public class MicaLauncherContext
     {

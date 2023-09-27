@@ -13,11 +13,11 @@ namespace MicaLauncher.Plugin.Calculator
 
         public double Value { get; }
 
-        public override float Match => 1;
+        public override float Weight => 1;
 
-        public override string Title => $"Value: {Value}";
+        public override string Title => $"{Value}";
 
-        public override string Description => $"From Calculator Result";
+        public override string Description => $"Copy value of calculation result: {Value}";
 
 
         public override ImageSource? Icon => null;

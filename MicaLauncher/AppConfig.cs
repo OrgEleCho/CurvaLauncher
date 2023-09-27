@@ -14,5 +14,11 @@ namespace MicaLauncher
 
         [ObservableProperty]
         private int _queryResultIconSize = 64;
+
+        [ObservableProperty]
+        private bool _keepLauncherWhenFocusLost = false;
+
+        [ObservableProperty]
+        private string _launcherHotkey = "Alt+Space";
     }
 }

@@ -21,6 +21,7 @@
     <CornerRadius x:Key="QueryResultCornerRadius">3</CornerRadius>
     <Thickness x:Key="QueryResultPaddingThickness">5</Thickness>
     <sys:Double x:Key="QueryResultImageSize">32</sys:Double>
+    <CornerRadius x:Key="QueryResultIconCornerRadius">3</CornerRadius>
     <SolidColorBrush x:Key="QueryResultTitleTextBrush">#0a0a0a</SolidColorBrush>
     <SolidColorBrush x:Key="QueryResultDescriptionTextBrush">#3a3a3a</SolidColorBrush>
     <sys:Double x:Key="QueryResultTitleTextSize">16</sys:Double>

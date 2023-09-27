@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using MicaLauncher.Common;
 using MicaLauncher.Data;
 using MicaLauncher.Models;
 using MicaLauncher.Services;
+using MicaLauncher.Utilities;
 
 namespace MicaLauncher.ViewModels
 {
@@ -46,7 +46,6 @@ namespace MicaLauncher.ViewModels
         [RelayCommand]
         public async Task QueryCore(CancellationToken cancellationToken)
         {
-            QueryResults.Clear();
             SelectedQueryResult = null;
 
             var dispatcher = Dispatcher.CurrentDispatcher;
@@ -54,33 +53,51 @@ namespace MicaLauncher.ViewModels
 
             var context = new MicaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize);
 
-            await Task.Run(() =>
+            SortedCollection<QueryResultModel, float> queryResults = new()
             {
-                foreach (var plugin in _pluginService.Plugins)
+                SortingRoot = m => m.Weight,
+                Descending = true,
+            };
+
+            await Task.Run(async () =>
+            {
+                foreach (var pluginInstance in _pluginService.PluginInstances)
                 {
-                    foreach (var result in plugin.Query(context, queryText))
+                    await pluginInstance.InitTask;
+
+                    await foreach (var result in pluginInstance.QueryAsync(context, queryText))
                     {
                         if (cancellationToken.IsCancellationRequested)
                             return;
 
                         var model = QueryResultModel.FromQueryResult(result);
-
-                        if (model.Icon == null)
-                            model.Icon = plugin.Icon;
+                        queryResults.Add(model);
 
                         dispatcher.Invoke(() =>
                         {
-                            QueryResults.Add(model);
+                            if (model.Icon == null)
+                                model.Icon = pluginInstance.Plugin.Icon;
+
+                            for (int i = 0; i < queryResults.Count; i++)
+                            {
+                                if (QueryResults.Count > i)
+                                    QueryResults[i] = queryResults[i];
+                                else
+                                    QueryResults.Add(queryResults[i]);
+                            }
 
                             if (SelectedQueryResult == null)
                                 SelectedQueryResultIndex = 0;
                         });
-                    }
 
-                    if (cancellationToken.IsCancellationRequested)
-                        return;
+                        if (cancellationToken.IsCancellationRequested)
+                            return;
+                    }
                 }
             });
+
+            while (QueryResults.Count > queryResults.Count)
+                QueryResults.RemoveAt(QueryResults.Count - 1);
 
             OnPropertyChanged(nameof(HasQueryResult));
         }

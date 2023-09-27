@@ -10,7 +10,7 @@ namespace MicaLauncher.Data
 {
     public abstract class QueryResult
     {
-        public abstract float Match { get; }
+        public abstract float Weight { get; }
         public abstract string Title { get; }
         public abstract string Description { get; }
         public abstract ImageSource? Icon { get; }

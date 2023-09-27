@@ -3,7 +3,6 @@ using System.Net.Cache;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using MicaLauncher.Common;
 using MicaLauncher.Data;
 
 namespace MicaLauncher.Plugin.OpenUrl
@@ -26,9 +25,9 @@ namespace MicaLauncher.Plugin.OpenUrl
 
         public Uri Url { get; }
 
-        public override float Match => 1;
+        public override float Weight => 1;
 
-        public override string Title => $"Open: {Url}";
+        public override string Title => $"{Url}";
 
         public override string Description => $"Open url in web browser: {Url}";
 

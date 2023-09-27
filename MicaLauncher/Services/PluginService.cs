@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using MicaLauncher.Models;
 using MicaLauncher.Plugin;
 
 namespace MicaLauncher.Services
@@ -15,7 +16,7 @@ namespace MicaLauncher.Services
         private readonly PathService _pathService;
 
         public string Path { get; set; } = "Plugins";
-        public List<IPlugin> Plugins { get; private set; }
+        public List<MicaLauncherPluginInstance> PluginInstances { get; private set; }
 
         public PluginService(
             PathService pathService)
@@ -24,12 +25,12 @@ namespace MicaLauncher.Services
 
             LoadPlugins(out var plugins);
 
-            Plugins = plugins;
+            PluginInstances = plugins;
         }
 
-        private void LoadPlugins(out List<IPlugin> plugins)
+        private void LoadPlugins(out List<MicaLauncherPluginInstance> plugins)
         {
-            plugins = new List<IPlugin>();
+            plugins = new List<MicaLauncherPluginInstance>();
 
             DirectoryInfo dir = 
                 new DirectoryInfo(_pathService.GetPath(Path));
@@ -43,11 +44,11 @@ namespace MicaLauncher.Services
                 .ToArray();
 
             foreach (FileInfo dllFile in dllFiles)
-                if (LoadPlugin(dllFile.FullName, out IPlugin? plugin))
+                if (LoadPlugin(dllFile.FullName, out MicaLauncherPluginInstance? plugin))
                     plugins.Add(plugin);
         }
 
-        private bool LoadPlugin(string dllFilePath, [NotNullWhen(true)] out IPlugin? plugin)
+        private bool LoadPlugin(string dllFilePath, [NotNullWhen(true)] out MicaLauncherPluginInstance? plugin)
         {
             plugin = null;
 
@@ -56,15 +57,16 @@ namespace MicaLauncher.Services
                 var assembly = Assembly.LoadFile(dllFilePath);
 
                 Type? pluginType = assembly.ExportedTypes
-                    .Where(type => type.IsAssignableTo(typeof(IPlugin)))
+                    .Where(type => type.IsAssignableTo(typeof(ISyncPlugin)))
                     .FirstOrDefault();
 
                 if (pluginType == null)
                     return false;
 
-                plugin = Activator.CreateInstance(pluginType) as IPlugin;
+                if (MicaLauncherPluginInstance.TryCreate(pluginType, out plugin))
+                    return true;
 
-                return plugin != null;
+                return false;
             }
             catch
             {

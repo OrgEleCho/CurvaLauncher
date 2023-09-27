@@ -11,23 +11,18 @@
         xmlns:condition="clr-namespace:EleCho.WpfUtilities.ConditionControls;assembly=EleCho.WpfUtilities.ConditionControls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainWindow}" d:Width="800"
-        Title="MainWindow" Height="Auto" Width="{Binding AppConfig.LauncherWidth}" Topmost="True"
+        Title="MainWindow" Height="Auto" Width="{Binding AppConfig.LauncherWidth}" 
+        Topmost="True" Visibility="Hidden" d:Visibility="Visible"
         WindowStyle="None" AllowsTransparency="True" SizeToContent="Height"
-        FocusManager.FocusedElement="{Binding ElementName=QueryBox}" 
-        TextOptions.TextRenderingMode="ClearType">
+        FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
+        TextOptions.TextRenderingMode="ClearType"
+        Closing="Window_Closing" Deactivated="Window_Deactivated">
     <Window.InputBindings>
-        <KeyBinding Modifiers="Alt" Key="Space" Command="{x:Static local:App.ShowLauncherCommand}"
-                    hotkey:GlobalHotkey.IsRegistered="True"/>
         <KeyBinding Key="Esc" Command="{x:Static local:App.CloseLauncherCommand}"/>
         <KeyBinding Key="Return" Command="{Binding ViewModel.InvokeSelectedCommand}"/>
         <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
         <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
     </Window.InputBindings>
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Deactivated">
-            <behaviors:InvokeCommandAction Command="{x:Static local:App.CloseLauncherCommand}"/>
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
     <Border Background="{DynamicResource LauncherBorderBrush}"
             Padding="{DynamicResource LauncherBorderThickness}"
             CornerRadius="{DynamicResource LauncherBorderRadius}"
@@ -74,9 +69,13 @@
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Image Width="{DynamicResource QueryResultImageSize}" 
-                                                       Height="{DynamicResource QueryResultImageSize}" 
-                                                       Source="{Binding Icon}"/>
+                                                <Border Width="{DynamicResource QueryResultImageSize}" 
+                                                        Height="{DynamicResource QueryResultImageSize}"
+                                                        CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
+                                                    <Border.Background>
+                                                        <ImageBrush ImageSource="{Binding Icon}"/>
+                                                    </Border.Background>
+                                                </Border>
                                                 <Grid Grid.Column="2">
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition/>

@@ -16,9 +16,9 @@ namespace MicaLauncher.Models
     {
         private readonly Action _invokeAction;
 
-        public QueryResultModel(float match, string title, string description, ImageSource? icon, Action invokeAction)
+        public QueryResultModel(float weight, string title, string description, ImageSource? icon, Action invokeAction)
         {
-            Match = match;
+            Weight = weight;
             Title = title;
             Description = description;
             Icon = icon;
@@ -26,7 +26,7 @@ namespace MicaLauncher.Models
         }
 
         [ObservableProperty]
-        private float match;
+        private float weight;
 
         [ObservableProperty]
         private string title = string.Empty;
@@ -49,7 +49,7 @@ namespace MicaLauncher.Models
 
         public static QueryResultModel FromQueryResult(QueryResult queryResult)
         {
-            return new QueryResultModel(queryResult.Match, queryResult.Title, queryResult.Description, queryResult.Icon, queryResult.Invoke);
+            return new QueryResultModel(queryResult.Weight, queryResult.Title, queryResult.Description, queryResult.Icon, queryResult.Invoke);
         }
     }
 }

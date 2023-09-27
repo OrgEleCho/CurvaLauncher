@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using MicaLauncher.Services;
+using MicaLauncher.Utilities;
+using MicaLauncher.View;
 using MicaLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,8 +29,11 @@ namespace MicaLauncher
 
             services.AddSingleton<MainWindow>();
             services.AddSingleton<MainViewModel>();
+            services.AddSingleton<SettingsWindow>();
+            services.AddSingleton<SettingsViewModel>();
 
             services.AddSingleton<PathService>();
+            services.AddSingleton<HotkeyService>();
             services.AddSingleton<PluginService>();
             services.AddSingleton<ConfigService>();
 
@@ -45,8 +50,21 @@ namespace MicaLauncher
 
             base.OnStartup(e);
 
+            var hotkeyService = ServiceProvider
+                .GetRequiredService<HotkeyService>();
+
+            // 初始化热键
+            hotkeyService.Register();
+
             // 创建窗口
-            ServiceProvider.GetRequiredService<MainWindow>();
+            ServiceProvider
+                .GetRequiredService<MainWindow>();
+
+            if (!hotkeyService.Registered)
+            {
+                NativeMethods.MessageBox(IntPtr.Zero, $"MicaLauncher hotkey registration failed. Please check if there are other programs occupying the hotkey and restart MicaLauncher.", "MicaLauncher Error", MessageBoxFlags.Ok | MessageBoxFlags.IconError);
+                Application.Current.Shutdown();
+            }            
         }
 
         private bool EnsureAppSingleton()
@@ -85,6 +103,8 @@ namespace MicaLauncher
             = new RelayCommand(CloseLauncher);
         public static RelayCommand ShowLauncherCommand { get; }
             = new RelayCommand(ShowLauncher);
+        public static RelayCommand ShutdownCommand { get; }
+            = new RelayCommand(Application.Current.Shutdown);
 
         public static void CloseLauncher()
         {

@@ -15,7 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicaLauncher.Plugin.Calcula
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicaLauncher.Plugin.OpenUrl", "MicaLauncher.Plugin.OpenUrl\MicaLauncher.Plugin.OpenUrl.csproj", "{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicaLauncher.Plugin.RunProgram", "MicaLauncher.Plugin.RunProgram\MicaLauncher.Plugin.RunProgram.csproj", "{C4629C9C-ACAD-4062-968C-ACF8E38D4331}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MicaLauncher.Plugin.RunProgram", "MicaLauncher.Plugin.RunProgram\MicaLauncher.Plugin.RunProgram.csproj", "{C4629C9C-ACAD-4062-968C-ACF8E38D4331}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{8834754D-EB48-473A-A42E-DBE2EA4BEF82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicaLauncher.Plugin.Test", "MicaLauncher.Plugin.Test\MicaLauncher.Plugin.Test.csproj", "{8BB89FEB-49E1-44EE-83E0-5C30B6117675}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MicaLauncher.Plugin.RunApplication", "MicaLauncher.Plugin.RunApplication\MicaLauncher.Plugin.RunApplication.csproj", "{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +53,18 @@ Global
 		{C4629C9C-ACAD-4062-968C-ACF8E38D4331}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4629C9C-ACAD-4062-968C-ACF8E38D4331}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4629C9C-ACAD-4062-968C-ACF8E38D4331}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8834754D-EB48-473A-A42E-DBE2EA4BEF82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8834754D-EB48-473A-A42E-DBE2EA4BEF82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8834754D-EB48-473A-A42E-DBE2EA4BEF82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8834754D-EB48-473A-A42E-DBE2EA4BEF82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB89FEB-49E1-44EE-83E0-5C30B6117675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB89FEB-49E1-44EE-83E0-5C30B6117675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB89FEB-49E1-44EE-83E0-5C30B6117675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB89FEB-49E1-44EE-83E0-5C30B6117675}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +73,8 @@ Global
 		{C20DA5C5-0683-4997-8628-61337A0772FF} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{C4629C9C-ACAD-4062-968C-ACF8E38D4331} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
+		{8BB89FEB-49E1-44EE-83E0-5C30B6117675} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
+		{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3FC4E11A-3D67-43DE-84D8-DCA1841F0D71}

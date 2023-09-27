@@ -1,19 +1,17 @@
-﻿
-
-using System.Diagnostics;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Threading;
+﻿using System.Windows.Media;
 using MicaLauncher.Utilities;
 using MicaLauncher.Data;
+using System.Diagnostics;
 
-namespace MicaLauncher.Plugin.RunProgram
+namespace MicaLauncher.Plugin.RunApplication
 {
-    public class RunProgramQueryResult : QueryResult
+    public class RunWin32ApplicationQueryResult : QueryResult
     {
-        public RunProgramQueryResult(MicaLauncherContext context, string filename)
+        public RunWin32ApplicationQueryResult(MicaLauncherContext context, string appName, string filename, float weight)
         {
+            AppName = appName;
             FileName = filename;
+            Weight = weight;
 
             context.Dispatcher.Invoke(() =>
             {
@@ -23,14 +21,15 @@ namespace MicaLauncher.Plugin.RunProgram
 
         private ImageSource? icon;
 
-        public override float Weight => 1;
+        public override float Weight { get; }
 
-        public override string Title => $"{System.IO.Path.GetFileName(FileName)}";
+        public override string Title => $"{AppName}";
 
-        public override string Description => $"Run Program: {FileName}";
+        public override string Description => $"Run Application: {FileName}";
 
         public override ImageSource? Icon => icon;
 
+        public string AppName { get; }
         public string FileName { get; }
 
         public override void Invoke()
