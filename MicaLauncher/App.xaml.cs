@@ -99,12 +99,32 @@ namespace MicaLauncher
             }
         }
 
-        public static RelayCommand CloseLauncherCommand { get; }
-            = new RelayCommand(CloseLauncher);
         public static RelayCommand ShowLauncherCommand { get; }
             = new RelayCommand(ShowLauncher);
+        public static RelayCommand CloseLauncherCommand { get; }
+            = new RelayCommand(CloseLauncher);
+        public static RelayCommand ShowLauncherSettingsCommand { get; }
+            = new RelayCommand(ShowLauncherSettings);
+
         public static RelayCommand ShutdownCommand { get; }
             = new RelayCommand(Application.Current.Shutdown);
+
+
+        public static void ShowLauncher()
+        {
+            var mainWindow =
+                ServiceProvider.GetRequiredService<MainWindow>();
+            var configService =
+                ServiceProvider.GetRequiredService<ConfigService>();
+
+            mainWindow.Width = configService.Config.LauncherWidth;
+            mainWindow.Left = (SystemParameters.PrimaryScreenWidth - mainWindow.AppConfig.LauncherWidth) / 2;
+            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 3;
+
+            mainWindow.Show();
+            mainWindow.Activate();
+            mainWindow.QueryBox.Focus();
+        }
 
         public static void CloseLauncher()
         {
@@ -115,17 +135,11 @@ namespace MicaLauncher
             mainWindow.Visibility = Visibility.Collapsed;
         }
 
-        public static void ShowLauncher()
+        public static void ShowLauncherSettings()
         {
-            var mainWindow =
-                ServiceProvider.GetRequiredService<MainWindow>();
-
-            mainWindow.Left = (SystemParameters.PrimaryScreenWidth - mainWindow.AppConfig.LauncherWidth) / 2;
-            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 3;
-
-            mainWindow.Show();
-            mainWindow.Activate();
-            mainWindow.QueryBox.Focus();
+            ServiceProvider
+                .GetRequiredService<SettingsWindow>()
+                .Show();
         }
     }
 }

@@ -11,7 +11,7 @@
         xmlns:condition="clr-namespace:EleCho.WpfUtilities.ConditionControls;assembly=EleCho.WpfUtilities.ConditionControls"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainWindow}" d:Width="800"
-        Title="MainWindow" Height="Auto" Width="{Binding AppConfig.LauncherWidth}" 
+        Title="MainWindow" Height="Auto" Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}" 
         Topmost="True" Visibility="Hidden" d:Visibility="Visible"
         WindowStyle="None" AllowsTransparency="True" SizeToContent="Height"
         FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
@@ -39,16 +39,30 @@
                              Text="{Binding ViewModel.QueryText,UpdateSourceTrigger=PropertyChanged}"
                              FontSize="{DynamicResource QueryBoxTextSize}"
                              Foreground="{DynamicResource QueryBoxTextBrush}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
+                            <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
+                        </TextBox.InputBindings>
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="TextChanged">
                                 <behaviors:InvokeCommandAction Command="{Binding ViewModel.QueryCommand}"/>
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
+                        <TextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Cut" Command="ApplicationCommands.Cut"/>
+                                <MenuItem Header="Copy" Command="ApplicationCommands.Copy"/>
+                                <MenuItem Header="Paste" Command="ApplicationCommands.Paste"/>
+                                <Separator/>
+                                <MenuItem Header="Settings" Command="{x:Static local:App.ShowLauncherSettingsCommand}"/>
+                                <MenuItem Header="Exit" Command="{x:Static local:App.ShutdownCommand}"/>
+                            </ContextMenu>
+                        </TextBox.ContextMenu>
                     </TextBox>
                 </Border>
                 <condition:IfControl Condition="{Binding ViewModel.HasQueryResult}">
                     <condition:IfControl.Then>
-                        <ListBox Margin="0 5 0 0" BorderThickness="0"
+                        <ListBox Margin="0 5 0 0" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
                                  SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
                                  SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
@@ -65,7 +79,7 @@
                                             <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="5"/>
+                                                    <ColumnDefinition Width="8"/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
 
@@ -82,12 +96,13 @@
                                                         <RowDefinition/>
                                                     </Grid.RowDefinitions>
                                                     <TextBlock Text="{Binding Title}" 
-                                                   FontSize="{DynamicResource QueryResultTitleTextSize}"
-                                                   Foreground="{DynamicResource QueryResultTitleTextBrush}"/>
+                                                               FontSize="{DynamicResource QueryResultTitleTextSize}"
+                                                               Foreground="{DynamicResource QueryResultTitleTextBrush}"/>
                                                     <TextBlock Grid.Row="1" 
-                                                   Text="{Binding Description}"
-                                                   FontSize="{DynamicResource QueryResultDescriptionTextSize}"
-                                                   Foreground="{DynamicResource QueryResultDescriptionTextBrush}"/>
+                                                               TextTrimming="WordEllipsis"
+                                                               Text="{Binding Description}"
+                                                               FontSize="{DynamicResource QueryResultDescriptionTextSize}"
+                                                               Foreground="{DynamicResource QueryResultDescriptionTextBrush}"/>
                                                 </Grid>
                                             </Grid>
                                         </Button>
@@ -96,28 +111,33 @@
                             </ListBox.ItemTemplate>
                             <ListBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListBoxItem}">
-                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Margin" Value="0 1 0 0" />
                                     <Setter Property="Padding" Value="0" />
                                     <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                 <Border x:Name="Bd"
-                                                Background="{TemplateBinding Background}"
-                                                BorderBrush="{TemplateBinding BorderBrush}"
-                                                CornerRadius="{DynamicResource QueryResultCornerRadius}"
-                                                SnapsToDevicePixels="True">
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                                        CornerRadius="{DynamicResource QueryResultCornerRadius}"
+                                                        SnapsToDevicePixels="True">
                                                     <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                              Content="{TemplateBinding Content}"
-                                                              ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                      Content="{TemplateBinding Content}"
+                                                                      ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                                 </Border>
                                                 <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter TargetName="Bd" Property="Background"
+                                                                Value="{DynamicResource QueryResultHoverBackgroundBrush}" />
+                                                    </Trigger>
                                                     <Trigger Property="IsSelected" Value="True">
                                                         <Setter TargetName="Bd" Property="Background"
-                                                        Value="{DynamicResource QueryResultActiveBackgroundBrush}" />
+                                                                Value="{DynamicResource QueryResultActiveBackgroundBrush}" />
                                                     </Trigger>
                                                 </ControlTemplate.Triggers>
                                             </ControlTemplate>

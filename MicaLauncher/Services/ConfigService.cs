@@ -37,6 +37,8 @@ namespace MicaLauncher.Services
             if (!File.Exists(fullPath))
             {
                 config = new AppConfig();
+                using FileStream _fs = File.Create(fullPath);
+                JsonSerializer.Serialize(_fs, config, JsonUtils.Options);
                 return;
             }
 

@@ -60,7 +60,9 @@ namespace MicaLauncher
             if (AppConfig.KeepLauncherWhenFocusLost)
                 return;
 
+//#if RELEASE
             App.CloseLauncher();
+//#endif
         }
     }
 }

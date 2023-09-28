@@ -17,6 +17,7 @@
     <sys:Double x:Key="QueryBoxTextSize">25</sys:Double>
 
     <SolidColorBrush x:Key="QueryResultBackgroundBrush">Transparent</SolidColorBrush>
+    <SolidColorBrush x:Key="QueryResultHoverBackgroundBrush">#88cce8ff</SolidColorBrush>
     <SolidColorBrush x:Key="QueryResultActiveBackgroundBrush">#cce8ff</SolidColorBrush>
     <CornerRadius x:Key="QueryResultCornerRadius">3</CornerRadius>
     <Thickness x:Key="QueryResultPaddingThickness">5</Thickness>

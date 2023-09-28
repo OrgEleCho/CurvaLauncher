@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:root="clr-namespace:MicaLauncher"
         xmlns:local="clr-namespace:MicaLauncher.View"
-        mc:Ignorable="d"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Title="SettingsWindow" Height="600" Width="800">
     <DockPanel>
         <Border DockPanel.Dock="Bottom" >
@@ -17,6 +18,7 @@
                         <Setter Property="Padding" Value="10 5"/>
                     </Style>
                 </StackPanel.Resources>
+                <Button Content="Exit MicaLauncher" Command="{x:Static root:App.ShutdownCommand}"/>
                 <Button Content="Apply"/>
                 <Button Content="Save"/>
             </StackPanel>

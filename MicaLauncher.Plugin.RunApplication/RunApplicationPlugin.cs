@@ -2,6 +2,7 @@
 using MicaLauncher.Utilities;
 using MicaLauncher.Data;
 using System.IO;
+using System.ComponentModel.DataAnnotations;
 
 namespace MicaLauncher.Plugin.RunApplication
 {
@@ -52,8 +53,11 @@ namespace MicaLauncher.Plugin.RunApplication
 
         public IEnumerable<QueryResult> Query(MicaLauncherContext context, string query)
         {
+            if (string.IsNullOrWhiteSpace(query))
+                yield break;
+
             var results = _win32appPathes
-                .Select(kv => (kv.Key, kv.Value, Weight: StringMatchUtils.FuzzyMatch(query.ToLower(), kv.Key.ToLower())))
+                .Select(kv => (kv.Key, kv.Value, Weight: StringUtils.Match(kv.Key.ToLower(), query.ToLower())))
                 .OrderByDescending(kvw => kvw.Weight)
                 .Take(ResultCount);
 
