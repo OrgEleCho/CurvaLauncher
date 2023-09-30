@@ -137,9 +137,12 @@ namespace MicaLauncher
 
         public static void ShowLauncherSettings()
         {
-            ServiceProvider
-                .GetRequiredService<SettingsWindow>()
-                .Show();
+            SettingsWindow settingsWindow = 
+                ServiceProvider.GetRequiredService<SettingsWindow>();
+
+            settingsWindow.WindowState = WindowState.Normal;
+            settingsWindow.Show();
+            settingsWindow.Activate();
         }
     }
 }

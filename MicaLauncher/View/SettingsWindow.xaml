@@ -6,7 +6,9 @@
         xmlns:root="clr-namespace:MicaLauncher"
         xmlns:local="clr-namespace:MicaLauncher.View"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="SettingsWindow" Height="600" Width="800">
+        d:DataContext="{d:DesignInstance Type=local:SettingsWindow}"
+        Title="SettingsWindow" Height="600" Width="800"
+        Closing="Window_Closing">
     <DockPanel>
         <Border DockPanel.Dock="Bottom" >
             <StackPanel HorizontalAlignment="Right"
@@ -26,7 +28,7 @@
         <TabControl>
             <TabItem Header="General">
                 <StackPanel Margin="15">
-                    <CheckBox Content="Keep launcher when focus is lost"/>
+                    <CheckBox Content="Keep launcher when focus is lost" IsChecked="{Binding ConfigService.Config.KeepLauncherWhenFocusLost}"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Plugin">

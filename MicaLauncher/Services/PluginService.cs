@@ -43,16 +43,16 @@ namespace MicaLauncher.Services
 
             var dllFiles = dir.GetFiles("*.dll");
 
-#if DEBUG
-            var debugDir = Directory.GetCurrentDirectory();
-            var projectRoot = System.IO.Path.Combine(debugDir, "..", "..", "..", "..");
-            var debugDll1 = System.IO.Path.Combine(projectRoot, "MicaLauncher.Plugin.RunApplication", "bin", "Debug", "net6.0-windows");
-            var debugDll2 = System.IO.Path.Combine(projectRoot, "MicaLauncher.Plugin.RunProgram", "bin", "Debug", "net6.0-windows");
+//#if DEBUG
+//            var debugDir = Directory.GetCurrentDirectory();
+//            var projectRoot = System.IO.Path.Combine(debugDir, "..", "..", "..", "..");
+//            var debugDll1 = System.IO.Path.Combine(projectRoot, "MicaLauncher.Plugin.RunApplication", "bin", "Debug", "net6.0-windows");
+//            var debugDll2 = System.IO.Path.Combine(projectRoot, "MicaLauncher.Plugin.RunProgram", "bin", "Debug", "net6.0-windows");
 
-            foreach (var debugDll in Directory.GetFiles(debugDll1, "*.dll").Concat(Directory.GetFiles(debugDll2, "*.dll")))
-                if (LoadPlugin(debugDll, out MicaLauncherPluginInstance? plugin))
-                    plugins.Add(plugin);
-#endif
+//            foreach (var debugDll in Directory.GetFiles(debugDll1, "*.dll").Concat(Directory.GetFiles(debugDll2, "*.dll")))
+//                if (LoadPlugin(debugDll, out MicaLauncherPluginInstance? plugin))
+//                    plugins.Add(plugin);
+//#endif
 
             foreach (FileInfo dllFile in dllFiles)
                 if (LoadPlugin(dllFile.FullName, out MicaLauncherPluginInstance? plugin))
