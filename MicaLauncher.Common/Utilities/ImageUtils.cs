@@ -211,9 +211,16 @@ namespace MicaLauncher.Utilities
             if (!File.Exists(filename))
                 return null;
 
-            return
-                FileIconHelper.GetEmbededIconImage(filename, iconSize) ??
-                FileIconHelper.GetAssociatedIconImage(filename, iconSize > 32);
+            try
+            {
+                return
+                    FileIconHelper.GetEmbededIconImage(filename, iconSize) ??
+                    FileIconHelper.GetAssociatedIconImage(filename, iconSize > 32);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public static ImageSource CreateFromSvg(string svg)
