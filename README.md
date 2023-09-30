@@ -1,1 +1,1 @@
-# MicaLauncher
+# CurvaLauncher

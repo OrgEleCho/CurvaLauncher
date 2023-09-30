@@ -1,4 +1,4 @@
-﻿using MicaLauncher.Utilities;
+﻿using CurvaLauncher.Utilities;
 
 SortedCollection<int, int> qwq = new();
 
