@@ -36,7 +36,7 @@ namespace MicaLauncher.Utilities
             {
                 for (int j = 1; j <= length2; j++)
                 {
-                    int cost = (_value1[i-1].Equals(_value2[j-1])) ? 0 : 1;
+                    int cost = (_value1[i - 1].Equals(_value2[j - 1])) ? 0 : 1;
 
                     d[i, j] = Math.Min(
                       Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
@@ -46,6 +46,35 @@ namespace MicaLauncher.Utilities
 
             return 1 - (float)d[length1, length2] / Math.Max(length1, length2);
         }
+
+        public static float CosineSimilarity(string str1, string str2)
+        {
+            //去重
+            char[] sl = str1.Union(str2).ToArray();
+            
+            //获取重复次数
+            List<int> arrA = new();
+            List<int> arrB = new();
+            foreach (var c in sl)
+            {
+                arrA.Add(str1.Where(x => x == c).Count());
+                arrB.Add(str2.Where(x => x == c).Count());
+            }
+            //计算商
+            float num = 0;
+            //被除数
+            float numA = 0;
+            float numB = 0;
+            for (int i = 0; i < sl.Length; i++)
+            {
+                num += arrA[i] * arrB[i];
+                numA += MathF.Pow(arrA[i], 2);
+                numB += MathF.Pow(arrB[i], 2);
+            }
+            float cos = num / (MathF.Sqrt(numA) * MathF.Sqrt(numB));
+            return cos;
+        }
+
 
         public static float MatchLevenShtein(string tocheck, string input)
         {
@@ -71,12 +100,14 @@ namespace MicaLauncher.Utilities
 
         public static float Match(string tocheck, string input)
         {
-            float weight1 = MatchLevenShtein(tocheck, input);
-            float weight2 = MatchStartLetter(tocheck, input);
-            float weight3 = MatchWords(tocheck, input);
-            float weight4 = MatchLength(tocheck, input);
+            float weight1 = MatchLevenShtein(tocheck, input) * 0.2f;
+            float weight2 = MatchStartLetter(tocheck, input) * 0.2f;
+            float weight3 = MatchWords(tocheck, input) * 0.4f;
+            float weight4 = (float)CosineSimilarity(tocheck, input) * 0.2f;
+            //float weight4 = MatchLength(tocheck, input);
 
-            return (weight1 + weight2 + weight3 + weight4) / 4;
+            return weight1 + weight2 + weight3 + weight4;
+            //return (weight1 + weight2 + weight3 + weight4) / 4;
         }
     }
 }

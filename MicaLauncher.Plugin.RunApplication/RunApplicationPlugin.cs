@@ -20,7 +20,7 @@ namespace MicaLauncher.Plugin.RunApplication
 
         public string Description => "Run Applications installed on your PC";
 
-        Dictionary<string, string> _win32appPathes = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _win32appPathes = new Dictionary<string, string>();
 
         public RunApplicationPlugin()
         {
@@ -42,7 +42,7 @@ namespace MicaLauncher.Plugin.RunApplication
                 if (FileUtils.GetShortcutTarget(shortcut) is not string target)
                     continue;
                 var ext = Path.GetExtension(target);
-                if (ext == null || ext.ToLower() != ".exe")
+                if (!string.Equals(ext, ".exe", StringComparison.OrdinalIgnoreCase))
                     continue;
 
                 var name = Path.GetFileNameWithoutExtension(shortcut);
@@ -54,7 +54,7 @@ namespace MicaLauncher.Plugin.RunApplication
         public IEnumerable<QueryResult> Query(MicaLauncherContext context, string query)
         {
             if (string.IsNullOrWhiteSpace(query))
-                yield break;
+                yield break;    
 
             var results = _win32appPathes
                 .Select(kv => (kv.Key, kv.Value, Weight: StringUtils.Match(kv.Key.ToLower(), query.ToLower())))
