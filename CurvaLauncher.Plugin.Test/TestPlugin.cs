@@ -13,7 +13,6 @@ namespace CurvaLauncher.Plugin.Test
         [PluginOption]
         public string Title { get; set; } = "Test";
 
-        [PluginOption]
         public string Description { get; set; } = "Just Test plugin";
 
         public static string IconSvg { get; }

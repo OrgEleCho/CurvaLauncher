@@ -1,139 +1,132 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CurvaLauncher.Data;
 using CurvaLauncher.Models;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities;
 
-namespace CurvaLauncher.ViewModels
+namespace CurvaLauncher.ViewModels;
+
+public partial class MainViewModel : ObservableObject
 {
-    public partial class MainViewModel : ObservableObject
+    private readonly PluginService _pluginService;
+    private readonly ConfigService _configService;
+
+    public MainViewModel(
+        PluginService pluginService,
+        ConfigService configService)
     {
-        private readonly PluginService _pluginService;
-        private readonly ConfigService _configService;
+        _pluginService = pluginService;
+        _configService = configService;
+    }
 
-        public MainViewModel(
-            PluginService pluginService,
-            ConfigService configService)
+    [ObservableProperty]
+    private string queryText = string.Empty;
+
+    [ObservableProperty]
+    private ObservableCollection<QueryResultModel> queryResults = new();
+
+    [ObservableProperty]
+    private QueryResultModel? selectedQueryResult;
+
+    [ObservableProperty]
+    private int selectedQueryResultIndex = 0;
+
+    public bool HasQueryResult => QueryResults.Count > 0;
+
+    [RelayCommand]
+    public async Task QueryCore(CancellationToken cancellationToken)
+    {
+        SelectedQueryResult = null;
+
+        var dispatcher = Dispatcher.CurrentDispatcher;
+        var queryText = QueryText;
+
+        var context = new CurvaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize);
+
+        SortedCollection<QueryResultModel, float> queryResults = new()
         {
-            _pluginService = pluginService;
-            _configService = configService;
-        }
+            SortingRoot = m => m.Weight,
+            Descending = true,
+        };
 
-        [ObservableProperty]
-        private string queryText = string.Empty;
-
-        [ObservableProperty]
-        private ObservableCollection<QueryResultModel> queryResults = new();
-
-        [ObservableProperty]
-        private QueryResultModel? selectedQueryResult;
-
-        [ObservableProperty]
-        private int selectedQueryResultIndex = 0;
-
-        public bool HasQueryResult => QueryResults.Count > 0;
-
-        [RelayCommand]
-        public async Task QueryCore(CancellationToken cancellationToken)
+        await Task.Run(async () =>
         {
-            SelectedQueryResult = null;
-
-            var dispatcher = Dispatcher.CurrentDispatcher;
-            var queryText = QueryText;
-
-            var context = new CurvaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize);
-
-            SortedCollection<QueryResultModel, float> queryResults = new()
+            foreach (var pluginInstance in _pluginService.PluginInstances)
             {
-                SortingRoot = m => m.Weight,
-                Descending = true,
-            };
+                await pluginInstance.InitTask;
 
-            await Task.Run(async () =>
-            {
-                foreach (var pluginInstance in _pluginService.PluginInstances)
+                await foreach (var result in pluginInstance.QueryAsync(context, queryText))
                 {
-                    await pluginInstance.InitTask;
+                    if (cancellationToken.IsCancellationRequested)
+                        return;
 
-                    await foreach (var result in pluginInstance.QueryAsync(context, queryText))
+                    var model = QueryResultModel.FromQueryResult(result);
+                    queryResults.Add(model);
+
+                    dispatcher.Invoke(() =>
                     {
-                        if (cancellationToken.IsCancellationRequested)
-                            return;
+                        if (model.Icon == null)
+                            model.Icon = pluginInstance.Plugin.Icon;
 
-                        var model = QueryResultModel.FromQueryResult(result);
-                        queryResults.Add(model);
-
-                        dispatcher.Invoke(() =>
+                        for (int i = 0; i < queryResults.Count; i++)
                         {
-                            if (model.Icon == null)
-                                model.Icon = pluginInstance.Plugin.Icon;
+                            if (QueryResults.Count > i)
+                                QueryResults[i] = queryResults[i];
+                            else
+                                QueryResults.Add(queryResults[i]);
+                        }
 
-                            for (int i = 0; i < queryResults.Count; i++)
-                            {
-                                if (QueryResults.Count > i)
-                                    QueryResults[i] = queryResults[i];
-                                else
-                                    QueryResults.Add(queryResults[i]);
-                            }
+                        if (SelectedQueryResult == null)
+                            SelectedQueryResultIndex = 0;
+                    });
 
-                            if (SelectedQueryResult == null)
-                                SelectedQueryResultIndex = 0;
-                        });
-
-                        if (cancellationToken.IsCancellationRequested)
-                            return;
-                    }
+                    if (cancellationToken.IsCancellationRequested)
+                        return;
                 }
-            });
+            }
+        });
 
-            while (QueryResults.Count > queryResults.Count)
-                QueryResults.RemoveAt(QueryResults.Count - 1);
+        while (QueryResults.Count > queryResults.Count)
+            QueryResults.RemoveAt(QueryResults.Count - 1);
 
-            OnPropertyChanged(nameof(HasQueryResult));
-        }
+        OnPropertyChanged(nameof(HasQueryResult));
+    }
 
-        [RelayCommand]
-        public void Query()
-        {
-            if (QueryCoreCommand.IsRunning)
-                QueryCoreCommand.Cancel();
+    [RelayCommand]
+    public void Query()
+    {
+        if (QueryCoreCommand.IsRunning)
+            QueryCoreCommand.Cancel();
 
-            QueryCoreCommand.Execute(null);
-        }
+        QueryCoreCommand.Execute(null);
+    }
 
-        [RelayCommand]
-        public void InvokeSelected()
-        {
-            if (SelectedQueryResult == null)
-                return;
+    [RelayCommand]
+    public void InvokeSelected()
+    {
+        if (SelectedQueryResult == null)
+            return;
 
-            SelectedQueryResult.Invoke();
-        }
+        SelectedQueryResult.Invoke();
+    }
 
-        [RelayCommand]
-        public void SelectNext()
-        {
-            SelectedQueryResultIndex = (SelectedQueryResultIndex + 1) % QueryResults.Count;
-        }
+    [RelayCommand]
+    public void SelectNext()
+    {
+        SelectedQueryResultIndex = (SelectedQueryResultIndex + 1) % QueryResults.Count;
+    }
 
-        [RelayCommand]
-        public void SelectPrev()
-        {
-            int newIndex = (SelectedQueryResultIndex - 1) % QueryResults.Count;
-            if (newIndex == -1)
-                newIndex = QueryResults.Count - 1;
+    [RelayCommand]
+    public void SelectPrev()
+    {
+        int newIndex = (SelectedQueryResultIndex - 1) % QueryResults.Count;
+        if (newIndex == -1)
+            newIndex = QueryResults.Count - 1;
 
-            SelectedQueryResultIndex = newIndex;
-        }
+        SelectedQueryResultIndex = newIndex;
     }
 }

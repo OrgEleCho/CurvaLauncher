@@ -1,24 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Text.Json.Nodes;
 
-namespace CurvaLauncher
+namespace CurvaLauncher;
+
+public partial class AppConfig : ObservableObject
 {
-    public partial class AppConfig : ObservableObject
-    {
-        [ObservableProperty]
-        private int _launcherWidth = 800;
+    [ObservableProperty]
+    private int _launcherWidth = 800;
 
-        [ObservableProperty]
-        private int _queryResultIconSize = 64;
+    [ObservableProperty]
+    private int _queryResultIconSize = 64;
 
-        [ObservableProperty]
-        private bool _keepLauncherWhenFocusLost = false;
+    [ObservableProperty]
+    private bool _keepLauncherWhenFocusLost = false;
 
-        [ObservableProperty]
-        private string _launcherHotkey = "Alt+Space";
-    }
+    [ObservableProperty]
+    private string _launcherHotkey = "Alt+Space";
+
+    [ObservableProperty]
+    private JsonObject? _pluginsConfig;
 }

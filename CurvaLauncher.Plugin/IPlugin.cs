@@ -1,12 +1,11 @@
 ﻿using System.Windows.Media;
 
-namespace CurvaLauncher.Plugin
-{
-    public interface IPlugin
-    {
-        public string Name { get; }
-        public string Description { get; }
+namespace CurvaLauncher.Plugin;
 
-        public ImageSource Icon { get; }
-    }
+public interface IPlugin
+{
+    string Name { get; }
+    string Description { get; }
+
+    ImageSource Icon { get; }
 }

@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Threading.Tasks;
 
-namespace CurvaLauncher.Utilities
+namespace CurvaLauncher.Utilities;
+
+internal class JsonUtils
 {
-    internal class JsonUtils
+    public static JsonSerializerOptions Options { get; } = new JsonSerializerOptions()
     {
-        public static JsonSerializerOptions Options { get; } = new JsonSerializerOptions()
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        Converters =
         {
-            WriteIndented = true,
-            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-            Converters =
-            {
-                
-            }
-        };
-    }
+            
+        }
+    };
 }

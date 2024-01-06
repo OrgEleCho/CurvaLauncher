@@ -1,66 +1,92 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CurvaLauncher.Plugin;
 using CurvaLauncher.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace CurvaLauncher.Services
+namespace CurvaLauncher.Services;
+
+public partial class ConfigService : ObservableObject
 {
-    public partial class ConfigService : ObservableObject
+    public string Path { get; set; } = "AppConfig.json";
+
+    private readonly IServiceProvider _serviceProvider;
+    private readonly PathService _pathService;
+
+    public ConfigService(
+        IServiceProvider serviceProvider,
+        PathService pathService)
     {
-        public string Path { get; set; } = "AppConfig.json";
+        _serviceProvider = serviceProvider;
+        _pathService = pathService;
 
-        private readonly PathService _pathService;
+        LoadConfig(out var config);
+        Config = config;
+    }
 
-        public ConfigService(
-            PathService pathService)
+
+
+    [ObservableProperty]
+    private AppConfig _config;
+
+    private void LoadConfig(out AppConfig config)
+    {
+        string fullPath = _pathService.GetPath(Path);
+        if (!File.Exists(fullPath))
         {
-            _pathService = pathService;
-
-            LoadConfig(out var config);
-            Config = config;
+            config = new AppConfig();
+            using FileStream _fs = File.Create(fullPath);
+            JsonSerializer.Serialize(_fs, config, JsonUtils.Options);
+            return;
         }
 
+        using FileStream fs = File.OpenRead(fullPath);
+        config = JsonSerializer.Deserialize<AppConfig>(fs, JsonUtils.Options) ?? new AppConfig();
+    }
 
+    private JsonObject GetPluginsConfig()
+    {
+        PluginService pluginService = _serviceProvider
+            .GetRequiredService<PluginService>();
 
-        [ObservableProperty]
-        private AppConfig _config;
-
-        private void LoadConfig(out AppConfig config)
+        JsonObject config = new();
+        foreach (var pluginInstance in pluginService.PluginInstances)
         {
-            string fullPath = _pathService.GetPath(Path);
-            if (!File.Exists(fullPath))
+            var props = pluginInstance.Plugin.GetType().GetProperties()
+                .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null);
+
+            JsonObject json = new();
+            foreach (var property in props)
             {
-                config = new AppConfig();
-                using FileStream _fs = File.Create(fullPath);
-                JsonSerializer.Serialize(_fs, config, JsonUtils.Options);
-                return;
+                json[property.Name] = JsonSerializer.SerializeToNode(property.GetValue(pluginInstance.Plugin));
             }
 
-            using FileStream fs = File.OpenRead(fullPath);
-            config = JsonSerializer.Deserialize<AppConfig>(fs, JsonUtils.Options) ?? new AppConfig();
+            config[pluginInstance.Plugin.GetType().FullName!] = json;
         }
 
+        return config;
+    }
 
+    [RelayCommand]
+    public void Load()
+    {
+        LoadConfig(out var config);
+        Config = config;
+    }
 
-        [RelayCommand]
-        public void Load()
-        {
-            LoadConfig(out var config);
-            Config = config;
-        }
+    [RelayCommand]
+    public void Save()
+    {
+        Config.PluginsConfig = GetPluginsConfig();
 
-        [RelayCommand]
-        public void Save()
-        {
-            string fullPath = _pathService.GetPath(Path);
-            using FileStream fs = File.Create(fullPath);
-            JsonSerializer.Serialize(fs, Config, JsonUtils.Options);
-        }
+        string fullPath = _pathService.GetPath(Path);
+        using FileStream fs = File.Create(fullPath);
+        JsonSerializer.Serialize(fs, Config, JsonUtils.Options);
     }
 }

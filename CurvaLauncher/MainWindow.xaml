@@ -7,12 +7,14 @@
         xmlns:hotkey="https://wpf.elecho.org/globalhotkey"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:data="clr-namespace:CurvaLauncher.Data;assembly=CurvaLauncher.Common"
+        xmlns:utils="clr-namespace:CurvaLauncher.Utilities"
         xmlns:models="clr-namespace:CurvaLauncher.Models"
+        xmlns:wpfproxy="clr-namespace:EleCho.WpfUtilities;assembly=EleCho.WpfUtilities.BindingProxy"
         xmlns:condition="clr-namespace:EleCho.WpfUtilities.ConditionControls;assembly=EleCho.WpfUtilities.ConditionControls"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainWindow}" d:Width="800"
-        Title="MainWindow" Height="Auto" Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}" 
+        Title="MainWindow" Height="Auto" Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}"
         Topmost="True" Visibility="Hidden" d:Visibility="Visible"
         WindowStyle="None" AllowsTransparency="True" SizeToContent="Height"
         FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
@@ -71,6 +73,9 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="models:QueryResultModel">
                                         <Border Padding="{DynamicResource QueryResultPaddingThickness}">
+                                            <Border.Resources>
+                                                <wpfproxy:BindingProxy x:Key="Proxy" Data="{Binding}"/>
+                                            </Border.Resources>
                                             <Button Command="{Binding InvokeCommand}">
                                                 <Button.Template>
                                                     <ControlTemplate TargetType="Button">
@@ -85,26 +90,27 @@
                                                         <ColumnDefinition/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <Border Width="{DynamicResource QueryResultImageSize}" 
-                                                        Height="{DynamicResource QueryResultImageSize}"
-                                                        CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
+                                                    <Border Width="{DynamicResource QueryResultImageSize}"
+                                                            Height="{DynamicResource QueryResultImageSize}"
+                                                            CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
                                                         <Border.Background>
-                                                            <ImageBrush ImageSource="{Binding Icon}"/>
+                                                            <ImageBrush ImageSource="{Binding Source={StaticResource Proxy}, Path=Data.Icon}"/>
                                                         </Border.Background>
                                                     </Border>
+
                                                     <Grid Grid.Column="2">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition/>
                                                             <RowDefinition/>
                                                         </Grid.RowDefinitions>
-                                                        <TextBlock Text="{Binding Title}" 
-                                                               FontSize="{DynamicResource QueryResultTitleTextSize}"
-                                                               Foreground="{DynamicResource QueryResultTitleTextBrush}"/>
-                                                        <TextBlock Grid.Row="1" 
-                                                               TextTrimming="WordEllipsis"
-                                                               Text="{Binding Description}"
-                                                               FontSize="{DynamicResource QueryResultDescriptionTextSize}"
-                                                               Foreground="{DynamicResource QueryResultDescriptionTextBrush}"/>
+                                                        <TextBlock Text="{Binding Title}"
+                                                                   FontSize="{DynamicResource QueryResultTitleTextSize}"
+                                                                   Foreground="{DynamicResource QueryResultTitleTextBrush}"/>
+                                                        <TextBlock Grid.Row="1"
+                                                                   TextTrimming="WordEllipsis"
+                                                                   Text="{Binding Description}"
+                                                                   FontSize="{DynamicResource QueryResultDescriptionTextSize}"
+                                                                   Foreground="{DynamicResource QueryResultDescriptionTextBrush}"/>
                                                     </Grid>
                                                 </Grid>
                                             </Button>
@@ -135,11 +141,11 @@
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
                                                             <Setter TargetName="Bd" Property="Background"
-                                                                Value="{DynamicResource QueryResultHoverBackgroundBrush}" />
+                                                                    Value="{DynamicResource QueryResultHoverBackgroundBrush}" />
                                                         </Trigger>
                                                         <Trigger Property="IsSelected" Value="True">
                                                             <Setter TargetName="Bd" Property="Background"
-                                                                Value="{DynamicResource QueryResultActiveBackgroundBrush}" />
+                                                                    Value="{DynamicResource QueryResultActiveBackgroundBrush}" />
                                                         </Trigger>
                                                     </ControlTemplate.Triggers>
                                                 </ControlTemplate>
