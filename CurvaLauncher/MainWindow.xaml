@@ -26,21 +26,21 @@
     </Window.InputBindings>
     <Grid>
         <Border Background="{DynamicResource LauncherBorderBrush}"
-            Padding="{DynamicResource LauncherBorderThickness}"
-            CornerRadius="{DynamicResource LauncherBorderRadius}"
-            MouseDown="Border_MouseDown">
+                Padding="{DynamicResource LauncherBorderThickness}"
+                CornerRadius="{DynamicResource LauncherBorderRadius}"
+                MouseDown="Border_MouseDown">
             <Border Background="{DynamicResource LauncherContentBrush}"
-                Padding="{DynamicResource LauncherPaddingThickness}"
-                CornerRadius="{DynamicResource LauncherContentCornerRadius}">
+                    Padding="{DynamicResource LauncherPaddingThickness}"
+                    CornerRadius="{DynamicResource LauncherContentCornerRadius}">
                 <StackPanel>
                     <Border Background="{DynamicResource QueryBoxContentBrush}"
-                        Padding="{DynamicResource QueryBoxPaddingThickness}"
-                        CornerRadius="{DynamicResource QueryBoxCornerRadius}">
+                            Padding="{DynamicResource QueryBoxPaddingThickness}"
+                            CornerRadius="{DynamicResource QueryBoxCornerRadius}">
                         <TextBox Name="QueryBox"
-                             BorderThickness="0" Background="Transparent"
-                             Text="{Binding ViewModel.QueryText,UpdateSourceTrigger=PropertyChanged}"
-                             FontSize="{DynamicResource QueryBoxTextSize}"
-                             Foreground="{DynamicResource QueryBoxTextBrush}">
+                                 BorderThickness="0" Background="Transparent"
+                                 Text="{Binding ViewModel.QueryText,UpdateSourceTrigger=PropertyChanged}"
+                                 FontSize="{DynamicResource QueryBoxTextSize}"
+                                 Foreground="{DynamicResource QueryBoxTextBrush}">
                             <TextBox.InputBindings>
                                 <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
                                 <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
@@ -65,9 +65,9 @@
                     <condition:IfControl Condition="{Binding ViewModel.HasQueryResult}">
                         <condition:IfControl.Then>
                             <ListBox Margin="0 5 0 0" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
-                                 SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
-                                 SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
+                                     ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
+                                     SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
+                                     SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate DataType="models:QueryResultModel">
                                         <Border Padding="{DynamicResource QueryResultPaddingThickness}">
@@ -121,16 +121,16 @@
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                     <Border x:Name="Bd"
-                                                        Background="{TemplateBinding Background}"
-                                                        BorderBrush="{TemplateBinding BorderBrush}"
-                                                        CornerRadius="{DynamicResource QueryResultCornerRadius}"
-                                                        SnapsToDevicePixels="True">
+                                                            Background="{TemplateBinding Background}"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                                            CornerRadius="{DynamicResource QueryResultCornerRadius}"
+                                                            SnapsToDevicePixels="True">
                                                         <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                                      Content="{TemplateBinding Content}"
-                                                                      ContentStringFormat="{TemplateBinding ContentStringFormat}"
-                                                                      ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                                          Content="{TemplateBinding Content}"
+                                                                          ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                                                     </Border>
                                                     <ControlTemplate.Triggers>
                                                         <Trigger Property="IsMouseOver" Value="True">
@@ -156,6 +156,7 @@
         <tb:TaskbarIcon Visibility="Visible"
                         ToolTipText="CurvaLauncher"
                         ToolTip="CurvaLauncher"
+                        IconSource="Assets/Icon32.ico"
                         LeftClickCommand="{x:Static local:App.ShowLauncherCommand}">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>

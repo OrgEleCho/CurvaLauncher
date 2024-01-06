@@ -6,14 +6,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using CurvaLauncher.Utilities;
 using CurvaLauncher.Data;
+using System.Text;
 
 namespace CurvaLauncher.Plugin.RunProgram
 {
     public class RunProgramQueryResult : QueryResult
     {
-        public RunProgramQueryResult(CurvaLauncherContext context, string filename)
+        public RunProgramQueryResult(CurvaLauncherContext context, string filename, string arguments)
         {
             FileName = filename;
+            Arguments = arguments;
 
             context.Dispatcher.Invoke(() =>
             {
@@ -27,11 +29,14 @@ namespace CurvaLauncher.Plugin.RunProgram
 
         public override string Title => $"{System.IO.Path.GetFileName(FileName)}";
 
-        public override string Description => $"Run Program: {FileName}";
+        public override string Description => !string.IsNullOrWhiteSpace(Arguments) ?
+            $"Run Program: '{FileName}' with '{Arguments}'" :
+            $"Run Program: '{FileName}'";
 
         public override ImageSource? Icon => icon;
 
         public string FileName { get; }
+        public string Arguments { get; }
 
         public override void Invoke()
         {
@@ -39,6 +44,7 @@ namespace CurvaLauncher.Plugin.RunProgram
                 new ProcessStartInfo()
                 {
                     FileName = FileName,
+                    Arguments = Arguments,
                     UseShellExecute = true,
                 });
         }

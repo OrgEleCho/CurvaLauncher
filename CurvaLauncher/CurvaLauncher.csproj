@@ -7,7 +7,16 @@
     <UseWPF>true</UseWPF>
     <StartupObject>CurvaLauncher.EntryPoint</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Icon128.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Icon32.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icon128.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
@@ -21,6 +30,10 @@
   <ItemGroup>
     <ProjectReference Include="..\CurvaLauncher.Common\CurvaLauncher.Common.csproj" />
     <ProjectReference Include="..\CurvaLauncher.Plugin\CurvaLauncher.Plugin.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\**\*" />
   </ItemGroup>
 
 </Project>
