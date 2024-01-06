@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace CurvaLauncher.ViewModels
+namespace CurvaLauncher.ViewModels;
+
+public partial class SettingsViewModel : ObservableObject
 {
-    public partial class SettingsViewModel : ObservableObject
-    {
-    }
 }

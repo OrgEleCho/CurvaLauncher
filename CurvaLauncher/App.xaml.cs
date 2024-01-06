@@ -10,7 +10,7 @@ using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.View;
+using CurvaLauncher.Views;
 using CurvaLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 
