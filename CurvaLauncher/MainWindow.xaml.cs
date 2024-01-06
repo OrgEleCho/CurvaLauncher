@@ -17,11 +17,11 @@ public partial class MainWindow : Window
         MainViewModel viewModel,
         ConfigService configService)
     {
-        InitializeComponent();
-
+        DataContext = this;
         AppConfig = configService.Config;
         ViewModel = viewModel;
-        DataContext = this;
+
+        InitializeComponent();
     }
 
     public AppConfig AppConfig { get; }

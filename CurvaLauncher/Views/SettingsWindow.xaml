@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:root="clr-namespace:CurvaLauncher"
         xmlns:local="clr-namespace:CurvaLauncher.Views"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:models="clr-namespace:CurvaLauncher.Models"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         d:DataContext="{d:DesignInstance Type=local:SettingsWindow}"
         Title="SettingsWindow" Height="600" Width="800"
@@ -21,18 +23,75 @@
                     </Style>
                 </StackPanel.Resources>
                 <Button Content="Exit CurvaLauncher" Command="{x:Static root:App.ShutdownCommand}"/>
-                <Button Content="Apply"/>
-                <Button Content="Save"/>
+                <Button Content="Save" Command="{Binding ConfigService.SaveCommand}"/>
             </StackPanel>
         </Border>
         <TabControl>
             <TabItem Header="General">
                 <StackPanel Margin="15">
-                    <CheckBox Content="Keep launcher when focus is lost" IsChecked="{Binding ConfigService.Config.KeepLauncherWhenFocusLost}"/>
+                    <StackPanel Margin="0 0 0 5">
+                        <Label Content="Launcher width:"/>
+                        <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
+                                 Text="{Binding ConfigService.Config.LauncherWidth}"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="0 0 0 5">
+                        <Label Content="Query result icon size:"/>
+                        <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
+                                 Text="{Binding ConfigService.Config.QueryResultIconSize}"/>
+                    </StackPanel>
+
+                    <CheckBox Margin="0 15 0 0"
+                              Content="Keep launcher when focus is lost"
+                              IsChecked="{Binding ConfigService.Config.KeepLauncherWhenFocusLost}"/>
                 </StackPanel>
             </TabItem>
             <TabItem Header="Plugin">
-                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Grid.Column="0"
+                             ItemsSource="{Binding PluginService.PluginInstances}"
+                             SelectedItem="{Binding ViewModel.SelectedPluginInstance}"
+                             SelectedIndex="0">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="SelectionChanged">
+                                <behaviors:InvokeCommandAction Command="{Binding NavigateToPluginSettingsCommand}"
+                                                               CommandParameter="{Binding ViewModel.SelectedPluginInstance}" />
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:CurvaLauncherPluginInstance}">
+                                <StackPanel Margin="3 5">
+                                    <TextBlock Text="{Binding Plugin.Name}" FontSize="16"/>
+                                    <TextBlock Text="{Binding Plugin.Description}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <ContentControl Name="pluginOptionContainer" Margin="10 5" />
+
+                        <StackPanel Grid.Row="1" Margin="10"
+                                    VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                            <Button Grid.Row="1"
+                                    Padding="10 5"
+                                    Content="Reload Plugins"
+                                    Command="{Binding PluginService.ReloadAllPluginsCommand}"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Grid>
             </TabItem>
         </TabControl>
     </DockPanel>

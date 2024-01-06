@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Text.Json.Nodes;
 
 namespace CurvaLauncher;
 
@@ -15,4 +16,7 @@ public partial class AppConfig : ObservableObject
 
     [ObservableProperty]
     private string _launcherHotkey = "Alt+Space";
+
+    [ObservableProperty]
+    private JsonObject? _pluginsConfig;
 }
