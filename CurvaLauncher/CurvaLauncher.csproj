@@ -8,6 +8,8 @@
     <StartupObject>CurvaLauncher.EntryPoint</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon128.ico</ApplicationIcon>
+
+    <Version>0.1.0-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
