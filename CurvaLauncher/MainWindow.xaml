@@ -20,12 +20,18 @@
         FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
         TextOptions.TextRenderingMode="ClearType"
         Closing="Window_Closing" Deactivated="Window_Deactivated">
+
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{x:Static local:App.CloseLauncherCommand}"/>
         <KeyBinding Key="Return" Command="{Binding ViewModel.InvokeSelectedCommand}"/>
         <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
         <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
     </Window.InputBindings>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2visibility"/>
+    </Window.Resources>
+
     <Grid>
         <Border Background="{DynamicResource LauncherBorderBrush}"
                 Padding="{DynamicResource LauncherBorderThickness}"
@@ -83,36 +89,46 @@
                                                     </ControlTemplate>
                                                 </Button.Template>
 
-                                                <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                        <ColumnDefinition Width="8"/>
-                                                        <ColumnDefinition/>
-                                                    </Grid.ColumnDefinitions>
+                                                <StackPanel>
 
-                                                    <Border Width="{DynamicResource QueryResultImageSize}"
-                                                            Height="{DynamicResource QueryResultImageSize}"
-                                                            CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
-                                                        <Border.Background>
-                                                            <ImageBrush ImageSource="{Binding Source={StaticResource Proxy}, Path=Data.Icon}"/>
-                                                        </Border.Background>
-                                                    </Border>
+                                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                            <ColumnDefinition Width="8"/>
+                                                            <ColumnDefinition/>
+                                                        </Grid.ColumnDefinitions>
 
-                                                    <Grid Grid.Column="2">
-                                                        <Grid.RowDefinitions>
-                                                            <RowDefinition/>
-                                                            <RowDefinition/>
-                                                        </Grid.RowDefinitions>
-                                                        <TextBlock Text="{Binding Title}"
-                                                                   FontSize="{DynamicResource QueryResultTitleTextSize}"
-                                                                   Foreground="{DynamicResource QueryResultTitleTextBrush}"/>
-                                                        <TextBlock Grid.Row="1"
-                                                                   TextTrimming="WordEllipsis"
-                                                                   Text="{Binding Description}"
-                                                                   FontSize="{DynamicResource QueryResultDescriptionTextSize}"
-                                                                   Foreground="{DynamicResource QueryResultDescriptionTextBrush}"/>
+                                                        <Border Width="{DynamicResource QueryResultImageSize}"
+                                                                Height="{DynamicResource QueryResultImageSize}"
+                                                                CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
+                                                            <Border.Background>
+                                                                <ImageBrush Stretch="Uniform"
+                                                                            ImageSource="{Binding Source={StaticResource Proxy}, Path=Data.Icon}"/>
+                                                            </Border.Background>
+                                                        </Border>
+
+                                                        <Grid Grid.Column="2">
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition/>
+                                                                <RowDefinition/>
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock Text="{Binding Title}"
+                                                                       FontSize="{DynamicResource QueryResultTitleTextSize}"
+                                                                       Foreground="{DynamicResource QueryResultTitleTextBrush}"/>
+                                                            <TextBlock Grid.Row="1"
+                                                                       TextTrimming="WordEllipsis"
+                                                                       Text="{Binding Description}"
+                                                                       FontSize="{DynamicResource QueryResultDescriptionTextSize}"
+                                                                       Foreground="{DynamicResource QueryResultDescriptionTextBrush}"/>
+                                                        </Grid>
                                                     </Grid>
-                                                </Grid>
+
+                                                    <ProgressBar VerticalAlignment="Bottom"
+                                                                 HorizontalAlignment="Stretch"
+                                                                 IsIndeterminate="True" Margin="3"
+                                                                 Visibility="{Binding Path=InvokeCommand.IsRunning,Converter={StaticResource bool2visibility}}"/>
+
+                                                </StackPanel>
                                             </Button>
                                         </Border>
                                     </DataTemplate>

@@ -49,14 +49,16 @@
             <TabItem Header="Plugin">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"/>
+                        <ColumnDefinition Width="3"/>
+                        <ColumnDefinition Width="*" MinWidth="200"/>
                     </Grid.ColumnDefinitions>
 
                     <ListBox Grid.Column="0"
                              ItemsSource="{Binding PluginService.PluginInstances}"
                              SelectedItem="{Binding ViewModel.SelectedPluginInstance}"
-                             SelectedIndex="0">
+                             SelectedIndex="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="SelectionChanged">
                                 <behaviors:InvokeCommandAction Command="{Binding NavigateToPluginSettingsCommand}"
@@ -68,13 +70,22 @@
                             <DataTemplate DataType="{x:Type models:CurvaLauncherPluginInstance}">
                                 <StackPanel Margin="3 5">
                                     <TextBlock Text="{Binding Plugin.Name}" FontSize="16"/>
-                                    <TextBlock Text="{Binding Plugin.Description}"/>
+                                    <TextBlock Text="{Binding Plugin.Description}"
+                                               TextWrapping="NoWrap"
+                                               TextTrimming="CharacterEllipsis"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <Grid Grid.Column="1">
+                    <GridSplitter Grid.Column="1"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Stretch"
+                                  Background="Transparent">
+
+                    </GridSplitter>
+
+                    <Grid Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition Height="*"/>

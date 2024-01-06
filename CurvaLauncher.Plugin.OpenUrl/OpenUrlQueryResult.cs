@@ -7,7 +7,7 @@ using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.OpenUrl
 {
-    public class OpenUrlQueryResult : QueryResult
+    public class OpenUrlQueryResult : SyncQueryResult
     {
         public OpenUrlQueryResult(CurvaLauncherContext context, Uri url)
         {

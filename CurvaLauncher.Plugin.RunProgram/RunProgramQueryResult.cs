@@ -10,7 +10,7 @@ using System.Text;
 
 namespace CurvaLauncher.Plugin.RunProgram
 {
-    public class RunProgramQueryResult : QueryResult
+    public class RunProgramQueryResult : SyncQueryResult
     {
         public RunProgramQueryResult(CurvaLauncherContext context, string filename, string arguments)
         {

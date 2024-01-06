@@ -32,18 +32,9 @@ namespace CurvaLauncher.Plugin.Calculator
                 yield break;
 
             string expr = query.Substring(Prefix.Length);
-            double result;
 
-            try
-            {
-                result = NCalc.Eval(expr);
-            }
-            catch
-            {
-                yield break;
-            }
-
-            yield return new CalculatorQueryResult(result);
+            if (NCalc.TryEval(expr, out var result))
+                yield return new CalculatorQueryResult(result);
         }
     }
 }

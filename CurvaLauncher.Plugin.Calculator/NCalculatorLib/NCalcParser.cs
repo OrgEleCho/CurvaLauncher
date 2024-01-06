@@ -528,5 +528,24 @@ namespace NCalculatorLib
                 throw new ArgumentException("Invalid expression");
             }
         }
+
+        public bool TryParse([NotNullWhen(true)] out NCalcExpr? result)
+        {
+            result = null;
+
+            int index = 0;
+            if (MatchExpr(ref index, out var rst))
+            {
+                if (index < Tokens.Length)
+                    return false;
+
+                result = rst;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

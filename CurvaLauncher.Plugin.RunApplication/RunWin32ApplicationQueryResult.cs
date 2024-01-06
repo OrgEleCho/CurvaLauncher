@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace CurvaLauncher.Plugin.RunApplication
 {
-    public class RunWin32ApplicationQueryResult : QueryResult
+    public class RunWin32ApplicationQueryResult : SyncQueryResult
     {
         public RunWin32ApplicationQueryResult(CurvaLauncherContext context, string appName, string filename, float weight)
         {

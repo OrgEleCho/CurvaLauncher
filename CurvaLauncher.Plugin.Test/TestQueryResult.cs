@@ -4,7 +4,7 @@ using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.Test
 {
-    public class TestQueryResult : QueryResult
+    public class TestQueryResult : AsyncQueryResult
     {
         public TestQueryResult(string title, string description, float weight)
         {
@@ -21,8 +21,10 @@ namespace CurvaLauncher.Plugin.Test
 
         public override ImageSource? Icon => null;
 
-        public override void Invoke()
+        public override async Task InvokeAsync(CancellationToken cancellationToken)
         {
+            await Task.Delay(2000, cancellationToken);
+
             MessageBox.Show(Description, Title);
         }
     }

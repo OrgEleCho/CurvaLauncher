@@ -16,6 +16,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Image Grid.RowSpan="2"
+                       Stretch="Uniform"
                        Source="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=Plugin.Icon}"/>
 
                 <StackPanel Grid.Column="2">
@@ -27,7 +28,7 @@
 
                     <TextBlock Grid.Column="2"
                                Grid.Row="1"
-                               Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=Plugin.Name}"/>
+                               Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=Plugin.Description}"/>
                 </StackPanel>
 
             </Grid>

@@ -26,4 +26,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <Target Name="CopyOutput" AfterTargets="Build">
+    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).dll" DestinationFiles="..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).dll"></Copy>
+    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).dll" DestinationFiles="..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).pdb"></Copy>
+  </Target>
+
 </Project>

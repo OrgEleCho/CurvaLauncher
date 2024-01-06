@@ -4,7 +4,7 @@ using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.Calculator
 {
-    public class CalculatorQueryResult : QueryResult
+    public class CalculatorQueryResult : SyncQueryResult
     {
         public CalculatorQueryResult(double value)
         {

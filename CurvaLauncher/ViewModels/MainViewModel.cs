@@ -106,12 +106,12 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    public void InvokeSelected()
+    public async Task InvokeSelected()
     {
         if (SelectedQueryResult == null)
             return;
 
-        SelectedQueryResult.Invoke();
+        await SelectedQueryResult.InvokeCommand.ExecuteAsync(null);
     }
 
     [RelayCommand]

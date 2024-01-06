@@ -13,6 +13,7 @@ using CurvaLauncher.Utilities;
 using CurvaLauncher.Views;
 using CurvaLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
+using CommunityToolkit.Mvvm.ComponentModel.__Internals;
 
 namespace CurvaLauncher
 {
@@ -109,9 +110,14 @@ namespace CurvaLauncher
         public static RelayCommand ShutdownCommand { get; }
             = new RelayCommand(Application.Current.Shutdown);
 
+        private static CancellationTokenSource _currentCancellationTokenSource = new();
+
+        public static CancellationToken GetLauncherCancellationToken() => _currentCancellationTokenSource.Token;
 
         public static void ShowLauncher()
         {
+            _currentCancellationTokenSource = new();
+
             var mainWindow =
                 ServiceProvider.GetRequiredService<MainWindow>();
             var configService =
@@ -133,6 +139,8 @@ namespace CurvaLauncher
 
             mainWindow.ViewModel.QueryText = string.Empty;
             mainWindow.Visibility = Visibility.Collapsed;
+
+            _currentCancellationTokenSource.Cancel();
         }
 
         public static void ShowLauncherSettings()
