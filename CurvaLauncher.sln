@@ -17,11 +17,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.OpenUr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.RunProgram", "CurvaLauncher.Plugin.RunProgram\CurvaLauncher.Plugin.RunProgram.csproj", "{C4629C9C-ACAD-4062-968C-ACF8E38D4331}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{8834754D-EB48-473A-A42E-DBE2EA4BEF82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "TestConsole\TestConsole.csproj", "{8834754D-EB48-473A-A42E-DBE2EA4BEF82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurvaLauncher.Plugin.Test", "CurvaLauncher.Plugin.Test\CurvaLauncher.Plugin.Test.csproj", "{8BB89FEB-49E1-44EE-83E0-5C30B6117675}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.Test", "CurvaLauncher.Plugin.Test\CurvaLauncher.Plugin.Test.csproj", "{8BB89FEB-49E1-44EE-83E0-5C30B6117675}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurvaLauncher.Plugin.RunApplication", "CurvaLauncher.Plugin.RunApplication\CurvaLauncher.Plugin.RunApplication.csproj", "{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.RunApplication", "CurvaLauncher.Plugin.RunApplication\CurvaLauncher.Plugin.RunApplication.csproj", "{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8683A850-988F-40A3-8E5D-54CE62C5EF8C}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
