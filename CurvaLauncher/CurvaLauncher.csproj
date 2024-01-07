@@ -2,14 +2,14 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <StartupObject>CurvaLauncher.EntryPoint</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon128.ico</ApplicationIcon>
 
-    <Version>0.2.0-alpha</Version>
+    <Version>0.2.1-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
