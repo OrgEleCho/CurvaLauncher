@@ -6,6 +6,10 @@ public sealed class PluginOptionAttribute : Attribute
     public string? Name { get; set; }
     public string? Description { get; set; }
 
+
+    public bool AllowTextMultiline { get; set; } = false;
+
+
     public PluginOptionAttribute() { }
 
     public PluginOptionAttribute(string? name)

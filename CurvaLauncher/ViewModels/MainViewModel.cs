@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -45,7 +46,10 @@ public partial class MainViewModel : ObservableObject
         var dispatcher = Dispatcher.CurrentDispatcher;
         var queryText = QueryText;
 
-        var context = new CurvaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize);
+        var context = new CurvaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize)
+        {
+            Alternate = Keyboard.Modifiers.HasFlag(ModifierKeys.Alt),
+        };
 
         SortedCollection<QueryResultModel, float> queryResults = new()
         {

@@ -17,5 +17,7 @@ namespace CurvaLauncher
 
         public Dispatcher Dispatcher { get; }
         public int RequiredIconSize { get; }
+
+        public bool Alternate { get; set; }
     }
 }

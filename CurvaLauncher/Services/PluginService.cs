@@ -31,6 +31,7 @@ public partial class PluginService
     {
         _pathService = pathService;
         _configService = configService;
+
         LoadPlugins(out var plugins);
 
         PluginInstances = new(plugins);
@@ -121,10 +122,10 @@ public partial class PluginService
     {
         foreach (var plugin in PluginInstances)
         {
-            if (plugin is ISyncPlugin syncPlugin)
+            if (plugin.Plugin is ISyncPlugin syncPlugin)
                 syncPlugin.Init();
 
-            if (plugin is IAsyncPlugin asyncPlugin)
+            if (plugin.Plugin is IAsyncPlugin asyncPlugin)
                 await asyncPlugin.InitAsync();
         }
     }

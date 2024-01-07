@@ -14,6 +14,12 @@ namespace CurvaLauncher.Plugin.Translator
         [PluginOption]
         public TranslatorAPI TranslatorAPI { get; set; } = TranslatorAPI.Youdao;
 
+        [PluginOption]
+        public string SourceLanguage { get; set; } = "Auto";
+
+        [PluginOption]
+        public string TargetLanguage { get; set; } = "Auto";
+
 
         public override IEnumerable<string> CommandNames
         {
@@ -51,9 +57,18 @@ namespace CurvaLauncher.Plugin.Translator
 
             string text = CommandLineUtils.Concat(arguments);
 
+            string? sourceLanguage = SourceLanguage;
+            string? targetLanguage = TargetLanguage;
+
+            if ("Auto".Equals(sourceLanguage, StringComparison.OrdinalIgnoreCase))
+                sourceLanguage = null;
+            if ("Auto".Equals(targetLanguage, StringComparison.OrdinalIgnoreCase))
+                targetLanguage = null;
+
             yield return TranslatorAPI switch
             {
-                TranslatorAPI.Youdao => new Youdao.YoudaoTranslationQueryResult(this, text),
+                TranslatorAPI.Youdao => new Youdao.YoudaoTranslationQueryResult(this, sourceLanguage, targetLanguage, text),
+                TranslatorAPI.MicrosoftEdge => new MicrosoftEdge.EdgeTranslationQueryResult(this, sourceLanguage, targetLanguage, text),
 
                 _ => throw new Exception("This would never happen")
             };

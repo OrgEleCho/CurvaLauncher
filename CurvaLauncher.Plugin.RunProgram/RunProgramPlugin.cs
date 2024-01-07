@@ -11,26 +11,45 @@ namespace CurvaLauncher.Plugin.RunProgram
 {
     public class RunProgramPlugin : ISyncPlugin
     {
-        readonly Lazy<ImageSource> laziedIcon = new Lazy<ImageSource>(() => ImageUtils.CreateFromSvg(Resources.IconSvg)!);
+        readonly Lazy<ImageSource> _laziedIcon = new Lazy<ImageSource>(() => ImageUtils.CreateFromSvg(Resources.IconSvg)!);
 
+        [PluginOption(AllowTextMultiline = true)]
+        public string IncludeDirectories { get; set; } = string.Empty;
+
+        [PluginOption(AllowTextMultiline = true)]
+        public string ExcludeDirectories { get; set; } = string.Empty;
+
+        [PluginOption]
+        public bool EnableAppsIndexing { get; set; } = true;
 
         public string Name => "Run Program";
         public string Description => "Run programs under paths and registered apps";
-        public ImageSource Icon => laziedIcon.Value;
+        public ImageSource Icon => _laziedIcon.Value;
 
 
 
-        Dictionary<string, string> _appPathes = new Dictionary<string, string>();
+        readonly Dictionary<string, string> _appPathes = new Dictionary<string, string>();
 
         public void Init()
         {
+            _appPathes.Clear();
+
+            HashSet<string> includeDirectories = IncludeDirectories
+                .Split(['\r', '\n'])
+                .ToHashSet();
+            HashSet<string> excludeDirectories = ExcludeDirectories
+                .Split(['\r', '\n'])
+                .ToHashSet();
+
             string? pathVariable = Environment.GetEnvironmentVariable("PATH");
             if (pathVariable != null)
             {
                 string[] directories = pathVariable.Split(';');
-                foreach (string directory in directories)
+                foreach (string directory in directories.Concat(includeDirectories))
                 {
                     if (!Directory.Exists(directory))
+                        continue;
+                    if (excludeDirectories.Contains(directory))
                         continue;
 
                     foreach (var file in Directory.GetFiles(directory))
@@ -41,18 +60,21 @@ namespace CurvaLauncher.Plugin.RunProgram
                 }
             }
 
-            RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths", false);
-            if (registryKey != null)
+            if (EnableAppsIndexing)
             {
-                foreach (var subkeyName in registryKey.GetSubKeyNames())
+                RegistryKey? registryKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths", false);
+                if (registryKey != null)
                 {
-                    var subkey = registryKey.OpenSubKey(subkeyName, false);
+                    foreach (var subkeyName in registryKey.GetSubKeyNames())
+                    {
+                        var subkey = registryKey.OpenSubKey(subkeyName, false);
 
-                    if (subkey == null || subkey.GetValue(null) is not string appPath)
-                        continue;
+                        if (subkey == null || subkey.GetValue(null) is not string appPath)
+                            continue;
 
-                    string name = subkeyName.ToLower();
-                    _appPathes[name] = appPath;
+                        string name = subkeyName.ToLower();
+                        _appPathes[name] = appPath;
+                    }
                 }
             }
         }

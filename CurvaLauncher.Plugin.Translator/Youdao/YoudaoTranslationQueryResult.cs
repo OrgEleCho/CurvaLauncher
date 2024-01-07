@@ -8,6 +8,8 @@ namespace CurvaLauncher.Plugin.Translator.Youdao
     public class YoudaoTranslationQueryResult : AsyncQueryResult
     {
         private readonly TranslatorPlugin _plugin;
+        private readonly string? _sourceLanguage;
+        private readonly string? _targetLanguage;
 
         public override float Weight => 1;
 
@@ -19,9 +21,11 @@ namespace CurvaLauncher.Plugin.Translator.Youdao
 
         public string Text { get; }
 
-        public YoudaoTranslationQueryResult(TranslatorPlugin plugin, string text)
+        public YoudaoTranslationQueryResult(TranslatorPlugin plugin, string? sourceLanguage, string? targetLanguage, string text)
         {
             _plugin = plugin;
+            _sourceLanguage = sourceLanguage;
+            _targetLanguage = targetLanguage;
             Text = text;
         }
 
@@ -34,8 +38,8 @@ namespace CurvaLauncher.Plugin.Translator.Youdao
                 Content = new FormUrlEncodedContent(
                     new Dictionary<string, string>()
                     {
-                        ["from"] = "auto",
-                        ["to"] = "auto",
+                        ["from"] = _sourceLanguage ?? "auto",
+                        ["to"] = _targetLanguage ?? "auto",
                         ["q"] = Text
                     })
             };

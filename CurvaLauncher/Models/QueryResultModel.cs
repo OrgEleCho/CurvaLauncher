@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -44,7 +45,7 @@ public partial class QueryResultModel : ObservableObject
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show($"{ex.Message}", "Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else if (_rawQueryResult is AsyncQueryResult asyncQueryResult)
@@ -59,7 +60,7 @@ public partial class QueryResultModel : ObservableObject
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show($"{ex.Message}", "Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

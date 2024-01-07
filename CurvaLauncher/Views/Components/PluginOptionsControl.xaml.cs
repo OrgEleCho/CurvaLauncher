@@ -37,7 +37,7 @@ public partial class PluginOptionsControl : UserControl
         }
         else if (typeof(IConvertible).IsAssignableFrom(property.PropertyType))
         {
-            return new PluginTextOption(Plugin, attribute.Name ?? property.Name, property.Name);
+            return new PluginTextOption(Plugin, attribute.Name ?? property.Name, property.Name, attribute.AllowTextMultiline);
         }
         else
         {
