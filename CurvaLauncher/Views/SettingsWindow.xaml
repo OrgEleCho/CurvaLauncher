@@ -88,10 +88,13 @@
                     <Grid Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
-                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <ContentControl Name="pluginOptionContainer" Margin="10 5" />
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                                      VerticalScrollBarVisibility="Auto">
+                            <ContentControl Name="pluginOptionContainer" Margin="10 5" />
+                        </ScrollViewer>
 
                         <StackPanel Grid.Row="1" Margin="10"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right">

@@ -2,6 +2,7 @@
 using CurvaLauncher.Utilities;
 using CurvaLauncher.Data;
 using System.Diagnostics;
+using System.IO;
 
 namespace CurvaLauncher.Plugin.RunApplication
 {
@@ -38,6 +39,7 @@ namespace CurvaLauncher.Plugin.RunApplication
                 new ProcessStartInfo()
                 {
                     FileName = FileName,
+                    WorkingDirectory = Path.GetDirectoryName(FileName),
                     UseShellExecute = true,
                 });
         }

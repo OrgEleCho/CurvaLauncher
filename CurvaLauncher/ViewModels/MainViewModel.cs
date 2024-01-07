@@ -90,6 +90,9 @@ public partial class MainViewModel : ObservableObject
             }
         });
 
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
         while (QueryResults.Count > queryResults.Count)
             QueryResults.RemoveAt(QueryResults.Count - 1);
 

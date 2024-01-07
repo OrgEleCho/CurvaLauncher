@@ -20,7 +20,22 @@ public partial class PluginOptionsControl : UserControl
 
     private PluginOption? CreateOption(PluginOptionAttribute attribute, PropertyInfo property)
     {
-        if (typeof(IConvertible).IsAssignableFrom(property.PropertyType))
+        if (typeof(bool) == property.PropertyType)
+        {
+            return new PluginSwitchOption(Plugin, attribute.Name ?? property.Name, property.Name);
+        }
+        else if (property.PropertyType.IsEnum)
+        {
+            if (property.GetCustomAttribute<FlagsAttribute>() is FlagsAttribute)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return new PluginSelectOption(Plugin, attribute.Name ?? property.Name, property.Name, Enum.GetValues(property.PropertyType));
+            }
+        }
+        else if (typeof(IConvertible).IsAssignableFrom(property.PropertyType))
         {
             return new PluginTextOption(Plugin, attribute.Name ?? property.Name, property.Name);
         }
@@ -41,7 +56,7 @@ public partial class PluginOptionsControl : UserControl
         {
             if (CreateOption(item.Attribute!, item.Property) is PluginOption pluginOption)
             {
-                pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 5);
+                pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 15);
                 optionsPanel.Children.Add(pluginOption);
             }
         }

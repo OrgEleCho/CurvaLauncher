@@ -7,18 +7,16 @@ using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.Plugin.Hashing;
 
-public class HashingPlugin : ISyncPlugin
+public class HashingPlugin : SyncCommandPlugin
 {
     private readonly Lazy<ImageSource> _laziedImageSource = new Lazy<ImageSource>(() => ImageUtils.CreateFromSvg(Resources.IconSvg)!);
 
-    public string Name => "Hashing";
-    public string Description => "Get a summary of data";
-    public System.Windows.Media.ImageSource Icon => _laziedImageSource.Value;
+    public override string Name => "Hashing";
+    public override string Description => "Get a summary of data";
+    public override System.Windows.Media.ImageSource Icon => _laziedImageSource.Value;
+    public override IEnumerable<string> CommandNames => _hashAlgorithmMap.Keys;
 
-    [PluginOption]
-    public string Prefix { get; set; } = "#";
-
-    Dictionary<string, HashAlgorithm> _hashAlgorithmMap = new()
+    static Dictionary<string, HashAlgorithm> _hashAlgorithmMap = new()
     {
         ["MD5"] = MD5.Create(),
         ["SHA1"] = SHA1.Create(),
@@ -27,74 +25,53 @@ public class HashingPlugin : ISyncPlugin
         ["SHA512"] = SHA512.Create(),
     };
 
-    public void Init()
+    public HashingPlugin()
     {
-
+        Prefix = "#";
     }
 
-    public IEnumerable<CurvaLauncher.Data.QueryResult> Query(CurvaLauncher.CurvaLauncherContext context, string query)
+    public override IEnumerable<QueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
     {
-        if (string.IsNullOrWhiteSpace(query))
-            yield break;
-
-        CommandLineUtils.Split(query, out var segments);
-
-        var nameSegment = segments[0];
-
-        if (nameSegment.IsQuoted)
-            yield break;
-
-        var arguments = segments
-            .Skip(1)
-            .Select(seg => seg.Value)
-            .ToList();
-
-        foreach (var hashAlgorithmKV in _hashAlgorithmMap)
+        string algorithmName = commandName.ToUpper();
+        if (_hashAlgorithmMap.TryGetValue(algorithmName, out var hashAlgorithm))
         {
-            if ($"{Prefix}{hashAlgorithmKV.Key}".Equals(nameSegment.Value, StringComparison.OrdinalIgnoreCase))
+            if (arguments.Length == 0)
             {
-                if (arguments.Count == 0)
-                {
-                    yield return new EmptyQueryResult("Get summary", $"Input text or file path to get it's summary with {hashAlgorithmKV.Key}", 1, null);
-                    yield break;
-                }
-
-                bool anyFileExist = arguments.Any(text => File.Exists(text));
-                string title = $"Get summary with {hashAlgorithmKV.Key}";
-
-                if (anyFileExist)
-                {
-                    foreach (var arg in arguments)
-                    {
-                        if (File.Exists(arg))
-                        {
-                            yield return new HashingQueryResult(() => File.OpenRead(arg),
-                                                                hashAlgorithmKV.Value,
-                                                                "Hash file",
-                                                                $"Use {hashAlgorithmKV.Key} to get summary of file content",
-                                                                1);
-                        }
-
-                        yield return new HashingQueryResult(() => new MemoryStream(Encoding.UTF8.GetBytes(arg)),
-                                                            hashAlgorithmKV.Value,
-                                                            "Hash text",
-                                                            $"Use {hashAlgorithmKV.Key} to get summary of input text",
-                                                            0.99f);
-                    }
-                }
-                else
-                {
-                    foreach (var arg in arguments)
-                    {
-                        yield return new HashingQueryResult(() => new MemoryStream(Encoding.UTF8.GetBytes(arg)),
-                                                            hashAlgorithmKV.Value,
-                                                            "Hash text",
-                                                            $"Use {hashAlgorithmKV.Key} to get summary of input text",
-                                                            1);
-                    }
-                }
-
+                yield return new EmptyQueryResult("Get summary", $"Input text or file path to get it's summary with {algorithmName}", 1, null);
                 yield break;
+            }
+
+            bool anyFileExist = arguments.Any(text => File.Exists(text.Value));
+            string title = $"Get summary with {algorithmName}";
+
+            var textFactories = arguments
+                    .Select(arg => (Func<Stream>)(() => new MemoryStream(Encoding.UTF8.GetBytes(arg.Value))));
+
+            if (anyFileExist)
+            {
+                var fileFactories = arguments
+                        .Where(arg => File.Exists(arg.Value))
+                        .Select(arg => (Func<Stream>)(() => File.OpenRead(arg.Value)));
+
+                yield return new HashingQueryResult(fileFactories,
+                                                    hashAlgorithm,
+                                                    "Hash file",
+                                                    $"Use {algorithmName} to get summary of file content",
+                                                    1);
+
+                yield return new HashingQueryResult(textFactories,
+                                                    hashAlgorithm,
+                                                    "Hash text",
+                                                    $"Use {algorithmName} to get summary of input text",
+                                                    0.9f);
+            }
+            else
+            {
+                yield return new HashingQueryResult(textFactories,
+                                                    hashAlgorithm,
+                                                    "Hash text",
+                                                    $"Use {algorithmName} to get summary of input text",
+                                                    1);
             }
         }
     }
