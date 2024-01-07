@@ -6,6 +6,11 @@
 
 ✨ *简单、轻量、快速的桌面启动器* ✨
 
+![许可证](https://img.shields.io/github/license/OrgEleCho/CurvaLauncher
+) ![版本](https://img.shields.io/github/v/release/OrgEleCho/CurvaLauncher?include_prereleases
+) / [![EN-US](https://img.shields.io/badge/EN-US-blue)](README.md) [![ZH-CN](https://img.shields.io/badge/ZH-CN-red)](README.zh.md)
+
+
 </div>
 
 <br />
