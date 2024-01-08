@@ -26,9 +26,9 @@ public partial class PluginOptionsControl : UserControl
         }
         else if (property.PropertyType.IsEnum)
         {
-            if (property.GetCustomAttribute<FlagsAttribute>() is FlagsAttribute)
+            if (property.PropertyType.GetCustomAttribute<FlagsAttribute>() is FlagsAttribute)
             {
-                throw new NotImplementedException();
+                return new PluginFlagsOption(Plugin, attribute.Name ?? property.Name, property, property.PropertyType);
             }
             else
             {

@@ -11,6 +11,9 @@
         d:DataContext="{d:DesignInstance Type=local:SettingsWindow}"
         Title="SettingsWindow" Height="600" Width="800"
         Closing="Window_Closing">
+    <Window.InputBindings>
+        <!--<KeyBinding  Command=""/>-->
+    </Window.InputBindings>
     <DockPanel>
         <Border DockPanel.Dock="Bottom" >
             <StackPanel HorizontalAlignment="Right"
@@ -91,7 +94,8 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                        <ScrollViewer Padding="0 10 0 0" 
+                                      HorizontalScrollBarVisibility="Auto" 
                                       VerticalScrollBarVisibility="Auto">
                             <ContentControl Name="pluginOptionContainer" Margin="10 5" />
                         </ScrollViewer>
