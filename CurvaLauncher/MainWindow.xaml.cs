@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Services;
 using CurvaLauncher.ViewModels;
 using Wpf.Ui.Appearance;
@@ -28,16 +30,6 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     public AppConfig AppConfig { get; }
     public MainViewModel ViewModel { get; }
 
-
-    [ObservableProperty]
-    private bool _isHotkeyRegisterSucceed;
-
-    private void Border_MouseDown(object sender, MouseButtonEventArgs e)
-    {
-        if (e.LeftButton == MouseButtonState.Pressed)
-            DragMove();
-    }
-
     private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
         e.Cancel = true;
@@ -49,15 +41,7 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
         if (AppConfig.KeepLauncherWhenFocusLost)
             return;
 
-//#if RELEASE
         App.CloseLauncher();
-//#endif
-    }
-
-    public void Clear()
-    {
-        ViewModel.QueryText = string.Empty;
-
     }
 
     private void UiWindow_Loaded(object sender, RoutedEventArgs e)
@@ -65,8 +49,9 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
         Wpf.Ui.Appearance.Watcher.Watch(this, BackgroundType.Mica, true);
     }
 
-    private void NotifyIcon_LeftClick(Wpf.Ui.Controls.NotifyIcon sender, RoutedEventArgs e)
+    [RelayCommand]
+    public void ScrollToSelectedQueryResult()
     {
-        App.ShowLauncher();
+        resultBox.ScrollIntoView(resultBox.SelectedItem);
     }
 }

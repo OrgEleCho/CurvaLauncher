@@ -29,5 +29,5 @@ public partial class AppConfig : ObservableObject
     private JsonObject? _pluginsConfig;
 
     [JsonIgnore]
-    public double LauncherResultViewHeight => LauncherResultViewCount * 50;
+    public double LauncherResultViewHeight => LauncherResultViewCount * 57 + LauncherResultViewCount;
 }

@@ -7,9 +7,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Base.xaml"/>
-                <ui:ThemesDictionary Theme="Light"/>
+                <ui:ThemesDictionary Theme="Dark"/>
                 <ui:ControlsDictionary/>
             </ResourceDictionary.MergedDictionaries>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

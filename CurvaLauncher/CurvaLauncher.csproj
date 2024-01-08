@@ -26,6 +26,7 @@
     <PackageReference Include="EleCho.GlobalHotkey.Windows" Version="1.0.2" />
     <PackageReference Include="EleCho.WpfUtilities.BindingProxy" Version="1.0.0" />
     <PackageReference Include="EleCho.WpfUtilities.ConditionControls" Version="1.0.0" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="WPF-UI" Version="2.1.0" />

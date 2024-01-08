@@ -13,7 +13,6 @@
              Title="CurvaLauncher Settings" Height="600" Width="800"
              ExtendsContentIntoTitleBar="True"
              WindowBackdropType="Mica"
-             Loaded="UiWindow_Loaded"
              Closing="Window_Closing">
 
     <behaviors:Interaction.Triggers>
@@ -32,12 +31,12 @@
     </Window.Resources>
 
     <Window.InputBindings>
-        <KeyBinding Key="Esc" 
+        <KeyBinding Key="Esc"
                     Command="{Binding CloseSettingsCommand}"/>
     </Window.InputBindings>
 
     <DockPanel>
-        <ui:TitleBar DockPanel.Dock="Top" 
+        <ui:TitleBar DockPanel.Dock="Top"
                      Icon="/Assets/Icon32.ico"
                      Title="CurvaLauncher Settings"/>
         <Border DockPanel.Dock="Bottom" >
@@ -59,12 +58,9 @@
             <TabItem Header="General">
                 <StackPanel Margin="15">
 
-                    <ui:CardControl Header="Title" >
-                        
-                    </ui:CardControl>
-                    
-                    <StackPanel Margin="0 0 0 5">
-                        <Label Content="Launcher hotkey:"/>
+                    <StackPanel Margin="0 0 0 10">
+                        <Label Content="Launcher hotkey:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
 
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -75,7 +71,7 @@
                             </Grid.ColumnDefinitions>
 
                             <ui:TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
-                                 Text="{Binding ConfigService.Config.LauncherHotkey,UpdateSourceTrigger=PropertyChanged}">
+                                        Text="{Binding ConfigService.Config.LauncherHotkey,UpdateSourceTrigger=PropertyChanged}">
                                 <behaviors:Interaction.Triggers>
                                     <behaviors:EventTrigger EventName="TextChanged">
                                         <behaviors:InvokeCommandAction Command="{Binding CheckHotkeyStatusCommand}"/>
@@ -85,8 +81,8 @@
 
                             <ui:Button Grid.Column="1" Content="Apply" Padding="5 0" Margin="10 0 0 0"
                                        VerticalAlignment="Stretch"
-                                    Visibility="{Binding ViewModel.ShowHotkeyApplyButton,Converter={StaticResource bool2visibility}}"
-                                    Command="{Binding ApplyHotkeyCommand}"/>
+                                       Visibility="{Binding ViewModel.ShowHotkeyApplyButton,Converter={StaticResource bool2visibility}}"
+                                       Command="{Binding ApplyHotkeyCommand}"/>
 
                             <TextBlock Grid.Column="2" Margin="10 0 0 0"
                                        Text="[ Not registered ]" VerticalAlignment="Center"
@@ -98,20 +94,23 @@
                         </Grid>
                     </StackPanel>
 
-                    <StackPanel Margin="0 0 0 5">
-                        <Label Content="Launcher width:"/>
+                    <StackPanel Margin="0 0 0 10">
+                        <Label Content="Launcher width:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                         <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
                                  Text="{Binding ConfigService.Config.LauncherWidth}"/>
                     </StackPanel>
 
-                    <StackPanel Margin="0 0 0 5">
-                        <Label Content="Launcher result view count:"/>
+                    <StackPanel Margin="0 0 0 10">
+                        <Label Content="Launcher result view count:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                         <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
                                  Text="{Binding ConfigService.Config.LauncherResultViewCount}"/>
                     </StackPanel>
 
-                    <StackPanel Margin="0 0 0 5">
-                        <Label Content="Query result icon size:"/>
+                    <StackPanel Margin="0 0 0 10">
+                        <Label Content="Query result icon size:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                         <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
                                  Text="{Binding ConfigService.Config.QueryResultIconSize}"/>
                     </StackPanel>
@@ -145,10 +144,10 @@
                     </Grid.ColumnDefinitions>
 
                     <ListView Grid.Column="0"
-                             ItemsSource="{Binding PluginService.PluginInstances}"
-                             SelectedItem="{Binding ViewModel.SelectedPluginInstance}"
-                             SelectedIndex="0"
-                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                              ItemsSource="{Binding PluginService.PluginInstances}"
+                              SelectedItem="{Binding ViewModel.SelectedPluginInstance}"
+                              SelectedIndex="0"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="SelectionChanged">
                                 <behaviors:InvokeCommandAction Command="{Binding NavigateToPluginSettingsCommand}"
@@ -162,7 +161,8 @@
                                     <TextBlock Text="{Binding Plugin.Name}" FontSize="16"/>
                                     <TextBlock Text="{Binding Plugin.Description}"
                                                TextWrapping="NoWrap"
-                                               TextTrimming="CharacterEllipsis"/>
+                                               TextTrimming="CharacterEllipsis"
+                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -181,8 +181,8 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <ScrollViewer Padding="0 10 0 0" 
-                                      HorizontalScrollBarVisibility="Disabled" 
+                        <ScrollViewer Padding="0 10 0 0"
+                                      HorizontalScrollBarVisibility="Disabled"
                                       VerticalScrollBarVisibility="Auto">
                             <ContentControl Name="pluginOptionContainer" Margin="10 5" />
                         </ScrollViewer>
@@ -209,26 +209,27 @@
                             </Grid.ColumnDefinitions>
 
                             <Image Grid.RowSpan="2"
-                               Width="50"
-                               Height="50"
-                               Stretch="Uniform"
-                               Source="/Assets/Icon128.png"/>
+                                   Width="50"
+                                   Height="50"
+                                   Stretch="Uniform"
+                                   Source="/Assets/Icon128.png"/>
 
                             <StackPanel Grid.Column="2">
                                 <TextBlock Grid.Column="2"
-                               Grid.Row="0"
-                               Text="CurvaLauncher"
-                               FontSize="16"
-                               Margin="0 0 0 5"/>
+                                           Grid.Row="0"
+                                           Text="CurvaLauncher"
+                                           FontSize="16"
+                                           Margin="0 0 0 5"/>
 
                                 <TextBlock Grid.Column="2"
-                               Grid.Row="1"
-                               Text="Simple, light and fast desktop launcher"/>
+                                           Grid.Row="1"
+                                           Text="Simple, light and fast desktop launcher"/>
                             </StackPanel>
 
                         </Grid>
 
-                        <Label Content="Version:" />
+                        <Label Content="Version:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                         <TextBlock Margin="10 0 0 20">
                             <Run Text="{x:Static root:App.Version}"/>
                             <Run Text=" "/>
@@ -250,10 +251,11 @@
                             </ui:ProgressRing>
                         </TextBlock>
 
-                        <Label Content="Repository:" />
+                        <Label Content="Repository:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                         <TextBlock Margin="10 0 0 20">
-                            <Run Text="{x:Static root:App.RepositoryAddress}" 
-                                 Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" 
+                            <Run Text="{x:Static root:App.RepositoryAddress}"
+                                 Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
                                  Cursor="Hand">
                                 <behaviors:Interaction.Triggers>
                                     <behaviors:EventTrigger EventName="MouseDown">

@@ -17,6 +17,8 @@ using CurvaLauncher.Views.Components;
 using Microsoft.Win32;
 using Wpf.Ui.Appearance;
 
+using WpfMsgBox = Wpf.Ui.Controls.MessageBox;
+
 namespace CurvaLauncher.Views;
 
 /// <summary>
@@ -86,6 +88,14 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
 
         ViewModel.ShowHotkeyApplyButton = !ViewModel.HotkeyNotValid && (!HotkeyService.Registered || HotkeyService.RegisteredHotkey != hotkey);
     }
+
+    Lazy<Wpf.Ui.Controls.MessageBox> _laziedHotkeyRegistrationSuccessfulDialog = new(
+        () => new WpfMsgBox()
+        { 
+            Title = "CurvaLauncher Tips",
+            Content = $"CurvaLauncher hotkey registration is successful",
+             
+        });
 
     [RelayCommand]
     public void ApplyHotkey()
@@ -191,7 +201,7 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
             {
                 if (MessageBox.Show($"New version found: {latestVersion.Value.Version}, would you want to go and download it?", "CurvaLauncher Tips", MessageBoxButton.YesNo, MessageBoxImage.Information) == System.Windows.MessageBoxResult.Yes)
                 {
-                    App.ShellStart(latestVersion.Value.Address);
+                    ShellUtils.Start(latestVersion.Value.Address);
                 }
             }
             else
@@ -210,10 +220,5 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
     {
         ConfigService.Save();
         MessageBox.Show("Settings saved", "CurvaLauncher Tips", MessageBoxButton.OK, MessageBoxImage.Information);
-    }
-
-    private void UiWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        Wpf.Ui.Appearance.Watcher.Watch(this, BackgroundType.Mica, true, true);
     }
 }

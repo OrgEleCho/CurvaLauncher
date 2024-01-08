@@ -46,58 +46,65 @@ public partial class MainViewModel : ObservableObject
         var dispatcher = Dispatcher.CurrentDispatcher;
         var queryText = QueryText;
 
-        var context = new CurvaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize)
+        if (!string.IsNullOrWhiteSpace(queryText))
         {
-            Alternate = Keyboard.Modifiers.HasFlag(ModifierKeys.Alt),
-        };
-
-        SortedCollection<QueryResultModel, float> queryResults = new()
-        {
-            SortingRoot = m => m.Weight,
-            Descending = true,
-        };
-
-        await Task.Run(async () =>
-        {
-            foreach (var pluginInstance in _pluginService.PluginInstances)
+            var context = new CurvaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize)
             {
-                await pluginInstance.InitTask;
+                Alternate = Keyboard.Modifiers.HasFlag(ModifierKeys.Alt),
+            };
 
-                await foreach (var result in pluginInstance.QueryAsync(context, queryText))
+            SortedCollection<QueryResultModel, float> queryResults = new()
+            {
+                SortingRoot = m => m.Weight,
+                Descending = true,
+            };
+
+            await Task.Run(async () =>
+            {
+                foreach (var pluginInstance in _pluginService.PluginInstances)
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                        return;
+                    await pluginInstance.InitTask;
 
-                    var model = QueryResultModel.FromQueryResult(result);
-                    queryResults.Add(model);
-
-                    dispatcher.Invoke(() =>
+                    await foreach (var result in pluginInstance.QueryAsync(context, queryText))
                     {
-                        model.SetFallbackIcon(() => pluginInstance.Plugin.Icon);
+                        if (cancellationToken.IsCancellationRequested)
+                            return;
 
-                        for (int i = 0; i < queryResults.Count; i++)
+                        var model = QueryResultModel.FromQueryResult(result);
+                        queryResults.Add(model);
+
+                        dispatcher.Invoke(() =>
                         {
-                            if (QueryResults.Count > i)
-                                QueryResults[i] = queryResults[i];
-                            else
-                                QueryResults.Add(queryResults[i]);
-                        }
+                            model.SetFallbackIcon(() => pluginInstance.Plugin.Icon);
 
-                        if (SelectedQueryResult == null)
-                            SelectedQueryResultIndex = 0;
-                    });
+                            for (int i = 0; i < queryResults.Count; i++)
+                            {
+                                if (QueryResults.Count > i)
+                                    QueryResults[i] = queryResults[i];
+                                else
+                                    QueryResults.Add(queryResults[i]);
+                            }
 
-                    if (cancellationToken.IsCancellationRequested)
-                        return;
+                            if (SelectedQueryResult == null)
+                                SelectedQueryResultIndex = 0;
+                        });
+
+                        if (cancellationToken.IsCancellationRequested)
+                            return;
+                    }
                 }
-            }
-        });
+            });
 
-        if (cancellationToken.IsCancellationRequested)
-            return;
+            if (cancellationToken.IsCancellationRequested)
+                return;
 
-        while (QueryResults.Count > queryResults.Count)
-            QueryResults.RemoveAt(QueryResults.Count - 1);
+            while (QueryResults.Count > queryResults.Count)
+                QueryResults.RemoveAt(QueryResults.Count - 1);
+        }
+        else
+        {
+            QueryResults.Clear();
+        }
 
         OnPropertyChanged(nameof(HasQueryResult));
     }
@@ -108,10 +115,7 @@ public partial class MainViewModel : ObservableObject
         if (QueryCoreCommand.IsRunning)
             QueryCoreCommand.Cancel();
 
-        if (string.IsNullOrWhiteSpace(QueryText))
-            QueryResults.Clear();
-        else
-            QueryCoreCommand.Execute(null);
+        QueryCoreCommand.Execute(null);
     }
 
     [RelayCommand]

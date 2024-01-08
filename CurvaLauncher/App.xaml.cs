@@ -112,7 +112,7 @@ namespace CurvaLauncher
         public static RelayCommand ShowLauncherSettingsCommand { get; }
             = new RelayCommand(ShowLauncherSettings);
         public static IRelayCommand ShellStartCommand { get; }
-            = new RelayCommand<string>(ShellStart);
+            = new RelayCommand<string>(ShellUtils.Start);
 
         public static RelayCommand ShutdownCommand { get; }
             = new RelayCommand(Application.Current.Shutdown);
@@ -159,19 +159,6 @@ namespace CurvaLauncher
             settingsWindow.WindowState = WindowState.Normal;
             settingsWindow.Show();
             settingsWindow.Activate();
-        }
-
-        public static void ShellStart(string? address)
-        {
-            if (string.IsNullOrEmpty(address))
-                return;
-
-            Process.Start(
-                new ProcessStartInfo()
-                {
-                    FileName = address,
-                    UseShellExecute = true,
-                });
         }
 
         public static string Version { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "[ Unknown Version ]";
