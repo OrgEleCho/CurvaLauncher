@@ -24,8 +24,9 @@ namespace CurvaLauncher.Views.Components
     {
         public PluginSelectOption(IPlugin plugin, 
             string optionName, 
+            string? optionDescription,
             string optionPropertyName,
-            IEnumerable selections) : base(plugin, optionName, optionPropertyName)
+            IEnumerable selections) : base(plugin, optionName, optionDescription, optionPropertyName)
         {
             Selections = selections;
 

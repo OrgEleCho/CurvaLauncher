@@ -7,8 +7,13 @@ namespace CurvaLauncher.Views.Components;
 
 public partial class PluginTextOption : PluginOption
 {
-    public PluginTextOption(IPlugin plugin, string optionName, string optionPropertyName, bool allowMultiline) 
-        : base(plugin, optionName, optionPropertyName)
+    public PluginTextOption(
+        IPlugin plugin,
+        string optionName,
+        string? optionDescription,
+        string optionPropertyName,
+        bool allowMultiline) 
+        : base(plugin, optionName, optionDescription, optionPropertyName)
     {
         InitializeComponent();
 

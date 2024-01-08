@@ -11,14 +11,20 @@ namespace CurvaLauncher.Plugin.RunApplication
     {
         readonly Lazy<ImageSource> laziedIcon = new Lazy<ImageSource>(() => ImageUtils.CreateFromSvg(Resources.IconSvg)!);
 
-        public ImageSource Icon => laziedIcon.Value;
 
         [PluginOption]
         public int ResultCount { get; set; } = 5;
 
-        public string Name => "Run Application";
+        [PluginOption]
+        public IndexLocations IndexLocations { get; set; } =
+            IndexLocations.CommonPrograms |
+            IndexLocations.Programs |
+            IndexLocations.Desktop;
 
+        public string Name => "Run Application";
         public string Description => "Run Applications installed on your PC";
+        public ImageSource Icon => laziedIcon.Value;
+
 
         private readonly Dictionary<string, string> _win32appPathes = new Dictionary<string, string>();
 
@@ -29,13 +35,17 @@ namespace CurvaLauncher.Plugin.RunApplication
 
         public void Init()
         {
-            var commonProgramsFolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms);
-            var programsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs);
-
             var allShotcutsInStartMenu = new List<string>();
 
-            allShotcutsInStartMenu.AddRange(Directory.GetFiles(commonProgramsFolder, "*.lnk", SearchOption.AllDirectories));
-            allShotcutsInStartMenu.AddRange(Directory.GetFiles(programsFolder, "*.lnk", SearchOption.AllDirectories));
+            allShotcutsInStartMenu.AddRange(
+                Directory.GetFiles(
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms), "*.lnk", SearchOption.AllDirectories));
+            allShotcutsInStartMenu.AddRange(
+                Directory.GetFiles(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Programs), "*.lnk", SearchOption.AllDirectories));
+            allShotcutsInStartMenu.AddRange(
+                Directory.GetFiles(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "*.lnk", SearchOption.TopDirectoryOnly));
 
             foreach (var shortcut in allShotcutsInStartMenu)
             {

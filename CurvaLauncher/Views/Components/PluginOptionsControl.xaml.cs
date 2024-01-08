@@ -22,22 +22,22 @@ public partial class PluginOptionsControl : UserControl
     {
         if (typeof(bool) == property.PropertyType)
         {
-            return new PluginSwitchOption(Plugin, attribute.Name ?? property.Name, property.Name);
+            return new PluginSwitchOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name);
         }
         else if (property.PropertyType.IsEnum)
         {
             if (property.PropertyType.GetCustomAttribute<FlagsAttribute>() is FlagsAttribute)
             {
-                return new PluginFlagsOption(Plugin, attribute.Name ?? property.Name, property, property.PropertyType);
+                return new PluginFlagsOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property, property.PropertyType);
             }
             else
             {
-                return new PluginSelectOption(Plugin, attribute.Name ?? property.Name, property.Name, Enum.GetValues(property.PropertyType));
+                return new PluginSelectOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name,  Enum.GetValues(property.PropertyType));
             }
         }
         else if (typeof(IConvertible).IsAssignableFrom(property.PropertyType))
         {
-            return new PluginTextOption(Plugin, attribute.Name ?? property.Name, property.Name, attribute.AllowTextMultiline);
+            return new PluginTextOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name, attribute.AllowTextMultiline);
         }
         else
         {

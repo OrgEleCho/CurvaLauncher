@@ -28,8 +28,9 @@ namespace CurvaLauncher.Views.Components
         public PluginFlagsOption(
             IPlugin plugin,
             string optionName,
+            string? optionDescription,
             PropertyInfo optionProperty,
-            Type enumType) : base(plugin, optionName, optionProperty.Name)
+            Type enumType) : base(plugin, optionName, optionDescription, optionProperty.Name)
         {
             InitializeComponent();
 

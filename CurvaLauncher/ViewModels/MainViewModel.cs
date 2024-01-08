@@ -108,7 +108,10 @@ public partial class MainViewModel : ObservableObject
         if (QueryCoreCommand.IsRunning)
             QueryCoreCommand.Cancel();
 
-        QueryCoreCommand.Execute(null);
+        if (string.IsNullOrWhiteSpace(QueryText))
+            QueryResults.Clear();
+        else
+            QueryCoreCommand.Execute(null);
     }
 
     [RelayCommand]

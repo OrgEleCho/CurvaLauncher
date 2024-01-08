@@ -14,6 +14,8 @@ using CurvaLauncher.Views;
 using CurvaLauncher.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using CommunityToolkit.Mvvm.ComponentModel.__Internals;
+using System.Reflection;
+using System.Diagnostics;
 
 namespace CurvaLauncher
 {
@@ -63,9 +65,12 @@ namespace CurvaLauncher
 
             if (!hotkeyService.Registered)
             {
-                NativeMethods.MessageBox(IntPtr.Zero, $"CurvaLauncher hotkey registration failed. Please check if there are other programs occupying the hotkey and restart CurvaLauncher.", "CurvaLauncher Error", MessageBoxFlags.Ok | MessageBoxFlags.IconError);
-                Application.Current.Shutdown();
-            }            
+                NativeMethods.MessageBox(
+                    IntPtr.Zero,
+                    $"CurvaLauncher hotkey registration failed. Please check if there are other programs occupying the hotkey and restart CurvaLauncher.",
+                    "CurvaLauncher Warning",
+                    MessageBoxFlags.Ok | MessageBoxFlags.IconWarning);
+            }
         }
 
         private bool EnsureAppSingleton()
@@ -106,6 +111,8 @@ namespace CurvaLauncher
             = new RelayCommand(CloseLauncher);
         public static RelayCommand ShowLauncherSettingsCommand { get; }
             = new RelayCommand(ShowLauncherSettings);
+        public static IRelayCommand ShellStartCommand { get; }
+            = new RelayCommand<string>(ShellStart);
 
         public static RelayCommand ShutdownCommand { get; }
             = new RelayCommand(Application.Current.Shutdown);
@@ -138,7 +145,8 @@ namespace CurvaLauncher
                 ServiceProvider.GetRequiredService<MainWindow>();
 
             mainWindow.ViewModel.QueryText = string.Empty;
-            mainWindow.Visibility = Visibility.Collapsed;
+            mainWindow.ViewModel.QueryResults.Clear();
+            mainWindow.Hide();
 
             _currentCancellationTokenSource.Cancel();
         }
@@ -152,5 +160,22 @@ namespace CurvaLauncher
             settingsWindow.Show();
             settingsWindow.Activate();
         }
+
+        public static void ShellStart(string? address)
+        {
+            if (string.IsNullOrEmpty(address))
+                return;
+
+            Process.Start(
+                new ProcessStartInfo()
+                {
+                    FileName = address,
+                    UseShellExecute = true,
+                });
+        }
+
+        public static string Version { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "[ Unknown Version ]";
+
+        public static string RepositoryAddress { get; } = "https://github.com/OrgEleCho/CurvaLauncher";
     }
 }

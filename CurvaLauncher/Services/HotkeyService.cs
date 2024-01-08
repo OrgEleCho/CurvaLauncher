@@ -42,33 +42,61 @@ public class HotkeyService
 
     public bool Registered { get; private set; }
 
+    public string? RegisteredHotkey { get; private set; }
 
-    public void Register()
+    private bool TryParseHotkey(string hotkey, out ModifierKeys modifiers, out Key key)
     {
-        ModifierKeys modifier = ModifierKeys.None;
-        Key key = Key.None;
+        modifiers = ModifierKeys.None;
+        key = Key.None;
 
         string[] keyStrs = _configService.Config.LauncherHotkey.Split('+');
         foreach (var keyStr in keyStrs)
         {
-            if (Enum.TryParse<ModifierKeys>(keyStr, out var _modifierKey))
-                modifier |= _modifierKey;
-            else if (Enum.TryParse<Key>(keyStr, out var _key))
+            var _keyStr = keyStr;
+
+            if (_keyStr == "Ctrl")
+                _keyStr = "Control";
+
+            if (Enum.TryParse<ModifierKeys>(_keyStr, out var _modifierKey))
+                modifiers |= _modifierKey;
+            else if (Enum.TryParse<Key>(_keyStr, out var _key))
                 key |= _key;
+            else
+                return false;
+        }
+
+        return true;
+    }
+
+    public bool IsValidHotkey()
+    {
+        return TryParseHotkey(_configService.Config.LauncherHotkey, out _, out _);
+    }
+
+
+    public void Register()
+    {
+        string launcherHotkey = _configService.Config.LauncherHotkey;
+        if (!TryParseHotkey(launcherHotkey, out var modifiers, out var key))
+        {
+            Registered = false;
+            return;
         }
 
         if (Registered &&
-            _registeredHotkey.Modifier == modifier &&
+            _registeredHotkey.Modifier == modifiers &&
             _registeredHotkey.Key == key)
             return;
 
         try
         {
-            Hotkey hotkey = new Hotkey(modifier, key);
+            Hotkey hotkey = new Hotkey(modifiers, key);
             _globalHotkeyManager.UnregisterAll();
             _globalHotkeyManager.Register(hotkey, hotkey => App.ShowLauncher());
 
             _registeredHotkey = hotkey;
+
+            RegisteredHotkey = launcherHotkey;
             Registered = true;
         }
         catch

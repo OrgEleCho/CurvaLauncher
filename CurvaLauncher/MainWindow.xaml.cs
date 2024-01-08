@@ -4,6 +4,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CurvaLauncher.Services;
 using CurvaLauncher.ViewModels;
+using Wpf.Ui.Appearance;
 
 namespace CurvaLauncher;
 
@@ -11,7 +12,7 @@ namespace CurvaLauncher;
 /// Interaction logic for MainWindow.xaml
 /// </summary>
 [ObservableObject]
-public partial class MainWindow : Window
+public partial class MainWindow : Wpf.Ui.Controls.UiWindow
 {
     public MainWindow(
         MainViewModel viewModel,
@@ -51,5 +52,21 @@ public partial class MainWindow : Window
 //#if RELEASE
         App.CloseLauncher();
 //#endif
+    }
+
+    public void Clear()
+    {
+        ViewModel.QueryText = string.Empty;
+
+    }
+
+    private void UiWindow_Loaded(object sender, RoutedEventArgs e)
+    {
+        Wpf.Ui.Appearance.Watcher.Watch(this, BackgroundType.Mica, true);
+    }
+
+    private void NotifyIcon_LeftClick(Wpf.Ui.Controls.NotifyIcon sender, RoutedEventArgs e)
+    {
+        App.ShowLauncher();
     }
 }

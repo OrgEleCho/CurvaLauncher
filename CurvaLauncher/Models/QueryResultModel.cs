@@ -64,7 +64,7 @@ public partial class QueryResultModel : ObservableObject
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message}", "Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
         else if (_rawQueryResult is AsyncQueryResult asyncQueryResult)
@@ -79,7 +79,7 @@ public partial class QueryResultModel : ObservableObject
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message}", "Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
