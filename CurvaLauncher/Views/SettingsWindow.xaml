@@ -12,7 +12,8 @@
         Title="SettingsWindow" Height="600" Width="800"
         Closing="Window_Closing">
     <Window.InputBindings>
-        <!--<KeyBinding  Command=""/>-->
+        <KeyBinding Key="Esc" 
+                    Command="{Binding CloseSettingsCommand}"/>
     </Window.InputBindings>
     <DockPanel>
         <Border DockPanel.Dock="Bottom" >

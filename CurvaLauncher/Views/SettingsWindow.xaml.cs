@@ -44,6 +44,12 @@ public partial class SettingsWindow : Window
     }
 
     [RelayCommand]
+    public void CloseSettings()
+    {
+        Hide();
+    }
+
+    [RelayCommand]
     public void NavigateToPluginSettings(CurvaLauncherPluginInstance? pluginInstance)
     {
         if (pluginInstance is null)
