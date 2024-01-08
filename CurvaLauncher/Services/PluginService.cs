@@ -100,7 +100,7 @@ public partial class PluginService
             var assembly = Assembly.LoadFile(dllFilePath);
 
             Type? pluginType = assembly.ExportedTypes
-                .Where(type => type.IsAssignableTo(typeof(ISyncPlugin)))
+                .Where(type => type.IsAssignableTo(typeof(ISyncPlugin)) || type.IsAssignableTo(typeof(IAsyncPlugin)))
                 .FirstOrDefault();
 
             if (pluginType == null)
