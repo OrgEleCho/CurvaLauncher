@@ -8,7 +8,7 @@
 
 [![图标](https://img.shields.io/github/license/OrgEleCho/CurvaLauncher
 )](LICENSE.txt) [![版本](https://img.shields.io/github/v/release/OrgEleCho/CurvaLauncher?include_prereleases
-)](https://github.com/OrgEleCho/CurvaLauncher/releases) / [![EN-US](https://img.shields.io/badge/EN-US-blue)](README.md) [![ZH-CN](https://img.shields.io/badge/ZH-CN-red)](README.zh.md)
+)](https://github.com/OrgEleCho/CurvaLauncher/releases) / [![EN-US](https://img.shields.io/badge/EN-US-blue)](README.md) [![ZH-Hans](https://img.shields.io/badge/中文-简体-red)](README.zh.md)
 
 
 </div>
@@ -71,11 +71,11 @@ CurvaLauncher 的大多功能都以插件形式提供
 
 ### 创建自己的插件
 
-1. 创建一个库，目标为 `net8.0-windows`。
-2. 在下载的程序目录中，您可以找到 `CurvaLauncher.Plugin.dll`
-3. 将 `CurvaLauncher.Plugin.dll` 添加为项目的程序集引用。
-4. 创建一个实现 'ISyncPlugin' 或 'IAsyncPlugin' 接口的插件类型
-5. 编写插件逻辑
+1. 克隆本仓库代码.
+2. 创建一个新项目, 目标框架为 `net8.0-windows`.
+3. 将 `CurvaLauncher.Plugin` 添加到项目引用中.
+4. 创建一个插件类, 实现 'ISyncPlugin' 或 'IAsyncPlugin' 接口.
+5. 实现接口成员, 并编写主逻辑.
 
 > 提示: 同步和异步插件表示你的插件是以同步还是异步方式进行查询, 你可以根据你的插件逻辑选择其中之一。查询结果也分同步和异步, 继承对应的 QueryResult 即可.
 > 

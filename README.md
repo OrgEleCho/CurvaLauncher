@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/github/license/OrgEleCho/CurvaLauncher
 )](LICENSE.txt) [![Version](https://img.shields.io/github/v/release/OrgEleCho/CurvaLauncher?include_prereleases
-)](https://github.com/OrgEleCho/CurvaLauncher/releases) / [![EN-US](https://img.shields.io/badge/EN-US-blue)](README.md) [![ZH-CN](https://img.shields.io/badge/ZH-CN-red)](README.zh.md)
+)](https://github.com/OrgEleCho/CurvaLauncher/releases) / [![EN-US](https://img.shields.io/badge/EN-US-blue)](README.md) [![ZH-Hans](https://img.shields.io/badge/中文-简体-red)](README.zh.md)
 
 </div>
 
@@ -70,11 +70,11 @@ Most of CurvaLauncher's features are available in the form of plugins
 
 ### Create your own
 
-1. Create a library, targets to `net8.0-windows`.
-2. In the downloaded program directory, you can find `CurvaLauncher.Plugin.dll`
-3. Add `CurvaLauncher.Plugin.dll`  as an assembly reference to your project.
-4. Create a plugin type that implements the 'ISyncPlugin' or 'IAsyncPlugin' interface
-5. Write the plugin logic
+1. Clone the repository code.
+2. Create a new project with the target framework `net8.0-windows`.
+3. Add 'CurvaLauncher.Plugin' to the project reference.
+4. Create a plugin class that implements the `ISyncPlugin` or `IAsyncPlugin` interface.
+5. Implement the interface members, and write the main logic.
 
 > Tip: Synchronous and asynchronous plug-ins indicate whether your plug-in performs queries synchronously or asynchronously. You can choose one of them based on your plug-in logic. Query results are also divided into synchronous and asynchronous, just inherit the corresponding QueryResult.
 > 
