@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Data;
@@ -33,6 +34,24 @@ public partial class QueryResultModel : ObservableObject
 
     [ObservableProperty]
     private ImageSource? icon;
+
+    public void SetFallbackIcon(Func<ImageSource> iconFactory)
+    {
+        if (Icon == null)
+        {
+            Icon = iconFactory.Invoke();
+        }
+        else if (Icon is BitmapImage bitmapImage && bitmapImage.IsDownloading)
+        {
+            var originIcon = Icon;
+
+            Icon = iconFactory.Invoke();
+            bitmapImage.DownloadCompleted += (s, e) =>
+            {
+                Icon = originIcon;
+            };
+        }
+    }
 
     [RelayCommand]
     public async Task Invoke()

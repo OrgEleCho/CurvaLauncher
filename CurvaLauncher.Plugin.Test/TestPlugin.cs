@@ -35,6 +35,9 @@ namespace CurvaLauncher.Plugin.Test
 
         public IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query)
         {
+            if (string.IsNullOrWhiteSpace(query))
+                yield break;
+
             for (int i = 0; i < ResultCount; i++)
             {
                 yield return new TestQueryResult($"{Title} {i}", Description, (float)i / ResultCount);

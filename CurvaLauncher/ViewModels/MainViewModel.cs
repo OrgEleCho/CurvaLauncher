@@ -73,8 +73,7 @@ public partial class MainViewModel : ObservableObject
 
                     dispatcher.Invoke(() =>
                     {
-                        if (model.Icon == null)
-                            model.Icon = pluginInstance.Plugin.Icon;
+                        model.SetFallbackIcon(() => pluginInstance.Plugin.Icon);
 
                         for (int i = 0; i < queryResults.Count; i++)
                         {
