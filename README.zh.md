@@ -100,6 +100,6 @@ CurvaLauncher 的大多功能都以插件形式提供
 ![](/Assets/preview2.png)
 
 
-![](/Assets/preview3.png)
+![](/Assets/preview4.png)
 
 </div>
