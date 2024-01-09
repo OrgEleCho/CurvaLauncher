@@ -61,28 +61,13 @@ public partial class PluginService
         foreach (FileInfo dllFile in dllFiles)
             if (LoadPlugin(config, dllFile.FullName, out CurvaLauncherPluginInstance? plugin))
             {
-                if (config.PluginsConfig != null && config.PluginsConfig.TryGetPropertyValue(plugin.Plugin.GetType().FullName!, out var json))
-                {
-                    var props = plugin.Plugin.GetType().GetProperties()
-                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null);
-
-                    foreach (var property in props)
-                    {
-                        if (json!.AsObject().TryGetPropertyValue(property.Name, out var value) is true)
-                        {
-                            var type = property.PropertyType;
-                            var val = JsonSerializer.Deserialize(value, type);
-                            property.SetValue(plugin.Plugin, val);
-                        }
-                    }
-                }
                 plugins.Add(plugin);
             }
     }
 
-    private bool LoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out CurvaLauncherPluginInstance? plugin)
+    private bool LoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out CurvaLauncherPluginInstance? pluginInstance)
     {
-        plugin = null;
+        pluginInstance = null;
 
         try
         {
@@ -95,11 +80,37 @@ public partial class PluginService
             if (pluginType == null)
                 return false;
 
-            if (!CurvaLauncherPluginInstance.TryCreate(pluginType, out plugin))
+            if (!CurvaLauncherPluginInstance.TryCreate(pluginType, out pluginInstance))
                 return false;
 
             var typeName = pluginType.FullName!;
-            plugin.IsEnabled = config.DisabledPlugins == null || !config.DisabledPlugins.Contains(typeName);
+
+            if (config.Plugins.TryGetValue(typeName, out var pluginConfig))
+            {
+                pluginInstance.IsEnabled = pluginConfig.IsEnabled;
+                pluginInstance.Weight = pluginConfig.Weight;
+
+                var props = pluginInstance.Plugin.GetType().GetProperties()
+                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null);
+
+                if (pluginConfig.Options != null)
+                {
+                    foreach (var property in props)
+                    {
+                        if (pluginConfig.Options.TryGetPropertyValue(property.Name, out var value))
+                        {
+                            var type = property.PropertyType;
+                            var val = JsonSerializer.Deserialize(value, type);
+                            property.SetValue(pluginInstance.Plugin, val);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                pluginInstance.IsEnabled = true;
+            }
+
             return true;
         }
         catch

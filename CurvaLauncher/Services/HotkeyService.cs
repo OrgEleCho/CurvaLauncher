@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Interop;
+using CurvaLauncher.Utilities;
 using EleCho.GlobalHotkey;
 using EleCho.GlobalHotkey.Windows;
 
@@ -37,71 +39,75 @@ public class HotkeyService
     }
 
 
-    Hotkey _registeredHotkey;
+    Hotkey _registeredLauncherHotkey;
     private readonly ConfigService _configService;
+    private readonly HashSet<Hotkey> _registeredCustomHotkeys = new();
 
-    public bool Registered { get; private set; }
-
+    public bool IsLauncherHotkeyRegistered { get; private set; }
     public string? RegisteredHotkey { get; private set; }
 
-    private bool TryParseHotkey(string hotkey, out ModifierKeys modifiers, out Key key)
-    {
-        modifiers = ModifierKeys.None;
-        key = Key.None;
-
-        string[] keyStrs = _configService.Config.LauncherHotkey.Split('+');
-        foreach (var keyStr in keyStrs)
-        {
-            var _keyStr = keyStr;
-
-            if (_keyStr == "Ctrl")
-                _keyStr = "Control";
-
-            if (Enum.TryParse<ModifierKeys>(_keyStr, out var _modifierKey))
-                modifiers |= _modifierKey;
-            else if (Enum.TryParse<Key>(_keyStr, out var _key))
-                key |= _key;
-            else
-                return false;
-        }
-
-        return true;
-    }
-
-    public bool IsValidHotkey()
-    {
-        return TryParseHotkey(_configService.Config.LauncherHotkey, out _, out _);
-    }
-
-
-    public void Register()
+    public void RegisterLauncherHotkey()
     {
         string launcherHotkey = _configService.Config.LauncherHotkey;
-        if (!TryParseHotkey(launcherHotkey, out var modifiers, out var key))
+        if (!HotkeyUtils.TryParseHotkey(launcherHotkey, out var modifiers, out var key))
         {
-            Registered = false;
+            IsLauncherHotkeyRegistered = false;
             return;
         }
 
-        if (Registered &&
-            _registeredHotkey.Modifier == modifiers &&
-            _registeredHotkey.Key == key)
-            return;
+        if (IsLauncherHotkeyRegistered)
+        {
+            if (_registeredLauncherHotkey.Modifier == modifiers &&
+                _registeredLauncherHotkey.Key == key)
+                return;
+
+            _globalHotkeyManager.Unregister(modifiers, key);
+        }
 
         try
         {
             Hotkey hotkey = new Hotkey(modifiers, key);
-            _globalHotkeyManager.UnregisterAll();
             _globalHotkeyManager.Register(hotkey, hotkey => App.ShowLauncher());
 
-            _registeredHotkey = hotkey;
+            _registeredLauncherHotkey = hotkey;
 
             RegisteredHotkey = launcherHotkey;
-            Registered = true;
+            IsLauncherHotkeyRegistered = true;
         }
         catch
         {
-            Registered = false;
+            IsLauncherHotkeyRegistered = false;
         }
+    }
+
+    public void RegisterCustomHotkeys()
+    {
+        foreach (var hotkey in _registeredCustomHotkeys)
+            _globalHotkeyManager.Unregister(hotkey);
+
+        foreach (var queryHotkey in _configService.Config.CustomQueryHotkeys)
+        {
+            if (!HotkeyUtils.TryParseHotkey(queryHotkey.Hotkey, out var modifiers, out var key))
+                continue;
+
+            try
+            {
+                var hotkey = new Hotkey(modifiers, key);
+                _globalHotkeyManager.Register(hotkey, hotkey => App.ShowLauncherWithQuery(queryHotkey.QueryText));
+                _registeredCustomHotkeys.Add(hotkey);
+            }
+            catch { }
+        }
+    }
+
+    public bool IsCustomHotkeyRegistered(Hotkey hotkey)
+    {
+        return _registeredCustomHotkeys.Contains(hotkey);
+    }
+
+    public void Register()
+    {
+        RegisterLauncherHotkey();
+        RegisterCustomHotkeys();
     }
 }

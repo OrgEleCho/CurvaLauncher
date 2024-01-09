@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CurvaLauncher.Models;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
@@ -27,11 +29,24 @@ public partial class AppConfig : ObservableObject
     private string _launcherHotkey = "Alt+Space";
 
     [ObservableProperty]
-    private JsonObject? _pluginsConfig;
+    private ObservableCollection<QueryHotkey> _customQueryHotkeys = new();
 
     [ObservableProperty]
-    private HashSet<string>? _disabledPlugins;
+    private Dictionary<string, PluginConfig> _plugins = new();
 
     [JsonIgnore]
     public double LauncherResultViewHeight => LauncherResultViewCount * 57 + LauncherResultViewCount;
+
+    
+    public partial class PluginConfig : ObservableObject
+    {
+        [ObservableProperty]
+        private bool _isEnabled;
+
+        [ObservableProperty]
+        private float _weight;
+
+        [ObservableProperty]
+        JsonObject? _options;
+    }
 }

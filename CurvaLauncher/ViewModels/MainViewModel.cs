@@ -73,7 +73,7 @@ public partial class MainViewModel : ObservableObject
                         if (cancellationToken.IsCancellationRequested)
                             return;
 
-                        var model = QueryResultModel.FromQueryResult(result);
+                        var model = QueryResultModel.Create(pluginInstance, result);
                         queryResults.Add(model);
 
                         dispatcher.Invoke(() =>

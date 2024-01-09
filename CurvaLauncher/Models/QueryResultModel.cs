@@ -13,41 +13,36 @@ public partial class QueryResultModel : ObservableObject
 {
     private readonly IQueryResult _rawQueryResult;
 
-    public QueryResultModel(float weight, string title, string description, ImageSource? icon, IQueryResult rawQueryResult)
+    private QueryResultModel(float weight, string title, string description, ImageSource? icon, IQueryResult rawQueryResult)
     {
         Weight = weight;
         Title = title;
         Description = description;
-        Icon = icon;
+        _icon = icon;
         _rawQueryResult = rawQueryResult;
     }
 
-    [ObservableProperty]
-    private float weight;
+    private ImageSource? _icon;
 
-    [ObservableProperty]
-    private string title = string.Empty;
-
-    [ObservableProperty]
-    private string description = string.Empty;
-
-    [ObservableProperty]
-    private ImageSource? icon;
+    public float Weight { get; }
+    public string Title { get; }
+    public string Description { get; }
+    public ImageSource? Icon => _icon;
 
     public void SetFallbackIcon(Func<ImageSource> iconFactory)
     {
-        if (Icon == null)
+        if (_icon == null)
         {
-            Icon = iconFactory.Invoke();
+            SetProperty(ref _icon, iconFactory.Invoke(), nameof(Icon));
         }
-        else if (Icon is BitmapImage bitmapImage && bitmapImage.IsDownloading)
+        else if (_icon is BitmapImage bitmapImage && bitmapImage.IsDownloading)
         {
-            var originIcon = Icon;
+            var originIcon = _icon;
 
-            Icon = iconFactory.Invoke();
+            SetProperty(ref _icon, iconFactory.Invoke(), nameof(Icon));
             bitmapImage.DownloadCompleted += (s, e) =>
             {
-                Icon = originIcon;
+                SetProperty(ref _icon, originIcon, nameof(Icon));
             };
         }
     }
@@ -86,8 +81,8 @@ public partial class QueryResultModel : ObservableObject
         App.CloseLauncher();
     }
 
-    public static QueryResultModel FromQueryResult(IQueryResult queryResult)
+    public static QueryResultModel Create(CurvaLauncherPluginInstance pluginInstance, IQueryResult queryResult)
     {
-        return new QueryResultModel(queryResult.Weight, queryResult.Title, queryResult.Description, queryResult.Icon, queryResult);
+        return new QueryResultModel(pluginInstance.Weight * queryResult.Weight, queryResult.Title, queryResult.Description, queryResult.Icon, queryResult);
     }
 }

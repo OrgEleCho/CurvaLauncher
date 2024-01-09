@@ -36,14 +36,21 @@
                                Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=Plugin.Description}"/>
                 </StackPanel>
 
-                <ui:ToggleSwitch Grid.Column="3" 
-                                 IsChecked="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.IsEnabled}"/>
+                <ui:ToggleSwitch 
+                        Grid.Column="3" HorizontalAlignment="Right"
+                        IsChecked="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.IsEnabled}"/>
 
             </Grid>
 
             <StackPanel Name="optionsPanel"
                         IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.IsEnabled}">
-
+                <Grid Margin="0 0 0 15">
+                    <StackPanel>
+                        <TextBlock Text="Plugin Weight:" Margin="0 0 5 0"/>
+                        <ui:NumberBox Margin="3 3 0 0 "
+                                      Value="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.Weight,UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </Grid>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -1,9 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                     xmlns:components="clr-namespace:CurvaLauncher.Views.Components">
     
     <Style TargetType="components:PluginOption"
            BasedOn="{StaticResource {x:Type UserControl}}">
     </Style>
-    
+
+    <!--<Style TargetType="components:RealtimeNumberBox"
+           BasedOn="{StaticResource DefaultUiNumberBoxStyle}"/>-->
+
 </ResourceDictionary>

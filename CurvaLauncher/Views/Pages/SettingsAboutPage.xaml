@@ -1,0 +1,82 @@
+﻿<ui:UiPage x:Class="CurvaLauncher.Views.Pages.SettingsAboutPage"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+           xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+           xmlns:root="clr-namespace:CurvaLauncher"
+           xmlns:local="clr-namespace:CurvaLauncher.Views.Pages"
+           xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+           mc:Ignorable="d" 
+           d:DesignHeight="450" d:DesignWidth="800"
+           d:Background="White"
+           Title="SettingsAboutPage">
+
+    <ui:UiPage.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2visibility"/>
+    </ui:UiPage.Resources>
+
+    <Grid>
+        <StackPanel Margin="10">
+            <Grid Margin="0 0 0 20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.RowSpan="2"
+                                   Width="50"
+                                   Height="50"
+                                   Stretch="Uniform"
+                                   Source="/Assets/Icon128.png"/>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Grid.Column="2"
+                                           Grid.Row="0"
+                                           Text="CurvaLauncher"
+                                           FontSize="16"
+                                           Margin="0 0 0 5"/>
+
+                    <TextBlock Grid.Column="2"
+                                           Grid.Row="1"
+                                           Text="Simple, light and fast desktop launcher"/>
+                </StackPanel>
+
+            </Grid>
+
+            <Label Content="Version:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <StackPanel>
+                <ui:Hyperlink>
+
+                </ui:Hyperlink>
+            </StackPanel>
+            <TextBlock Margin="10 0 0 20">
+                <Run Text="{x:Static root:App.Version}"/>
+                <Run Text=" "/>
+                <Run Text="Check"
+                        Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                        Cursor="Hand">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseDown">
+                            <behaviors:InvokeCommandAction Command="{Binding CheckVersionCommand}"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </Run>
+                <ui:ProgressRing VerticalAlignment="Center" Margin="5 0 0 0"
+                                    IsIndeterminate="True"
+                                    Visibility="{Binding CheckVersionCommand.IsRunning,Converter={StaticResource bool2visibility}}">
+                    <ui:ProgressRing.LayoutTransform>
+                        <ScaleTransform ScaleX=".15" ScaleY=".15"/>
+                    </ui:ProgressRing.LayoutTransform>
+                </ui:ProgressRing>
+            </TextBlock>
+
+            <Label Content="Repository:"
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <ui:Hyperlink Content="{x:Static root:App.RepositoryAddress}"
+                                      NavigateUri="{x:Static root:App.RepositoryAddress}"/>
+        </StackPanel>
+    </Grid>
+</ui:UiPage>

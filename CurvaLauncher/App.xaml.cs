@@ -16,6 +16,9 @@ using Microsoft.Extensions.DependencyInjection;
 using CommunityToolkit.Mvvm.ComponentModel.__Internals;
 using System.Reflection;
 using System.Diagnostics;
+using CurvaLauncher.Views.Pages;
+using Wpf.Ui.Mvvm.Contracts;
+using Wpf.Ui.Mvvm.Services;
 
 namespace CurvaLauncher
 {
@@ -30,15 +33,28 @@ namespace CurvaLauncher
         {
             ServiceCollection services = new ServiceCollection();
 
+            // view
             services.AddSingleton<MainWindow>();
-            services.AddSingleton<MainViewModel>();
             services.AddSingleton<SettingsWindow>();
-            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<SettingsGeneralPage>();
+            services.AddSingleton<SettingsPluginPage>();
+            services.AddSingleton<SettingsHotkeyPage>();
+            services.AddSingleton<SettingsAboutPage>();
 
+            // view model
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<SettingsGeneralViewModel>();
+            services.AddSingleton<SettingsPluginViewModel>();
+            services.AddSingleton<SettingsHotkeyViewModel>();
+            services.AddSingleton<SettingsAboutViewModel>();
+
+            // services
             services.AddSingleton<PathService>();
             services.AddSingleton<HotkeyService>();
             services.AddSingleton<PluginService>();
             services.AddSingleton<ConfigService>();
+            services.AddSingleton<PageService>();
 
             return services.BuildServiceProvider();
         }
@@ -63,7 +79,7 @@ namespace CurvaLauncher
             ServiceProvider
                 .GetRequiredService<MainWindow>();
 
-            if (!hotkeyService.Registered)
+            if (!hotkeyService.IsLauncherHotkeyRegistered)
             {
                 NativeMethods.MessageBox(
                     IntPtr.Zero,
@@ -136,6 +152,25 @@ namespace CurvaLauncher
 
             mainWindow.Show();
             mainWindow.Activate();
+            mainWindow.QueryBox.Focus();
+        }
+
+        public static void ShowLauncherWithQuery(string queryText)
+        {
+            _currentCancellationTokenSource = new();
+
+            var mainWindow =
+                ServiceProvider.GetRequiredService<MainWindow>();
+            var configService =
+                ServiceProvider.GetRequiredService<ConfigService>();
+
+            mainWindow.Width = configService.Config.LauncherWidth;
+            mainWindow.Left = (SystemParameters.PrimaryScreenWidth - mainWindow.AppConfig.LauncherWidth) / 2;
+            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 3;
+
+            mainWindow.Show();
+            mainWindow.Activate();
+            mainWindow.SetQueryText(queryText);
             mainWindow.QueryBox.Focus();
         }
 

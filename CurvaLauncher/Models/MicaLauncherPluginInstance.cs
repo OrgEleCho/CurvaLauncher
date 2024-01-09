@@ -25,6 +25,9 @@ public partial class CurvaLauncherPluginInstance : ObservableObject
     [ObservableProperty]
     private bool _isEnabled = false;
 
+    [ObservableProperty]
+    private float _weight = 1;
+
     partial void OnIsEnabledChanged(bool value)
     {
         if (value)

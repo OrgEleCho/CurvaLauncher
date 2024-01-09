@@ -54,4 +54,11 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     {
         resultBox.ScrollIntoView(resultBox.SelectedItem);
     }
+
+    public void SetQueryText(string text)
+    {
+        ViewModel.QueryText = text;
+        QueryBox.SelectionStart = text.Length;
+        QueryBox.SelectionLength = 0;
+    }
 }

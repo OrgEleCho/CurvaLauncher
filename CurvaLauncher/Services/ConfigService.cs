@@ -7,6 +7,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CurvaLauncher.Models;
 using CurvaLauncher.Plugin;
 using CurvaLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,27 +52,19 @@ public partial class ConfigService : ObservableObject
         config = JsonSerializer.Deserialize<AppConfig>(fs, JsonUtils.Options) ?? new AppConfig();
     }
 
-    private HashSet<string> GetDisabledPlugins()
+    private AppConfig.PluginConfig GetPluginConfig(CurvaLauncherPluginInstance pluginInstance)
     {
-        PluginService pluginService = _serviceProvider
-            .GetRequiredService<PluginService>();
-
-        return pluginService.PluginInstances
-            .Where(pluginInstance => !pluginInstance.IsEnabled)
-            .Select(pluginInstance => pluginInstance.Plugin.GetType().FullName!)
-            .Where(pluginName => pluginName != null)
-            .ToHashSet();
-    }
-
-    private JsonObject GetPluginsConfig()
-    {
-        PluginService pluginService = _serviceProvider
-            .GetRequiredService<PluginService>();
-
-        JsonObject config = new();
-        foreach (var pluginInstance in pluginService.PluginInstances)
+        return new()
         {
-            var props = pluginInstance.Plugin.GetType().GetProperties()
+            IsEnabled = pluginInstance.IsEnabled,
+            Weight = pluginInstance.Weight,
+            Options = GetPluginOptions(pluginInstance.Plugin)
+        };
+
+        JsonObject GetPluginOptions(IPlugin plugin)
+        {
+            var props = plugin.GetType()
+                .GetProperties()
                 .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null);
 
             JsonObject json = new();
@@ -80,10 +73,8 @@ public partial class ConfigService : ObservableObject
                 json[property.Name] = JsonSerializer.SerializeToNode(property.GetValue(pluginInstance.Plugin));
             }
 
-            config[pluginInstance.Plugin.GetType().FullName!] = json;
+            return json;
         }
-
-        return config;
     }
 
     [RelayCommand]
@@ -96,8 +87,11 @@ public partial class ConfigService : ObservableObject
     [RelayCommand]
     public void Save()
     {
-        Config.DisabledPlugins = GetDisabledPlugins();
-        Config.PluginsConfig = GetPluginsConfig();
+        var pluginService = _serviceProvider
+            .GetRequiredService<PluginService>();
+
+        Config.Plugins = pluginService.PluginInstances
+            .ToDictionary(instance => instance.Plugin.GetType().FullName!, instance => GetPluginConfig(instance));
 
         string fullPath = _pathService.GetPath(Path);
         using FileStream fs = File.Create(fullPath);
