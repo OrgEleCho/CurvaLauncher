@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Wpf.Ui.Appearance;
 
 namespace CurvaLauncher;
 
@@ -37,7 +38,22 @@ public partial class AppConfig : ObservableObject
     [JsonIgnore]
     public double LauncherResultViewHeight => LauncherResultViewCount * 57 + LauncherResultViewCount;
 
-    
+    [ObservableProperty]
+    private AppTheme _theme;
+
+    [JsonIgnore]
+    public IReadOnlyCollection<AppTheme> Themes { get; } = [AppTheme.Light, AppTheme.Dark];
+
+    partial void OnThemeChanged(AppTheme value)
+    {
+        Wpf.Ui.Appearance.Theme.Apply(Theme switch
+        {
+            AppTheme.Dark => ThemeType.Dark,
+            AppTheme.Light => ThemeType.Light,
+            _ => ThemeType.Light,
+        });
+    }
+
     public partial class PluginConfig : ObservableObject
     {
         [ObservableProperty]
