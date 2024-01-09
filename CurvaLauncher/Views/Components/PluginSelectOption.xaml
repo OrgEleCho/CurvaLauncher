@@ -14,6 +14,6 @@
                  d:Text="SomeOption"/>
             <Run Text=":"/>
         </TextBlock>
-        <ComboBox Name="input" Height="26" VerticalContentAlignment="Center" Padding="2 0" Margin="3 3 0 0"/>
+        <ComboBox Name="input" Height="26" VerticalContentAlignment="Center" Margin="3 3 0 0"/>
     </StackPanel>
 </local:PluginOption>

@@ -35,202 +35,208 @@
                     Command="{Binding CloseSettingsCommand}"/>
     </Window.InputBindings>
 
-    <DockPanel>
-        <ui:TitleBar DockPanel.Dock="Top"
+    <Grid>
+        <DockPanel>
+            <ui:TitleBar DockPanel.Dock="Top"
                      Icon="/Assets/Icon32.ico"
                      Title="CurvaLauncher Settings"/>
-        <Border DockPanel.Dock="Bottom" >
-            <StackPanel HorizontalAlignment="Right"
+            <Border DockPanel.Dock="Bottom" >
+                <StackPanel HorizontalAlignment="Right"
                         Orientation="Horizontal"
                         Margin="15">
-                <StackPanel.Resources>
-                    <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
-                        <Setter Property="Margin" Value="10 0 0 0"/>
-                        <Setter Property="Padding" Value="10 5"/>
-                    </Style>
-                </StackPanel.Resources>
-                <ui:Button Content="Exit CurvaLauncher" Command="{x:Static root:App.ShutdownCommand}"/>
-                <ui:Button Content="Save" Command="{Binding SaveSettingsCommand}"
+                    <StackPanel.Resources>
+                        <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                            <Setter Property="Margin" Value="10 0 0 0"/>
+                        </Style>
+                    </StackPanel.Resources>
+                    <ui:Button Content="Exit CurvaLauncher" Command="{x:Static root:App.ShutdownCommand}"/>
+                    <ui:Button Content="Save" Command="{Binding SaveSettingsCommand}"
                            Appearance="Primary"/>
-            </StackPanel>
-        </Border>
-        <TabControl Margin="5">
-            <TabItem Header="General">
-                <StackPanel Margin="15">
+                </StackPanel>
+            </Border>
+            <TabControl Margin="5">
+                <TabItem Header="General">
+                    <StackPanel Margin="15">
 
-                    <StackPanel Margin="0 0 0 10">
-                        <Label Content="Launcher hotkey:"
-                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        <StackPanel Margin="0 0 0 10">
+                            <StackPanel Orientation="Horizontal">
 
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
+                                <Label Content="Launcher hotkey:"
+                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
 
-                            <ui:TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
+                                <TextBlock Grid.Column="2" Margin="10 0 0 0"
+                                           Text="[ Not registered ]"
+                                           Visibility="{Binding ViewModel.HotkeyNotRegistered,Converter={StaticResource bool2visibility}}"/>
+
+                                <TextBlock Grid.Column="3" Margin="10 0 0 0"
+                                           Text="[ Invalid hotkey ]"
+                                           Visibility="{Binding ViewModel.HotkeyNotValid,Converter={StaticResource bool2visibility}}"/>
+                            </StackPanel>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <ui:TextBox VerticalContentAlignment="Center"
                                         Text="{Binding ConfigService.Config.LauncherHotkey,UpdateSourceTrigger=PropertyChanged}">
-                                <behaviors:Interaction.Triggers>
-                                    <behaviors:EventTrigger EventName="TextChanged">
-                                        <behaviors:InvokeCommandAction Command="{Binding CheckHotkeyStatusCommand}"/>
-                                    </behaviors:EventTrigger>
-                                </behaviors:Interaction.Triggers>
-                            </ui:TextBox>
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="TextChanged">
+                                            <behaviors:InvokeCommandAction Command="{Binding CheckHotkeyStatusCommand}"/>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ui:TextBox>
 
-                            <ui:Button Grid.Column="1" Content="Apply" Padding="5 0" Margin="10 0 0 0"
+                                <ui:Button Grid.Column="1" Content="Apply" Margin="10 0 0 0"
                                        VerticalAlignment="Stretch"
                                        Visibility="{Binding ViewModel.ShowHotkeyApplyButton,Converter={StaticResource bool2visibility}}"
                                        Command="{Binding ApplyHotkeyCommand}"/>
+                            </Grid>
+                        </StackPanel>
 
-                            <TextBlock Grid.Column="2" Margin="10 0 0 0"
-                                       Text="[ Not registered ]" VerticalAlignment="Center"
-                                       Visibility="{Binding ViewModel.HotkeyNotRegistered,Converter={StaticResource bool2visibility}}"/>
-
-                            <TextBlock Grid.Column="3" Margin="10 0 0 0"
-                                       Text="[ Invalid hotkey ]" VerticalAlignment="Center"
-                                       Visibility="{Binding ViewModel.HotkeyNotValid,Converter={StaticResource bool2visibility}}"/>
-                        </Grid>
-                    </StackPanel>
-
-                    <StackPanel Margin="0 0 0 10">
-                        <Label Content="Launcher width:"
+                        <StackPanel Margin="0 0 0 10">
+                            <Label Content="Launcher width:"
                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                        <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
+                            <TextBox VerticalContentAlignment="Center"
                                  Text="{Binding ConfigService.Config.LauncherWidth}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Margin="0 0 0 10">
-                        <Label Content="Launcher result view count:"
+                        <StackPanel Margin="0 0 0 10">
+                            <Label Content="Launcher result view count:"
                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                        <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
+                            <TextBox VerticalContentAlignment="Center"
                                  Text="{Binding ConfigService.Config.LauncherResultViewCount}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <StackPanel Margin="0 0 0 10">
-                        <Label Content="Query result icon size:"
+                        <StackPanel Margin="0 0 0 10">
+                            <Label Content="Query result icon size:"
                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                        <TextBox Height="26" Padding="2 0" VerticalContentAlignment="Center"
+                            <TextBox VerticalContentAlignment="Center"
                                  Text="{Binding ConfigService.Config.QueryResultIconSize}"/>
-                    </StackPanel>
+                        </StackPanel>
 
-                    <CheckBox Margin="0 15 0 0"
+                        <CheckBox Margin="0 15 0 0"
                               Content="Starts with windows"
                               IsChecked="{Binding ConfigService.Config.StartsWithWindows}" >
 
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="Checked">
-                                <behaviors:InvokeCommandAction Command="{Binding SwitchOnStartupCommand}"/>
-                            </behaviors:EventTrigger>
-                            <behaviors:EventTrigger EventName="Unchecked">
-                                <behaviors:InvokeCommandAction Command="{Binding SwitchOffStartupCommand}"/>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding SwitchOnStartupCommand}"/>
+                                </behaviors:EventTrigger>
+                                <behaviors:EventTrigger EventName="Unchecked">
+                                    <behaviors:InvokeCommandAction Command="{Binding SwitchOffStartupCommand}"/>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
 
-                    </CheckBox>
+                        </CheckBox>
 
-                    <CheckBox Margin="0 0 0 0"
+                        <CheckBox Margin="0 0 0 0"
                               Content="Keep launcher when focus is lost"
                               IsChecked="{Binding ConfigService.Config.KeepLauncherWhenFocusLost}"/>
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Plugin">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"/>
-                        <ColumnDefinition Width="3"/>
-                        <ColumnDefinition Width="*" MinWidth="200"/>
-                    </Grid.ColumnDefinitions>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Plugin">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="150" MinWidth="100" MaxWidth="300"/>
+                            <ColumnDefinition Width="3"/>
+                            <ColumnDefinition Width="*" MinWidth="200"/>
+                        </Grid.ColumnDefinitions>
 
-                    <ListView Grid.Column="0"
+                        <ListView Grid.Column="0"
                               ItemsSource="{Binding PluginService.PluginInstances}"
                               SelectedItem="{Binding ViewModel.SelectedPluginInstance}"
                               SelectedIndex="0"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="SelectionChanged">
-                                <behaviors:InvokeCommandAction Command="{Binding NavigateToPluginSettingsCommand}"
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="SelectionChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding NavigateToPluginSettingsCommand}"
                                                                CommandParameter="{Binding ViewModel.SelectedPluginInstance}" />
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
 
-                        <ListView.ItemTemplate>
-                            <DataTemplate DataType="{x:Type models:CurvaLauncherPluginInstance}">
-                                <StackPanel Margin="3 5">
-                                    <TextBlock Text="{Binding Plugin.Name}" FontSize="16"/>
-                                    <TextBlock Text="{Binding Plugin.Description}"
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:CurvaLauncherPluginInstance}">
+                                    <StackPanel Margin="3 5">
+                                        <TextBlock Text="{Binding Plugin.Name}" FontSize="16"/>
+                                        <TextBlock Text="{Binding Plugin.Description}"
                                                TextWrapping="NoWrap"
                                                TextTrimming="CharacterEllipsis"
                                                Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
 
-                    <GridSplitter Grid.Column="1"
+                        <GridSplitter Grid.Column="1"
                                   VerticalAlignment="Stretch"
                                   HorizontalAlignment="Stretch"
                                   Background="Transparent">
 
-                    </GridSplitter>
+                        </GridSplitter>
 
-                    <Grid Grid.Column="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                        <Grid Grid.Column="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
 
-                        <ScrollViewer Padding="0 10 0 0"
+                            <ScrollViewer Padding="0 10 0 0"
                                       HorizontalScrollBarVisibility="Disabled"
                                       VerticalScrollBarVisibility="Auto">
-                            <ContentControl Name="pluginOptionContainer" Margin="10 5" />
-                        </ScrollViewer>
+                                <ContentControl Name="pluginOptionContainer" Margin="10 5" />
+                            </ScrollViewer>
 
-                        <StackPanel Grid.Row="1" Margin="10"
+                            <StackPanel Grid.Row="1" Margin="10"
                                     VerticalAlignment="Bottom" HorizontalAlignment="Right">
-                            <Button Grid.Row="1"
+                                <Button Grid.Row="1"
                                     Padding="10 5"
                                     Content="Reload Plugins"
                                     Command="{Binding PluginService.ReloadAllPluginsCommand}"/>
-                        </StackPanel>
+                            </StackPanel>
 
+                        </Grid>
                     </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="About">
-                <Grid>
-                    <StackPanel Margin="10">
-                        <Grid Margin="0 0 0 20">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="10"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                </TabItem>
+                <TabItem Header="About">
+                    <Grid>
+                        <StackPanel Margin="10">
+                            <Grid Margin="0 0 0 20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                            <Image Grid.RowSpan="2"
+                                <Image Grid.RowSpan="2"
                                    Width="50"
                                    Height="50"
                                    Stretch="Uniform"
                                    Source="/Assets/Icon128.png"/>
 
-                            <StackPanel Grid.Column="2">
-                                <TextBlock Grid.Column="2"
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Grid.Column="2"
                                            Grid.Row="0"
                                            Text="CurvaLauncher"
                                            FontSize="16"
                                            Margin="0 0 0 5"/>
 
-                                <TextBlock Grid.Column="2"
+                                    <TextBlock Grid.Column="2"
                                            Grid.Row="1"
                                            Text="Simple, light and fast desktop launcher"/>
-                            </StackPanel>
+                                </StackPanel>
 
-                        </Grid>
+                            </Grid>
 
-                        <Label Content="Version:"
+                            <Label Content="Version:"
                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                        <TextBlock Margin="10 0 0 20">
+                            <StackPanel>
+                                <ui:Hyperlink>
+
+                                </ui:Hyperlink>
+                            </StackPanel>
+                            <TextBlock Margin="10 0 0 20">
                             <Run Text="{x:Static root:App.Version}"/>
                             <Run Text=" "/>
                             <Run Text="Check"
@@ -249,25 +255,16 @@
                                     <ScaleTransform ScaleX=".15" ScaleY=".15"/>
                                 </ui:ProgressRing.LayoutTransform>
                             </ui:ProgressRing>
-                        </TextBlock>
+                            </TextBlock>
 
-                        <Label Content="Repository:"
+                            <Label Content="Repository:"
                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                        <TextBlock Margin="10 0 0 20">
-                            <Run Text="{x:Static root:App.RepositoryAddress}"
-                                 Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
-                                 Cursor="Hand">
-                                <behaviors:Interaction.Triggers>
-                                    <behaviors:EventTrigger EventName="MouseDown">
-                                        <behaviors:InvokeCommandAction Command="{x:Static root:App.ShellStartCommand}"
-                                                                       CommandParameter="{x:Static root:App.RepositoryAddress}"/>
-                                    </behaviors:EventTrigger>
-                                </behaviors:Interaction.Triggers>
-                            </Run>
-                        </TextBlock>
-                    </StackPanel>
-                </Grid>
-            </TabItem>
-        </TabControl>
-    </DockPanel>
+                            <ui:Hyperlink Content="{x:Static root:App.RepositoryAddress}"
+                                      NavigateUri="{x:Static root:App.RepositoryAddress}"/>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </Grid>
 </ui:UiWindow>

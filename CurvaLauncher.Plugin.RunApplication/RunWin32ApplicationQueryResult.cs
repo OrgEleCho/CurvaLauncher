@@ -1,12 +1,11 @@
 ﻿using System.Windows.Media;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Data;
 using System.Diagnostics;
 using System.IO;
 
 namespace CurvaLauncher.Plugin.RunApplication
 {
-    public class RunWin32ApplicationQueryResult : SyncQueryResult
+    public class RunWin32ApplicationQueryResult : ISyncQueryResult
     {
         public RunWin32ApplicationQueryResult(CurvaLauncherContext context, string appName, string filename, float weight)
         {
@@ -22,18 +21,18 @@ namespace CurvaLauncher.Plugin.RunApplication
 
         private ImageSource? icon;
 
-        public override float Weight { get; }
+        public float Weight { get; }
 
-        public override string Title => $"{AppName}";
+        public string Title => $"{AppName}";
 
-        public override string Description => $"Run Application: {FileName}";
+        public string Description => $"Run Application: {FileName}";
 
-        public override ImageSource? Icon => icon;
+        public ImageSource? Icon => icon;
 
         public string AppName { get; }
         public string FileName { get; }
 
-        public override void Invoke()
+        public void Invoke()
         {
             Process.Start(
                 new ProcessStartInfo()

@@ -9,25 +9,24 @@ using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.Translator.MicrosoftEdge
 {
-    public class EdgeTranslationQueryResult : AsyncQueryResult
+    public class EdgeTranslationQueryResult : IAsyncQueryResult
     {
-        public override string Title => "Translate text";
+        public string Title => "Translate text";
 
-        public override string Description => "Translate specified text with 'MicrosoftEdge'";
+        public string Description => "Translate specified text with 'MicrosoftEdge'";
 
-        public override float Weight => 1;
+        public float Weight => 1;
 
-        public override ImageSource? Icon => null;
+        public ImageSource? Icon => null;
 
         public string Text { get; }
 
-        public EdgeTranslationQueryResult(TranslatorPlugin plugin, string? sourceLanguage, string? targetLanguage, string text)
+        public EdgeTranslationQueryResult(HttpClient httpClient, string? sourceLanguage, string? targetLanguage, string text)
         {
-            _plugin = plugin;
+            _httpClient = httpClient;
             _sourceLanguage = sourceLanguage;
             _targetLanguage = targetLanguage;
             Text = text;
@@ -35,7 +34,7 @@ namespace CurvaLauncher.Plugin.Translator.MicrosoftEdge
 
 
         static string? s_currentJwt;
-        private readonly TranslatorPlugin _plugin;
+        private readonly HttpClient _httpClient;
         private readonly string? _sourceLanguage;
         private readonly string? _targetLanguage;
 
@@ -51,7 +50,7 @@ namespace CurvaLauncher.Plugin.Translator.MicrosoftEdge
                 }
             };
 
-            var response = await _plugin.HttpClient.SendAsync(request, cancellationToken);
+            var response = await _httpClient.SendAsync(request, cancellationToken);
 
             return await response.Content.ReadAsStringAsync(cancellationToken);
         }
@@ -107,7 +106,7 @@ namespace CurvaLauncher.Plugin.Translator.MicrosoftEdge
                     })
             };
 
-            var response = await _plugin.HttpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -128,7 +127,7 @@ namespace CurvaLauncher.Plugin.Translator.MicrosoftEdge
         }
 
 
-        public override async Task InvokeAsync(CancellationToken cancellationToken)
+        public async Task InvokeAsync(CancellationToken cancellationToken)
         {
             await EnsureJwtAsync(cancellationToken);
 

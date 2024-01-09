@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -50,6 +51,18 @@ public partial class ConfigService : ObservableObject
         config = JsonSerializer.Deserialize<AppConfig>(fs, JsonUtils.Options) ?? new AppConfig();
     }
 
+    private HashSet<string> GetDisabledPlugins()
+    {
+        PluginService pluginService = _serviceProvider
+            .GetRequiredService<PluginService>();
+
+        return pluginService.PluginInstances
+            .Where(pluginInstance => !pluginInstance.IsEnabled)
+            .Select(pluginInstance => pluginInstance.Plugin.GetType().FullName!)
+            .Where(pluginName => pluginName != null)
+            .ToHashSet();
+    }
+
     private JsonObject GetPluginsConfig()
     {
         PluginService pluginService = _serviceProvider
@@ -83,6 +96,7 @@ public partial class ConfigService : ObservableObject
     [RelayCommand]
     public void Save()
     {
+        Config.DisabledPlugins = GetDisabledPlugins();
         Config.PluginsConfig = GetPluginsConfig();
 
         string fullPath = _pathService.GetPath(Path);

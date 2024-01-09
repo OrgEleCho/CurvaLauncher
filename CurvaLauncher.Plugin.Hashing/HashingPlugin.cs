@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Media;
-using CurvaLauncher.Data;
 using CurvaLauncher.Plugin.Hashing.Properties;
 using CurvaLauncher.Utilities;
 
@@ -30,7 +29,7 @@ public class HashingPlugin : SyncCommandPlugin
         Prefix = "#";
     }
 
-    public override IEnumerable<QueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
+    public override IEnumerable<IQueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
     {
         string algorithmName = commandName.ToUpper();
         if (_hashAlgorithmMap.TryGetValue(algorithmName, out var hashAlgorithm))

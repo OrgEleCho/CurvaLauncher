@@ -5,16 +5,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CurvaLauncher.Data;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CurvaLauncher.Models;
 
 public partial class QueryResultModel : ObservableObject
 {
-    private readonly QueryResult _rawQueryResult;
+    private readonly IQueryResult _rawQueryResult;
 
-    public QueryResultModel(float weight, string title, string description, ImageSource? icon, QueryResult rawQueryResult)
+    public QueryResultModel(float weight, string title, string description, ImageSource? icon, IQueryResult rawQueryResult)
     {
         Weight = weight;
         Title = title;
@@ -56,7 +55,7 @@ public partial class QueryResultModel : ObservableObject
     [RelayCommand]
     public async Task Invoke()
     {
-        if (_rawQueryResult is SyncQueryResult syncQueryResult)
+        if (_rawQueryResult is ISyncQueryResult syncQueryResult)
         {
             try
             {
@@ -67,7 +66,7 @@ public partial class QueryResultModel : ObservableObject
                 MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        else if (_rawQueryResult is AsyncQueryResult asyncQueryResult)
+        else if (_rawQueryResult is IAsyncQueryResult asyncQueryResult)
         {
             try
             {
@@ -87,7 +86,7 @@ public partial class QueryResultModel : ObservableObject
         App.CloseLauncher();
     }
 
-    public static QueryResultModel FromQueryResult(QueryResult queryResult)
+    public static QueryResultModel FromQueryResult(IQueryResult queryResult)
     {
         return new QueryResultModel(queryResult.Weight, queryResult.Title, queryResult.Description, queryResult.Icon, queryResult);
     }

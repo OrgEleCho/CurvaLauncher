@@ -1,9 +1,9 @@
-﻿using CurvaLauncher.Data;
-
-namespace CurvaLauncher.Plugin;
+﻿namespace CurvaLauncher.Plugin;
 
 public interface ISyncPlugin : IPlugin
 {
-    void Init();
-    IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query);
+    void Initialize();
+    void Finish();
+
+    IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query);
 }

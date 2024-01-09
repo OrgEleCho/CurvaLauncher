@@ -1,6 +1,5 @@
 ﻿using System.Windows.Media;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Data;
 using System.IO;
 using System.ComponentModel.DataAnnotations;
 using CurvaLauncher.Plugin.RunApplication.Properties;
@@ -26,15 +25,17 @@ namespace CurvaLauncher.Plugin.RunApplication
         public ImageSource Icon => laziedIcon.Value;
 
 
-        private readonly Dictionary<string, string> _win32appPathes = new Dictionary<string, string>();
+        private Dictionary<string, string>? _win32appPathes;
 
         public RunApplicationPlugin()
         {
 
         }
 
-        public void Init()
+        public void Initialize()
         {
+            _win32appPathes = new();
+
             var allShotcutsInStartMenu = new List<string>();
 
             allShotcutsInStartMenu.AddRange(
@@ -61,10 +62,17 @@ namespace CurvaLauncher.Plugin.RunApplication
             }
         }
 
-        public IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query)
+        public void Finish()
+        {
+            _win32appPathes = null;
+        }
+
+        public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
         {
             if (string.IsNullOrWhiteSpace(query))
-                yield break;    
+                yield break;
+            if (_win32appPathes == null)
+                yield break;
 
             var results = _win32appPathes
                 .Select(kv => (kv.Key, kv.Value, Weight: StringUtils.Match(kv.Key.ToLower(), query.ToLower())))

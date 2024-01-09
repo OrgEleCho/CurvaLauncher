@@ -1,5 +1,4 @@
-﻿using CurvaLauncher.Data;
-using CurvaLauncher.Utilities;
+﻿using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.Plugin;
 
@@ -9,10 +8,12 @@ public abstract class SyncCommandPlugin : CommandPlugin, ISyncPlugin
     {
     }
 
-    public virtual void Init() { }
-    public abstract IEnumerable<QueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments);
+    public virtual void Initialize() { }
+    public virtual void Finish() { }
 
-    public IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query)
+    public abstract IEnumerable<IQueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments);
+
+    public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
     {
         if (string.IsNullOrWhiteSpace(query))
             yield break;

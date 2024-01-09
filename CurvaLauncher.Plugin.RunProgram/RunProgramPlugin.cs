@@ -2,7 +2,6 @@
 using System.Windows.Media;
 using System.Windows.Threading;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Data;
 using Microsoft.Win32;
 using CurvaLauncher.Plugin.RunProgram.Properties;
 using System.Text;
@@ -28,11 +27,11 @@ namespace CurvaLauncher.Plugin.RunProgram
 
 
 
-        readonly Dictionary<string, string> _appPathes = new Dictionary<string, string>();
+        Dictionary<string, string>? _appPathes;
 
-        public void Init()
+        public void Initialize()
         {
-            _appPathes.Clear();
+            _appPathes = new();
 
             HashSet<string> includeDirectories = IncludeDirectories
                 .Split(['\r', '\n'])
@@ -79,9 +78,16 @@ namespace CurvaLauncher.Plugin.RunProgram
             }
         }
 
-        public IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query)
+        public void Finish()
+        {
+            _appPathes = null;
+        }
+
+        public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
         {
             if (string.IsNullOrWhiteSpace(query))
+                yield break;
+            if (_appPathes == null)
                 yield break;
 
             CommandLineUtils.Split(query, out var segments);

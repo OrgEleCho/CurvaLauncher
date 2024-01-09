@@ -2,7 +2,6 @@
 using System.Windows.Media;
 using System.Windows.Threading;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Data;
 using CurvaLauncher.Plugin.OpenUrl.Properties;
 
 namespace CurvaLauncher.Plugin.OpenUrl
@@ -20,12 +19,11 @@ namespace CurvaLauncher.Plugin.OpenUrl
 
         public string Description => "Use web browser to open URL";
 
-        public void Init()
-        {
-            // do nothing
-        }
+        public void Initialize() { }
+        public void Finish() { }
 
-        public IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query)
+
+        public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
         {
             if (!UrlRegex.IsMatch(query))
                 yield break;

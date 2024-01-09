@@ -63,6 +63,9 @@ public partial class MainViewModel : ObservableObject
             {
                 foreach (var pluginInstance in _pluginService.PluginInstances)
                 {
+                    if (!pluginInstance.IsEnabled)
+                        continue;
+
                     await pluginInstance.InitTask;
 
                     await foreach (var result in pluginInstance.QueryAsync(context, queryText))

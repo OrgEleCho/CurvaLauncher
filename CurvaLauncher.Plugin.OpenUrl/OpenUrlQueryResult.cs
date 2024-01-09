@@ -3,11 +3,10 @@ using System.Net.Cache;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.OpenUrl
 {
-    public class OpenUrlQueryResult : SyncQueryResult
+    public class OpenUrlQueryResult : ISyncQueryResult
     {
         public OpenUrlQueryResult(CurvaLauncherContext context, Uri url)
         {
@@ -25,15 +24,15 @@ namespace CurvaLauncher.Plugin.OpenUrl
 
         public Uri Url { get; }
 
-        public override float Weight => 1;
+        public float Weight => 1;
 
-        public override string Title => $"{Url}";
+        public string Title => $"{Url}";
 
-        public override string Description => $"Open url in web browser: {Url}";
+        public string Description => $"Open url in web browser: {Url}";
 
-        public override ImageSource? Icon => icon;
+        public ImageSource? Icon => icon;
 
-        public override void Invoke()
+        public void Invoke()
         {
             Process.Start(
                 new ProcessStartInfo()

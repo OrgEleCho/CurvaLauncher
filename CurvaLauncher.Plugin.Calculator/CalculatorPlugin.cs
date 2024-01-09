@@ -1,6 +1,5 @@
 ﻿using System.Windows.Media;
 using System.Windows.Threading;
-using CurvaLauncher.Data;
 using CurvaLauncher.Plugin.Calculator.Properties;
 using CurvaLauncher.Utilities;
 using NCalculatorLib;
@@ -21,12 +20,10 @@ namespace CurvaLauncher.Plugin.Calculator
 
         public string Description => "Math calculation";
 
-        public void Init()
-        {
-            // do nothing
-        }
+        public void Initialize() { }
+        public void Finish() { }
 
-        public IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query)
+        public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
         {
             if (!query.StartsWith(Prefix))
                 yield break;

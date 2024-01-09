@@ -1,26 +1,25 @@
 ﻿using System.Windows.Media;
-using CurvaLauncher.Data;
 using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.Plugin.QuickWebSearch
 {
-    public class QuickWebSearchQueryResult : SyncQueryResult
+    public class QuickWebSearchQueryResult : ISyncQueryResult
     {
         private readonly ImageSource? _icon;
 
-        public override string Title => $"Web search for {Keyword}";
+        public string Title => $"Web search for {Keyword}";
 
-        public override string Description => $"Use {Engine} to search the web for '{Keyword}'";
+        public string Description => $"Use {Engine} to search the web for '{Keyword}'";
 
-        public override float Weight => 1;
+        public float Weight => 1;
 
-        public override ImageSource? Icon => _icon;
+        public ImageSource? Icon => _icon;
 
         public string Engine { get; }
         public string Keyword { get; }
         public string Url { get; }
 
-        public override void Invoke()
+        public void Invoke()
         {
             ShellUtils.Start(Url);
         }

@@ -1,6 +1,6 @@
-﻿namespace CurvaLauncher.Data;
+﻿namespace CurvaLauncher;
 
-public abstract class SyncQueryResult : QueryResult
+public interface ISyncQueryResult : IQueryResult
 {
-    public abstract void Invoke();
+    public void Invoke();
 }

@@ -56,23 +56,12 @@ public partial class PluginService
         var dllFiles = dir.GetFiles("*.dll");
         var configFilePath = System.IO.Path.Combine(dir.FullName, ConfigFileName);
 
-        JsonObject? config = _configService.Config.PluginsConfig;
-
-//#if DEBUG
-//            var debugDir = Directory.GetCurrentDirectory();
-//            var projectRoot = System.IO.Path.Combine(debugDir, "..", "..", "..", "..");
-//            var debugDll1 = System.IO.Path.Combine(projectRoot, "CurvaLauncher.Plugin.RunApplication", "bin", "Debug", "net6.0-windows");
-//            var debugDll2 = System.IO.Path.Combine(projectRoot, "CurvaLauncher.Plugin.RunProgram", "bin", "Debug", "net6.0-windows");
-
-//            foreach (var debugDll in Directory.GetFiles(debugDll1, "*.dll").Concat(Directory.GetFiles(debugDll2, "*.dll")))
-//                if (LoadPlugin(debugDll, out CurvaLauncherPluginInstance? plugin))
-//                    plugins.Add(plugin);
-//#endif
+        AppConfig config = _configService.Config;
 
         foreach (FileInfo dllFile in dllFiles)
-            if (LoadPlugin(dllFile.FullName, out CurvaLauncherPluginInstance? plugin))
+            if (LoadPlugin(config, dllFile.FullName, out CurvaLauncherPluginInstance? plugin))
             {
-                if (config != null && config.TryGetPropertyValue(plugin.Plugin.GetType().FullName!, out var json))
+                if (config.PluginsConfig != null && config.PluginsConfig.TryGetPropertyValue(plugin.Plugin.GetType().FullName!, out var json))
                 {
                     var props = plugin.Plugin.GetType().GetProperties()
                         .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null);
@@ -91,7 +80,7 @@ public partial class PluginService
             }
     }
 
-    private bool LoadPlugin(string dllFilePath, [NotNullWhen(true)] out CurvaLauncherPluginInstance? plugin)
+    private bool LoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out CurvaLauncherPluginInstance? plugin)
     {
         plugin = null;
 
@@ -106,10 +95,12 @@ public partial class PluginService
             if (pluginType == null)
                 return false;
 
-            if (CurvaLauncherPluginInstance.TryCreate(pluginType, out plugin))
-                return true;
+            if (!CurvaLauncherPluginInstance.TryCreate(pluginType, out plugin))
+                return false;
 
-            return false;
+            var typeName = pluginType.FullName!;
+            plugin.IsEnabled = config.DisabledPlugins == null || !config.DisabledPlugins.Contains(typeName);
+            return true;
         }
         catch
         {
@@ -120,13 +111,12 @@ public partial class PluginService
     [RelayCommand]
     public async Task ReloadAllPlugins()
     {
-        foreach (var plugin in PluginInstances)
+        foreach (var plugin in PluginInstances.Where(ins => ins.IsEnabled))
         {
             if (plugin.Plugin is ISyncPlugin syncPlugin)
-                syncPlugin.Init();
-
-            if (plugin.Plugin is IAsyncPlugin asyncPlugin)
-                await asyncPlugin.InitAsync();
+                syncPlugin.Initialize();
+            else if (plugin.Plugin is IAsyncPlugin asyncPlugin)
+                await asyncPlugin.InitializeAsync();
         }
     }
 }

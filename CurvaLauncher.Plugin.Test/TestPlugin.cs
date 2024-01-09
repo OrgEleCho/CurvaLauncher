@@ -1,6 +1,6 @@
-﻿using System.Windows.Media;
+﻿using System.Diagnostics;
+using System.Windows.Media;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.Test
 {
@@ -34,7 +34,7 @@ namespace CurvaLauncher.Plugin.Test
 
         public string Name => "Test plugin";
 
-        public IEnumerable<QueryResult> Query(CurvaLauncherContext context, string query)
+        public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
         {
             if (string.IsNullOrWhiteSpace(query))
                 yield break;
@@ -45,9 +45,14 @@ namespace CurvaLauncher.Plugin.Test
             }
         }
 
-        public void Init()
+        public void Initialize()
         {
-            // do nothing
+            Debug.WriteLine("Plugin loaded");
+        }
+
+        public void Finish()
+        {
+            Debug.WriteLine("Plugin Unloaded");
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Media;
-using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.Calculator
 {
-    public class CalculatorQueryResult : SyncQueryResult
+    public class CalculatorQueryResult : ISyncQueryResult
     {
         public CalculatorQueryResult(double value)
         {
@@ -13,17 +12,17 @@ namespace CurvaLauncher.Plugin.Calculator
 
         public double Value { get; }
 
-        public override float Weight => 1;
+        public float Weight => 1;
 
-        public override string Title => $"{Value}";
+        public string Title => $"{Value}";
 
-        public override string Description => $"Copy value of calculation result: {Value}";
-
-
-        public override ImageSource? Icon => null;
+        public string Description => $"Copy value of calculation result: {Value}";
 
 
-        public override void Invoke()
+        public ImageSource? Icon => null;
+
+
+        public void Invoke()
         {
             Clipboard.SetText($"{Value}");
         }

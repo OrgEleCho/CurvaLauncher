@@ -1,4 +1,5 @@
-﻿using CurvaLauncher.Plugin;
+﻿using CurvaLauncher.Models;
+using CurvaLauncher.Plugin;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -8,11 +9,12 @@ namespace CurvaLauncher.Views.Components;
 
 public partial class PluginOptionsControl : UserControl
 {
-    public IPlugin Plugin { get; }
+    public CurvaLauncherPluginInstance PluginInstance { get; }
+    public IPlugin Plugin => PluginInstance.Plugin;
 
-    public PluginOptionsControl(IPlugin plugin)
+    public PluginOptionsControl(CurvaLauncherPluginInstance pluginInstance)
     {
-        Plugin = plugin;
+        PluginInstance = pluginInstance;
 
         InitializeComponent();
         BuildOptions();
@@ -22,22 +24,22 @@ public partial class PluginOptionsControl : UserControl
     {
         if (typeof(bool) == property.PropertyType)
         {
-            return new PluginSwitchOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name);
+            return new PluginSwitchOption(PluginInstance.Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name);
         }
         else if (property.PropertyType.IsEnum)
         {
             if (property.PropertyType.GetCustomAttribute<FlagsAttribute>() is FlagsAttribute)
             {
-                return new PluginFlagsOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property, property.PropertyType);
+                return new PluginFlagsOption(PluginInstance.Plugin, attribute.Name ?? property.Name, attribute.Description, property, property.PropertyType);
             }
             else
             {
-                return new PluginSelectOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name,  Enum.GetValues(property.PropertyType));
+                return new PluginSelectOption(PluginInstance.Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name,  Enum.GetValues(property.PropertyType));
             }
         }
         else if (typeof(IConvertible).IsAssignableFrom(property.PropertyType))
         {
-            return new PluginTextOption(Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name, attribute.AllowTextMultiline);
+            return new PluginTextOption(PluginInstance.Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name, attribute.AllowTextMultiline);
         }
         else
         {
@@ -48,7 +50,7 @@ public partial class PluginOptionsControl : UserControl
 
     private void BuildOptions()
     {
-        var props = Plugin.GetType().GetProperties()
+        var props = PluginInstance.Plugin.GetType().GetProperties()
             .Select(p => (Attribute: p.GetCustomAttribute<PluginOptionAttribute>(), Property: p))
             .Where(v => v.Attribute is not null);
 
@@ -60,6 +62,5 @@ public partial class PluginOptionsControl : UserControl
                 optionsPanel.Children.Add(pluginOption);
             }
         }
-        
     }
 }

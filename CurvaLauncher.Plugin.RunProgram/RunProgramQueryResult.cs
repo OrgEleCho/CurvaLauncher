@@ -5,12 +5,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Data;
 using System.Text;
 
 namespace CurvaLauncher.Plugin.RunProgram
 {
-    public class RunProgramQueryResult : SyncQueryResult
+    public class RunProgramQueryResult : ISyncQueryResult
     {
         public RunProgramQueryResult(CurvaLauncherContext context, string filename, string arguments)
         {
@@ -25,20 +24,20 @@ namespace CurvaLauncher.Plugin.RunProgram
 
         private ImageSource? icon;
 
-        public override float Weight => 1;
+        public float Weight => 1;
 
-        public override string Title => $"{System.IO.Path.GetFileName(FileName)}";
+        public string Title => $"{System.IO.Path.GetFileName(FileName)}";
 
-        public override string Description => !string.IsNullOrWhiteSpace(Arguments) ?
+        public string Description => !string.IsNullOrWhiteSpace(Arguments) ?
             $"Run Program: '{FileName}' with '{Arguments}'" :
             $"Run Program: '{FileName}'";
 
-        public override ImageSource? Icon => icon;
+        public ImageSource? Icon => icon;
 
         public string FileName { get; }
         public string Arguments { get; }
 
-        public override void Invoke()
+        public void Invoke()
         {
             Process.Start(
                 new ProcessStartInfo()

@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.Generic;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 
@@ -27,6 +28,9 @@ public partial class AppConfig : ObservableObject
 
     [ObservableProperty]
     private JsonObject? _pluginsConfig;
+
+    [ObservableProperty]
+    private HashSet<string>? _disabledPlugins;
 
     [JsonIgnore]
     public double LauncherResultViewHeight => LauncherResultViewCount * 57 + LauncherResultViewCount;

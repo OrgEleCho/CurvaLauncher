@@ -1,6 +1,6 @@
-﻿namespace CurvaLauncher.Data;
+﻿namespace CurvaLauncher;
 
-public abstract class AsyncQueryResult : QueryResult
+public interface IAsyncQueryResult : IQueryResult
 {
-    public abstract Task InvokeAsync(CancellationToken cancellationToken);
+    public Task InvokeAsync(CancellationToken cancellationToken);
 }

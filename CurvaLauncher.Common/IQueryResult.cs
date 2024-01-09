@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace CurvaLauncher.Data;
+namespace CurvaLauncher;
 
-public abstract class QueryResult
+public interface IQueryResult
 {
-    public abstract string Title { get; }
-    public abstract string Description { get; }
-    public abstract float Weight { get; }
-    public abstract ImageSource? Icon { get; }
+    public string Title { get; }
+    public string Description { get; }
+    public float Weight { get; }
+    public ImageSource? Icon { get; }
 }

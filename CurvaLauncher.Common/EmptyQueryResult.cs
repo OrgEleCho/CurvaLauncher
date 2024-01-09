@@ -1,19 +1,19 @@
 ﻿using System.Windows.Media;
 
-namespace CurvaLauncher.Data;
+namespace CurvaLauncher;
 
-public class EmptyQueryResult : QueryResult
+public class EmptyQueryResult : IQueryResult
 {
     private readonly string _title;
     private readonly string _description;
     private readonly float _weight;
     private readonly ImageSource? _icon;
 
-    public override float Weight => _weight;
-    public override string Title => _title;
-    public override string Description => _description;
+    public float Weight => _weight;
+    public string Title => _title;
+    public string Description => _description;
 
-    public override ImageSource? Icon => _icon;
+    public ImageSource? Icon => _icon;
 
     public EmptyQueryResult(string title, string description, float weight, ImageSource? icon)
     {

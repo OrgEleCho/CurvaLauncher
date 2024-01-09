@@ -1,30 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <SolidColorBrush x:Key="LauncherBorderBrush">#aaaaaa</SolidColorBrush>
-    <Thickness x:Key="LauncherBorderThickness">5</Thickness>
-    <CornerRadius x:Key="LauncherBorderRadius">3</CornerRadius>
 
-    <SolidColorBrush x:Key="LauncherContentBrush">#ffffff</SolidColorBrush>
     <Thickness x:Key="LauncherPaddingThickness">7</Thickness>
-    <CornerRadius x:Key="LauncherContentCornerRadius">3</CornerRadius>
 
-    <SolidColorBrush x:Key="QueryBoxContentBrush">#ebebeb</SolidColorBrush>
-    <CornerRadius x:Key="QueryBoxCornerRadius">2</CornerRadius>
     <Thickness x:Key="QueryBoxPaddingThickness">5</Thickness>
 
-    <SolidColorBrush x:Key="QueryBoxTextBrush">#0a0a0a</SolidColorBrush>
     <sys:Double x:Key="QueryBoxTextSize">25</sys:Double>
 
-    <SolidColorBrush x:Key="QueryResultBackgroundBrush">Transparent</SolidColorBrush>
-    <SolidColorBrush x:Key="QueryResultHoverBackgroundBrush">#88cce8ff</SolidColorBrush>
-    <SolidColorBrush x:Key="QueryResultActiveBackgroundBrush">#cce8ff</SolidColorBrush>
-    <CornerRadius x:Key="QueryResultCornerRadius">3</CornerRadius>
     <Thickness x:Key="QueryResultPaddingThickness">5</Thickness>
-    <sys:Double x:Key="QueryResultImageSize">32</sys:Double>
+    
+    <sys:Double x:Key="QueryResultIconSize">32</sys:Double>
     <CornerRadius x:Key="QueryResultIconCornerRadius">3</CornerRadius>
-    <SolidColorBrush x:Key="QueryResultTitleTextBrush">#0a0a0a</SolidColorBrush>
-    <SolidColorBrush x:Key="QueryResultDescriptionTextBrush">#3a3a3a</SolidColorBrush>
+    
     <sys:Double x:Key="QueryResultTitleTextSize">16</sys:Double>
     <sys:Double x:Key="QueryResultDescriptionTextSize">12</sys:Double>
 </ResourceDictionary>

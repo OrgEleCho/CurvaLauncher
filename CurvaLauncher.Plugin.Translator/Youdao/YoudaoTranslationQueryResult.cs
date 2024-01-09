@@ -1,35 +1,34 @@
 ﻿using System.Net.Http.Json;
 using System.Windows;
 using System.Windows.Media;
-using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.Translator.Youdao
 {
-    public class YoudaoTranslationQueryResult : AsyncQueryResult
+    public class YoudaoTranslationQueryResult : IAsyncQueryResult
     {
-        private readonly TranslatorPlugin _plugin;
+        private readonly HttpClient _httpClient;
         private readonly string? _sourceLanguage;
         private readonly string? _targetLanguage;
 
-        public override float Weight => 1;
+        public float Weight => 1;
 
-        public override string Title => "Translate text";
+        public string Title => "Translate text";
 
-        public override string Description => "Translate specified text with 'Youdao'";
+        public string Description => "Translate specified text with 'Youdao'";
 
-        public override ImageSource? Icon => null;
+        public ImageSource? Icon => null;
 
         public string Text { get; }
 
-        public YoudaoTranslationQueryResult(TranslatorPlugin plugin, string? sourceLanguage, string? targetLanguage, string text)
+        public YoudaoTranslationQueryResult(HttpClient httpClient, string? sourceLanguage, string? targetLanguage, string text)
         {
-            _plugin = plugin;
+            _httpClient = httpClient;
             _sourceLanguage = sourceLanguage;
             _targetLanguage = targetLanguage;
             Text = text;
         }
 
-        public override async Task InvokeAsync(CancellationToken cancellationToken)
+        public async Task InvokeAsync(CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage()
             {
@@ -44,7 +43,7 @@ namespace CurvaLauncher.Plugin.Translator.Youdao
                     })
             };
 
-            var response = await _plugin.HttpClient.SendAsync(request, cancellationToken);
+            var response = await _httpClient.SendAsync(request, cancellationToken);
             var result = await response.Content.ReadFromJsonAsync<YoudaoApiResult>(Converter.Settings, cancellationToken);
 
             if (result?.Translation != null && result.Translation.Any())

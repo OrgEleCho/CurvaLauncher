@@ -2,11 +2,10 @@
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using CurvaLauncher.Data;
 
 namespace CurvaLauncher.Plugin.Hashing;
 
-public class HashingQueryResult : AsyncQueryResult
+public class HashingQueryResult : IAsyncQueryResult
 {
     private readonly IEnumerable<Func<Stream>> _streamFactories;
     private readonly HashAlgorithm _hashAlgorithm;
@@ -14,10 +13,10 @@ public class HashingQueryResult : AsyncQueryResult
     private readonly string title;
     private readonly string description;
 
-    public override float Weight => 1;
-    public override string Title => title;
-    public override string Description => description;
-    public override ImageSource? Icon => null;
+    public float Weight => 1;
+    public string Title => title;
+    public string Description => description;
+    public ImageSource? Icon => null;
 
     public HashingQueryResult(IEnumerable<Func<Stream>> streamFactories, HashAlgorithm hashAlgorithm, string title, string description, float weight)
     {
@@ -29,7 +28,7 @@ public class HashingQueryResult : AsyncQueryResult
         _hashAlgorithm = hashAlgorithm;
     }
 
-    public override async Task InvokeAsync(CancellationToken cancellationToken)
+    public async Task InvokeAsync(CancellationToken cancellationToken)
     {
         List<string> results = new();
 

@@ -1,5 +1,4 @@
 ﻿using System.Windows.Media;
-using CurvaLauncher.Data;
 using CurvaLauncher.Plugin.Translator.Properties;
 using CurvaLauncher.Utilities;
 
@@ -29,6 +28,8 @@ namespace CurvaLauncher.Plugin.Translator
             }
         }
 
+
+        HttpClient? _httpClient;
         Lazy<ImageSource> _laziedIcon = new Lazy<ImageSource>(() => ImageUtils.CreateFromSvg(Resources.IconSvg)!);
 
         public override string Name => "Translator";
@@ -37,16 +38,30 @@ namespace CurvaLauncher.Plugin.Translator
 
         public override ImageSource Icon => _laziedIcon.Value;
 
-        public HttpClient HttpClient { get; private set; }
-
         public TranslatorPlugin()
         {
-            HttpClient = new();
+            
         }
 
-        public override IEnumerable<QueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            _httpClient = new();
+        }
+
+        public override void Finish()
+        {
+            base.Finish();
+
+            _httpClient = null;
+        }
+
+        public override IEnumerable<IQueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
         {
             if (!Enum.IsDefined<TranslatorAPI>(TranslatorAPI))
+                yield break;
+            if (_httpClient == null)
                 yield break;
 
             if (arguments.Length == 0)
@@ -67,11 +82,12 @@ namespace CurvaLauncher.Plugin.Translator
 
             yield return TranslatorAPI switch
             {
-                TranslatorAPI.Youdao => new Youdao.YoudaoTranslationQueryResult(this, sourceLanguage, targetLanguage, text),
-                TranslatorAPI.MicrosoftEdge => new MicrosoftEdge.EdgeTranslationQueryResult(this, sourceLanguage, targetLanguage, text),
+                TranslatorAPI.Youdao => new Youdao.YoudaoTranslationQueryResult(_httpClient, sourceLanguage, targetLanguage, text),
+                TranslatorAPI.MicrosoftEdge => new MicrosoftEdge.EdgeTranslationQueryResult(_httpClient, sourceLanguage, targetLanguage, text),
 
                 _ => throw new Exception("This would never happen")
             };
         }
     }
 }
+

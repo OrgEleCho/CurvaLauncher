@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:CurvaLauncher"
              xmlns:hotkey="https://wpf.elecho.org/globalhotkey"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:data="clr-namespace:CurvaLauncher.Data;assembly=CurvaLauncher.Common"
              xmlns:utils="clr-namespace:CurvaLauncher.Utilities"
              xmlns:models="clr-namespace:CurvaLauncher.Models"
              xmlns:wpfproxy="clr-namespace:EleCho.WpfUtilities;assembly=EleCho.WpfUtilities.BindingProxy"
@@ -15,13 +14,12 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=local:MainWindow}" 
-             Title="CurvaLauncher"
-             d:Width="800"
+             Title="CurvaLauncher" d:Width="800"
              Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}" 
              Height="Auto" MinHeight="0"
              ResizeMode="NoResize"
              ShowInTaskbar="False"
-             Topmost="True" Visibility="Hidden" d:Visibility="Visible"
+             Topmost="True" 
              SizeToContent="Height"
              ExtendsContentIntoTitleBar="True"
              WindowBackdropType="Mica"
@@ -29,8 +27,7 @@
              TextOptions.TextRenderingMode="ClearType"
              Loaded="UiWindow_Loaded"
              Closing="Window_Closing"
-             Deactivated="Window_Deactivated"
-             d:Background="White">
+             Deactivated="Window_Deactivated">
 
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{x:Static local:App.CloseLauncherCommand}"/>
@@ -63,7 +60,8 @@
                             <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
                         </ui:TextBox.InputBindings>
                         <ui:TextBox.ContextMenu>
-                            <ContextMenu FontSize="14">
+                            <ContextMenu FontSize="14" HasDropShadow="True"
+                                         BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}">
                                 <ui:MenuItem Header="Cut" Command="ApplicationCommands.Cut"/>
                                 <ui:MenuItem Header="Copy" Command="ApplicationCommands.Copy"/>
                                 <ui:MenuItem Header="Paste" Command="ApplicationCommands.Paste"/>
@@ -137,8 +135,8 @@
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
 
-                                                <Border Width="{DynamicResource QueryResultImageSize}"
-                                                        Height="{DynamicResource QueryResultImageSize}"
+                                                <Border Width="{DynamicResource QueryResultIconSize}"
+                                                        Height="{DynamicResource QueryResultIconSize}"
                                                         CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
                                                     <Border.Background>
                                                         <ImageBrush Stretch="Uniform"

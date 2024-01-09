@@ -1,5 +1,4 @@
 ﻿using System.Windows.Media;
-using CurvaLauncher.Data;
 using CurvaLauncher.Plugin.QuickWebSearch.Properties;
 using CurvaLauncher.Utilities;
 
@@ -74,7 +73,7 @@ namespace CurvaLauncher.Plugin.QuickWebSearch
             };
         }
 
-        public override IEnumerable<QueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
+        public override IEnumerable<IQueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
         {
             var searchEngine = GetSearchEngineFromCommand(commandName);
             var icon = GetSearchEngineIcon(searchEngine);

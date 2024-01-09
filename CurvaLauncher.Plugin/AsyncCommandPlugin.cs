@@ -1,5 +1,4 @@
-﻿using CurvaLauncher.Data;
-using CurvaLauncher.Utilities;
+﻿using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.Plugin;
 
@@ -9,10 +8,12 @@ public abstract class AsyncCommandPlugin : CommandPlugin, IAsyncPlugin
     {
     }
 
-    public virtual Task InitAsync() => Task.CompletedTask;
-    public abstract IAsyncEnumerable<QueryResult> ExecuteCommandAsync(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments);
+    public virtual Task InitializeAsync() => Task.CompletedTask;
+    public virtual Task FinishAsync() => Task.CompletedTask;
 
-    public async IAsyncEnumerable<QueryResult> QueryAsync(CurvaLauncherContext context, string query)
+    public abstract IAsyncEnumerable<IQueryResult> ExecuteCommandAsync(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments);
+
+    public async IAsyncEnumerable<IQueryResult> QueryAsync(CurvaLauncherContext context, string query)
     {
         if (string.IsNullOrWhiteSpace(query))
             yield break;

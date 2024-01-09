@@ -16,7 +16,7 @@ using CurvaLauncher.ViewModels;
 using CurvaLauncher.Views.Components;
 using Microsoft.Win32;
 using Wpf.Ui.Appearance;
-
+using Wpf.Ui.Mvvm.Services;
 using WpfMsgBox = Wpf.Ui.Controls.MessageBox;
 
 namespace CurvaLauncher.Views;
@@ -73,7 +73,7 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
             return;
 
         if (!_cachedPluginOptions.TryGetValue(pluginInstance, out var pluginOption))
-            _cachedPluginOptions[pluginInstance] = pluginOption = new PluginOptionsControl(pluginInstance.Plugin);
+            _cachedPluginOptions[pluginInstance] = pluginOption = new PluginOptionsControl(pluginInstance);
 
         pluginOptionContainer.Content = pluginOption;
     }
@@ -89,29 +89,13 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
         ViewModel.ShowHotkeyApplyButton = !ViewModel.HotkeyNotValid && (!HotkeyService.Registered || HotkeyService.RegisteredHotkey != hotkey);
     }
 
-    Lazy<Wpf.Ui.Controls.MessageBox> _laziedHotkeyRegistrationSuccessfulDialog = new(
-        () => new WpfMsgBox()
-        { 
-            Title = "CurvaLauncher Tips",
-            Content = $"CurvaLauncher hotkey registration is successful",
-             
-        });
-
     [RelayCommand]
     public void ApplyHotkey()
     {
         HotkeyService.Register();
         CheckHotkeyStatus();
 
-        if (HotkeyService.Registered)
-        {
-            NativeMethods.MessageBox(
-                IntPtr.Zero,
-                $"CurvaLauncher hotkey registration is successful",
-                "CurvaLauncher Tips",
-                MessageBoxFlags.Ok | MessageBoxFlags.IconInformation);
-        }
-        else
+        if (!HotkeyService.Registered)
         {
             NativeMethods.MessageBox(
                 IntPtr.Zero,
@@ -125,7 +109,7 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
     [RelayCommand]
     public void CheckStartupStatus()
     {
-        var selfPath = Assembly.GetExecutingAssembly().Location!;
+        var selfPath = System.Environment.ProcessPath!;
         var runDir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
         var path = Path.Combine(runDir, $"{nameof(CurvaLauncher)}.lnk");
 
@@ -155,7 +139,7 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
         try
         {
             var runDir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            var shortcut = Shortcut.CreateShortcut(Assembly.GetExecutingAssembly().Location);
+            var shortcut = Shortcut.CreateShortcut( System.Environment.ProcessPath!);
             var path = Path.Combine(runDir, $"{nameof(CurvaLauncher)}.lnk");
 
             File.WriteAllBytes(path, shortcut.GetBytes());
@@ -174,7 +158,6 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
         try
         {
             var runDir = Environment.GetFolderPath(Environment.SpecialFolder.Startup);
-            var shortcut = Shortcut.CreateShortcut(Assembly.GetExecutingAssembly().Location);
             var path = Path.Combine(runDir, $"{nameof(CurvaLauncher)}.lnk");
 
             if (File.Exists(path))
@@ -219,6 +202,5 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
     public void SaveSettings()
     {
         ConfigService.Save();
-        MessageBox.Show("Settings saved", "CurvaLauncher Tips", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 }
