@@ -9,7 +9,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon128.ico</ApplicationIcon>
 
-    <Version>0.3.0-alpha</Version>
+    <Version>0.4.0-alpha</Version>
   </PropertyGroup>
 
   <ItemGroup>
