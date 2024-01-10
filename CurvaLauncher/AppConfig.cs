@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Wpf.Ui.Appearance;
 
 namespace CurvaLauncher;
 
@@ -45,6 +46,11 @@ public partial class AppConfig : ObservableObject
     public static IReadOnlyCollection<AppLanguage> AvailableLanguages { get; } = Enum.GetValues<AppLanguage>();
 
     
+    [ObservableProperty]
+    private AppTheme _theme;
+
+    public static IReadOnlyCollection<AppTheme> AvailableThemes { get; } = [AppTheme.Auto, AppTheme.Light, AppTheme.Dark];
+
     public partial class PluginConfig : ObservableObject
     {
         [ObservableProperty]

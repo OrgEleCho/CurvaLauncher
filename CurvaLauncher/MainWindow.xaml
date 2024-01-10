@@ -13,21 +13,20 @@
              xmlns:tb="http://www.hardcodet.net/taskbar"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type=local:MainWindow}" 
+             d:DataContext="{d:DesignInstance Type=local:MainWindow}"
              Title="CurvaLauncher" d:Width="800"
-             Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}" 
+             Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}"
              Height="Auto" MinHeight="0"
              ResizeMode="NoResize"
              ShowInTaskbar="False"
-             Topmost="True" 
+             Topmost="True"
              SizeToContent="Height"
              ExtendsContentIntoTitleBar="True"
              WindowBackdropType="Mica"
              FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
              TextOptions.TextRenderingMode="ClearType"
-             Loaded="UiWindow_Loaded"
-             Closing="Window_Closing"
-             Deactivated="Window_Deactivated">
+             Closing="WindowClosing"
+             Deactivated="WindowDeactivated">
 
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{x:Static local:App.CloseLauncherCommand}"/>
@@ -182,7 +181,7 @@
                         IconSource="/Assets/Icon32.ico"
                         LeftClickCommand="{x:Static local:App.ShowLauncherCommand}">
             <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu HasDropShadow="True" StaysOpen="True" 
+                <ContextMenu HasDropShadow="True" StaysOpen="True"
                              Background="{DynamicResource ApplicationBackgroundBrush}"
                              Foreground="{DynamicResource TextFillColorPrimaryBrush}"
                              BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}">

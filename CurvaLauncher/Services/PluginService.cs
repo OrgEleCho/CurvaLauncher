@@ -23,7 +23,7 @@ public partial class PluginService
     public string Path { get; set; } = "Plugins";
     public string ConfigFileName { get; set; } = "Config.json";
 
-    public ObservableCollection<CurvaLauncherPluginInstance> PluginInstances { get; private set; }
+    public ObservableCollection<CurvaLauncherPluginInstance> PluginInstances { get; } = new();
 
     public PluginService(
         PathService pathService,
@@ -31,14 +31,10 @@ public partial class PluginService
     {
         _pathService = pathService;
         _configService = configService;
-
-        LoadPlugins(out var plugins);
-
-        PluginInstances = new(plugins);
     }
 
 
-    public DirectoryInfo EnsurePluginDirectories()
+    private DirectoryInfo EnsurePluginDirectories()
     {
         DirectoryInfo dir = new(_pathService.GetPath(Path));
 
@@ -48,24 +44,23 @@ public partial class PluginService
         return dir;
     }
 
-    private void LoadPlugins(out List<CurvaLauncherPluginInstance> plugins)
+    private void CoreLoadPlugins(out List<CurvaLauncherPluginInstance> plugins)
     {
         plugins = new List<CurvaLauncherPluginInstance>();
 
         var dir = EnsurePluginDirectories();
         var dllFiles = dir.GetFiles("*.dll");
-        var configFilePath = System.IO.Path.Combine(dir.FullName, ConfigFileName);
 
         AppConfig config = _configService.Config;
 
         foreach (FileInfo dllFile in dllFiles)
-            if (LoadPlugin(config, dllFile.FullName, out CurvaLauncherPluginInstance? plugin))
+            if (CoreLoadPlugin(config, dllFile.FullName, out CurvaLauncherPluginInstance? plugin))
             {
                 plugins.Add(plugin);
             }
     }
 
-    private bool LoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out CurvaLauncherPluginInstance? pluginInstance)
+    private bool CoreLoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out CurvaLauncherPluginInstance? pluginInstance)
     {
         pluginInstance = null;
 
@@ -117,6 +112,16 @@ public partial class PluginService
         {
             return false;
         }
+    }
+
+    [RelayCommand]
+    public void LoadAllPlugins()
+    {
+        CoreLoadPlugins(out var plugins);
+
+        PluginInstances.Clear();
+        foreach (var plugin in plugins)
+            PluginInstances.Add(plugin);
     }
 
     [RelayCommand]

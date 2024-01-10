@@ -30,13 +30,13 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     public AppConfig AppConfig { get; }
     public MainViewModel ViewModel { get; }
 
-    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
     {
         e.Cancel = true;
         App.CloseLauncher();
     }
 
-    private void Window_Deactivated(object sender, EventArgs e)
+    private void WindowDeactivated(object sender, EventArgs e)
     {
         if (AppConfig.KeepLauncherWhenFocusLost)
             return;

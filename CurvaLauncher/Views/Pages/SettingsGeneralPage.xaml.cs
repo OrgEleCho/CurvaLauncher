@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Libraries.Securify.ShellLink;
+using CurvaLauncher.Models;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities;
 using CurvaLauncher.ViewModels;
-using Wpf.Ui.Mvvm.Interfaces;
+using Wpf.Ui.Appearance;
 
 namespace CurvaLauncher.Views.Pages
 {
