@@ -22,7 +22,7 @@
         <ComboBox Name="input" VerticalContentAlignment="Center" Margin="3 3 0 0">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Converter={}}"/>
+                    <TextBlock Text="{Binding Converter={StaticResource enum2str}}"/>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>

@@ -31,6 +31,9 @@ public partial class AppConfig : ObservableObject
     private string _launcherHotkey = "Alt+Space";
 
     [ObservableProperty]
+    private AppTheme _theme = AppTheme.Auto;
+
+    [ObservableProperty]
     private AppLanguage _language = AppLanguage.Auto;
 
     [ObservableProperty]
@@ -43,13 +46,10 @@ public partial class AppConfig : ObservableObject
     public double LauncherResultViewHeight => LauncherResultViewCount * 57 + LauncherResultViewCount;
 
 
-    public static IReadOnlyCollection<AppLanguage> AvailableLanguages { get; } = Enum.GetValues<AppLanguage>();
-
-    
-    [ObservableProperty]
-    private AppTheme _theme;
 
     public static IReadOnlyCollection<AppTheme> AvailableThemes { get; } = [AppTheme.Auto, AppTheme.Light, AppTheme.Dark];
+    public static IReadOnlyCollection<AppLanguage> AvailableLanguages { get; } = Enum.GetValues<AppLanguage>();
+
 
     public partial class PluginConfig : ObservableObject
     {

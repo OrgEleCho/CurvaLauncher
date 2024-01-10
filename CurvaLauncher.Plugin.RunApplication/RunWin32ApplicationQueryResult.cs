@@ -6,7 +6,7 @@ using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.Plugin.RunApplication
 {
-    public class RunWin32ApplicationQueryResult : IAsyncQueryResult
+    public class RunWin32ApplicationQueryResult : ISyncQueryResult
     {
         public RunWin32ApplicationQueryResult(CurvaLauncherContext context, string appName, string filename, string? commandLineArguments, float weight)
         {
@@ -35,7 +35,7 @@ namespace CurvaLauncher.Plugin.RunApplication
         public string FileName { get; }
         public string? CommandLineArguments { get; }
 
-        public async Task InvokeAsync(CancellationToken cancellationToken)
+        public void Invoke()
         {
             var process = Process.Start(
                 new ProcessStartInfo()
@@ -45,24 +45,6 @@ namespace CurvaLauncher.Plugin.RunApplication
                     WorkingDirectory = Path.GetDirectoryName(FileName),
                     UseShellExecute = true,
                 });
-
-            if (process == null)
-                return;
-
-            Task inputWait = Task.Run(process.WaitForInputIdle, cancellationToken);
-
-            while (process.MainWindowHandle == IntPtr.Zero)
-            {
-                if (cancellationToken.IsCancellationRequested)
-                    break;
-                if (process.HasExited)
-                    break;
-                
-                if (inputWait.IsCompleted)
-                    break;
-
-                await Task.Delay(1);
-            }
         }
     }
 }

@@ -20,11 +20,13 @@ namespace CurvaLauncher.Views.Pages
             SettingsGeneralViewModel viewModel,
             ConfigService configService,
             HotkeyService hotkeyService,
+            ThemeService themeService,
             GlobalizationService globalizationService)
         {
             ViewModel = viewModel;
             ConfigService = configService;
             HotkeyService = hotkeyService;
+            ThemeService = themeService;
             GlobalizationService = globalizationService;
             DataContext = this;
 
@@ -34,6 +36,7 @@ namespace CurvaLauncher.Views.Pages
         public SettingsGeneralViewModel ViewModel { get; }
         public ConfigService ConfigService { get; }
         public HotkeyService HotkeyService { get; }
+        public ThemeService ThemeService { get; }
         public GlobalizationService GlobalizationService { get; }
 
         [RelayCommand]

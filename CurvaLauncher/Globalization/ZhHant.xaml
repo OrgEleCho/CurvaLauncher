@@ -1,0 +1,47 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <sys:String x:Key="StrCut">剪切</sys:String>
+    <sys:String x:Key="StrCopy">複製</sys:String>
+    <sys:String x:Key="StrPaste">貼上</sys:String>
+    <sys:String x:Key="StrSettings">設定</sys:String>
+    <sys:String x:Key="StrExit">退出</sys:String>
+    <sys:String x:Key="StrAdd">新增</sys:String>
+    <sys:String x:Key="StrDelete">刪除</sys:String>
+    <sys:String x:Key="StrCheck">檢查</sys:String>
+    <sys:String x:Key="StrTips">提示</sys:String>
+    <sys:String x:Key="StrApply">套用</sys:String>
+    <sys:String x:Key="StrSave">儲存</sys:String>
+    <sys:String x:Key="StrGeneral">常規</sys:String>
+    <sys:String x:Key="StrPlugin">插件</sys:String>
+    <sys:String x:Key="StrHotkey">熱鍵</sys:String>
+    <sys:String x:Key="StrAbout">關於</sys:String>
+    <sys:String x:Key="StrTheme">主題</sys:String>
+    <sys:String x:Key="StrLanguage">語言</sys:String>
+    <sys:String x:Key="StrVersion">版本</sys:String>
+    <sys:String x:Key="StrRepository">儲存庫</sys:String>
+
+    <sys:String x:Key="StrExitLauncher">退出啟動器</sys:String>
+
+    <sys:String x:Key="StrLauncherHotkey">啟動器熱鍵</sys:String>
+    <sys:String x:Key="StrNotRegistered">未註冊</sys:String>
+    <sys:String x:Key="StrInvalidHotkey">無效熱鍵</sys:String>
+    <sys:String x:Key="StrLauncherWidth">啟動器寬度</sys:String>
+    <sys:String x:Key="StrQueryResultViewCount">查詢結果可視數量</sys:String>
+    <sys:String x:Key="StrQueryResultIconSize">查詢結果圖示大小</sys:String>
+    <sys:String x:Key="StrStartsWithWindows">自動隨 Windows 啟動</sys:String>
+    <sys:String x:Key="StrKeepLauncherWhenFocusIsLost">在焦點丟失時保持啟動器開啟</sys:String>
+
+    <sys:String x:Key="StrReloadAllPlugins">重新載入所有插件</sys:String>
+    <sys:String x:Key="StrPluginWeight">插件權重</sys:String>
+
+    <sys:String x:Key="StrErrorHotkeys">錯誤熱鍵</sys:String>
+    <sys:String x:Key="StrCustomHotkeyTips">
+        在這裡，您可以自定義查詢熱鍵，當查詢熱鍵觸發時，啟動器會打開並自動輸入指定的內容。
+    </sys:String>
+
+    <sys:String x:Key="AppDescription">簡單、輕量、快速的桌面啟動器</sys:String>
+
+
+</ResourceDictionary>

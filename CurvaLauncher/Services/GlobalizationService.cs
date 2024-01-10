@@ -19,6 +19,8 @@ namespace CurvaLauncher.Services
         {
             [new CultureInfo("en-US")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("EnUs.xaml") },
             [new CultureInfo("zh-Hans")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("ZhHans.xaml") },
+            [new CultureInfo("zh-Hant")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("ZhHant.xaml") },
+            [new CultureInfo("ja-JP")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("JaJp.xaml") },
         };
 
         public GlobalizationService(
@@ -67,6 +69,7 @@ namespace CurvaLauncher.Services
                 AppLanguage.English => new CultureInfo("en"),
                 AppLanguage.ChineseSimplified => new CultureInfo("zh-Hans"),
                 AppLanguage.ChineseTraditional => new CultureInfo("zh-Hant"),
+                AppLanguage.Japanese => new CultureInfo("ja-JP"),
                 _ => CultureInfo.CurrentCulture
             };
 

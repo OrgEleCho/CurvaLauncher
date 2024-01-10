@@ -6,7 +6,9 @@
            xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
            xmlns:root="clr-namespace:CurvaLauncher"
            xmlns:local="clr-namespace:CurvaLauncher.Views.Pages"
+           xmlns:models="clr-namespace:CurvaLauncher.Models"
            xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+           xmlns:converters="clr-namespace:CurvaLauncher.Converters"
            mc:Ignorable="d"
            d:DesignHeight="450" d:DesignWidth="800"
            d:Background="White"
@@ -15,6 +17,7 @@
 
     <ui:UiPage.Resources>
         <BooleanToVisibilityConverter x:Key="bool2visibility"/>
+        <converters:EnumConverter x:Key="enum2str"/>
     </ui:UiPage.Resources>
 
     <behaviors:Interaction.Triggers>
@@ -29,133 +32,156 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <StackPanel Margin="15">
-
-            <StackPanel Margin="0 0 0 10">
-                <StackPanel Orientation="Horizontal">
-
-                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-                        <TextBlock>
+        <ScrollViewer>
+            <StackPanel Margin="15">
+                <StackPanel Margin="0 0 0 10">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                            <TextBlock>
                             <Run Text="{DynamicResource StrLauncherHotkey}"/>
                             <Run Text=":"/>
-                        </TextBlock>
-                    </Label>
+                            </TextBlock>
+                        </Label>
 
-                    <TextBlock Grid.Column="2" Margin="10 0 0 0"
+                        <TextBlock Grid.Column="2" Margin="10 0 0 0"
                                 Visibility="{Binding ViewModel.HotkeyNotRegistered,Converter={StaticResource bool2visibility}}">
-                        <Run Text="["/>
-                        <Run Text="{DynamicResource StrNotRegistered}"/>
-                        <Run Text="]"/>
-                    </TextBlock>
+                            <Run Text="["/>
+                            <Run Text="{DynamicResource StrNotRegistered}"/>
+                            <Run Text="]"/>
+                        </TextBlock>
 
-                    <TextBlock Grid.Column="3" Margin="10 0 0 0"
+                        <TextBlock Grid.Column="3" Margin="10 0 0 0"
                                 Visibility="{Binding ViewModel.HotkeyNotValid,Converter={StaticResource bool2visibility}}">
-                        <Run Text="["/>
-                        <Run Text="{DynamicResource StrInvalidHotkey}"/>
-                        <Run Text="]"/>
-                    </TextBlock>
-                </StackPanel>
+                            <Run Text="["/>
+                            <Run Text="{DynamicResource StrInvalidHotkey}"/>
+                            <Run Text="]"/>
+                        </TextBlock>
+                    </StackPanel>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                    <ui:TextBox VerticalContentAlignment="Center"
+                        <ui:TextBox VerticalContentAlignment="Center"
                                 Text="{Binding ConfigService.Config.LauncherHotkey,UpdateSourceTrigger=PropertyChanged}">
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="TextChanged">
-                                <behaviors:InvokeCommandAction Command="{Binding CheckHotkeyStatusCommand}"/>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                    </ui:TextBox>
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="TextChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding CheckHotkeyStatusCommand}"/>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </ui:TextBox>
 
-                    <ui:Button Grid.Column="1" Margin="10 0 0 0"
+                        <ui:Button Grid.Column="1" Margin="10 0 0 0"
                                VerticalAlignment="Stretch"
                                Content="{DynamicResource StrApply}"
                                Visibility="{Binding ViewModel.ShowHotkeyApplyButton,Converter={StaticResource bool2visibility}}"
                                Command="{Binding ApplyHotkeyCommand}"/>
-                </Grid>
-            </StackPanel>
+                    </Grid>
+                </StackPanel>
 
-            <StackPanel Margin="0 0 0 10">
-                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-                    <TextBlock>
+                <StackPanel Margin="0 0 0 10">
+                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                        <TextBlock>
                         <Run Text="{DynamicResource StrLauncherWidth}"/>
                         <Run Text=":"/>
-                    </TextBlock>
-                </Label>
-                <TextBox VerticalContentAlignment="Center"
+                        </TextBlock>
+                    </Label>
+                    <TextBox VerticalContentAlignment="Center"
                          Text="{Binding ConfigService.Config.LauncherWidth}"/>
-            </StackPanel>
+                </StackPanel>
 
-            <StackPanel Margin="0 0 0 10">
-                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-                    <TextBlock>
+                <StackPanel Margin="0 0 0 10">
+                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                        <TextBlock>
                         <Run Text="{DynamicResource StrQueryResultViewCount}"/>
                         <Run Text=":"/>
-                    </TextBlock>
-                </Label>
-                <TextBox VerticalContentAlignment="Center"
+                        </TextBlock>
+                    </Label>
+                    <TextBox VerticalContentAlignment="Center"
                          Text="{Binding ConfigService.Config.LauncherResultViewCount}"/>
-            </StackPanel>
+                </StackPanel>
 
-            <StackPanel Margin="0 0 0 10">
-                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-                    <TextBlock>
+                <StackPanel Margin="0 0 0 10">
+                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                        <TextBlock>
                         <Run Text="{DynamicResource StrQueryResultIconSize}"/>
                         <Run Text=":"/>
-                    </TextBlock>
-                </Label>
-                <TextBox VerticalContentAlignment="Center"
+                        </TextBlock>
+                    </Label>
+                    <TextBox VerticalContentAlignment="Center"
                          Text="{Binding ConfigService.Config.QueryResultIconSize}"/>
-            </StackPanel>
+                </StackPanel>
 
-            <StackPanel Margin="0 0 0 10">
-                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
-                    <TextBlock>
-                        <Run Text="{DynamicResource StrLanguage}"/>
+                <StackPanel Margin="0 0 0 10">
+                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                        <TextBlock>
+                        <Run Text="{DynamicResource StrTheme}"/>
                         <Run Text=":"/>
-                    </TextBlock>
-                </Label>
-                <ComboBox VerticalContentAlignment="Center"
+                        </TextBlock>
+                    </Label>
+                    <ComboBox VerticalContentAlignment="Center"
+                          ItemsSource="{x:Static root:AppConfig.AvailableThemes}"
+                          SelectedItem="{Binding ConfigService.Config.Theme}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="SelectionChanged">
+                                <behaviors:InvokeCommandAction Command="{Binding ThemeService.ApplyThemeCommand}"/>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
+
+                <StackPanel Margin="0 0 0 10">
+                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                        <TextBlock>
+                            <Run Text="{DynamicResource StrLanguage}"/>
+                            <Run Text=":"/>
+                        </TextBlock>
+                    </Label>
+                    <ComboBox VerticalContentAlignment="Center"
                           ItemsSource="{x:Static root:AppConfig.AvailableLanguages}"
                           SelectedItem="{Binding ConfigService.Config.Language}">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="SelectionChanged">
-                            <behaviors:InvokeCommandAction Command="{Binding GlobalizationService.ApplyLanguageCommand}"/>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                </ComboBox>
-            </StackPanel>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate DataType="models:AppLanguage">
+                                <TextBlock Text="{Binding Converter={StaticResource enum2str}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="SelectionChanged">
+                                <behaviors:InvokeCommandAction Command="{Binding GlobalizationService.ApplyLanguageCommand}"/>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
 
-            <CheckBox Margin="0 15 0 0"
+                <CheckBox Margin="0 15 0 0"
                       IsChecked="{Binding ConfigService.Config.StartsWithWindows}">
-                
-                <TextBlock>
+
+                    <TextBlock>
                         <Run Text="{DynamicResource StrStartsWithWindows}"/>
                         <Run Text=":"/>
-                </TextBlock>
+                    </TextBlock>
 
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="Checked">
-                        <behaviors:InvokeCommandAction Command="{Binding SwitchOnStartupCommand}"/>
-                    </behaviors:EventTrigger>
-                    <behaviors:EventTrigger EventName="Unchecked">
-                        <behaviors:InvokeCommandAction Command="{Binding SwitchOffStartupCommand}"/>
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="Checked">
+                            <behaviors:InvokeCommandAction Command="{Binding SwitchOnStartupCommand}"/>
+                        </behaviors:EventTrigger>
+                        <behaviors:EventTrigger EventName="Unchecked">
+                            <behaviors:InvokeCommandAction Command="{Binding SwitchOffStartupCommand}"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
 
-            </CheckBox>
+                </CheckBox>
 
-            <CheckBox Margin="0 0 0 0"
+                <CheckBox Margin="0 0 0 0"
                       IsChecked="{Binding ConfigService.Config.KeepLauncherWhenFocusLost}">
-                <TextBlock>
+                    <TextBlock>
                     <Run Text="{DynamicResource StrKeepLauncherWhenFocusIsLost}"/>
                     <Run Text=":"/>
-                </TextBlock>
-            </CheckBox>
-        </StackPanel>
+                    </TextBlock>
+                </CheckBox>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </ui:UiPage>

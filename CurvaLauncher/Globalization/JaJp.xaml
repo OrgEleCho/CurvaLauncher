@@ -1,0 +1,48 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="StrCut">切り取り</sys:String>
+    <sys:String x:Key="StrCopy">コピー</sys:String>
+    <sys:String x:Key="StrPaste">貼り付け</sys:String>
+    <sys:String x:Key="StrSettings">設定</sys:String>
+    <sys:String x:Key="StrExit">終了</sys:String>
+    <sys:String x:Key="StrAdd">追加</sys:String>
+    <sys:String x:Key="StrDelete">削除</sys:String>
+    <sys:String x:Key="StrCheck">チェック</sys:String>
+    <sys:String x:Key="StrTips">ヒント</sys:String>
+    <sys:String x:Key="StrApply">適用</sys:String>
+    <sys:String x:Key="StrSave">保存</sys:String>
+    <sys:String x:Key="StrGeneral">一般</sys:String>
+    <sys:String x:Key="StrPlugin">プラグイン</sys:String>
+    <sys:String x:Key="StrHotkey">ホットキー</sys:String>
+    <sys:String x:Key="StrAbout">情報</sys:String>
+    <sys:String x:Key="StrTheme">テーマ</sys:String>
+    <sys:String x:Key="StrLanguage">言語</sys:String>
+    <sys:String x:Key="StrVersion">バージョン</sys:String>
+    <sys:String x:Key="StrRepository">リポジトリ</sys:String>
+
+    <sys:String x:Key="StrExitLauncher">ランチャーを終了する</sys:String>
+
+    <sys:String x:Key="StrLauncherHotkey">ランチャーホットキー</sys:String>
+    <sys:String x:Key="StrNotRegistered">登録されていません</sys:String>
+    <sys:String x:Key="StrInvalidHotkey">無効なホットキー</sys:String>
+    <sys:String x:Key="StrLauncherWidth">ランチャーの幅</sys:String>
+    <sys:String x:Key="StrQueryResultViewCount">クエリ結果の表示数</sys:String>
+    <sys:String x:Key="StrQueryResultIconSize">クエリ結果のアイコンサイズ</sys:String>
+    <sys:String x:Key="StrStartsWithWindows">Windows の起動時に自動的に開始</sys:String>
+    <sys:String x:Key="StrKeepLauncherWhenFocusIsLost">フォーカスが失われたときにランチャーを開いたままにする</sys:String>
+
+    <sys:String x:Key="StrReloadAllPlugins">すべてのプラグインを再読み込みする</sys:String>
+    <sys:String x:Key="StrPluginWeight">プラグインの重み</sys:String>
+
+    <sys:String x:Key="StrErrorHotkeys">エラーホットキー</sys:String>
+    <sys:String x:Key="StrCustomHotkeyTips">
+        ここでは、クエリホットキーをカスタマイズできます。クエリホットキーがトリガーされると、ランチャーが開き、指定された内容が自動的に入力されます。
+    </sys:String>
+
+    <sys:String x:Key="AppDescription">シンプルで軽量、高速なデスクトップランチャー</sys:String>
+
+
+
+</ResourceDictionary>
