@@ -51,9 +51,10 @@ namespace CurvaLauncher
 
             // services
             services.AddSingleton<PathService>();
+            services.AddSingleton<ConfigService>();
             services.AddSingleton<HotkeyService>();
             services.AddSingleton<PluginService>();
-            services.AddSingleton<ConfigService>();
+            services.AddSingleton<GlobalizationService>();
             services.AddSingleton<PageService>();
 
             return services.BuildServiceProvider();
@@ -71,9 +72,14 @@ namespace CurvaLauncher
 
             var hotkeyService = ServiceProvider
                 .GetRequiredService<HotkeyService>();
+            var globalizationService = ServiceProvider
+                .GetRequiredService<GlobalizationService>();
 
             // 初始化热键
             hotkeyService.Register();
+
+            // 初始化语言
+            globalizationService.ApplyLanguage();
 
             // 创建窗口
             ServiceProvider

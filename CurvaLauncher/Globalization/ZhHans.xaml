@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--Common-->
+    <sys:String x:Key="StrCut">剪切</sys:String>
+    <sys:String x:Key="StrCopy">复制</sys:String>
+    <sys:String x:Key="StrPaste">粘贴</sys:String>
+    <sys:String x:Key="StrSettings">设置</sys:String>
+    <sys:String x:Key="StrExit">退出</sys:String>
+    <sys:String x:Key="StrAdd">添加</sys:String>
+    <sys:String x:Key="StrDelete">删除</sys:String>
+    <sys:String x:Key="StrCheck">检查</sys:String>
+    <sys:String x:Key="StrTips">提示</sys:String>
+    <sys:String x:Key="StrApply">应用</sys:String>
+    <sys:String x:Key="StrSave">保存</sys:String>
+    <sys:String x:Key="StrGeneral">常规</sys:String>
+    <sys:String x:Key="StrPlugin">插件</sys:String>
+    <sys:String x:Key="StrHotkey">热键</sys:String>
+    <sys:String x:Key="StrAbout">关于</sys:String>
+    <sys:String x:Key="StrTheme">主题</sys:String>
+    <sys:String x:Key="StrLanguage">语言</sys:String>
+    <sys:String x:Key="StrVersion">版本</sys:String>
+    <sys:String x:Key="StrRepository">仓库</sys:String>
+
+    <!--LauncherWindow-->
+
+    <!--SettingsWindow-->
+    <sys:String x:Key="StrExitLauncher">退出启动器</sys:String>
+
+    <!--SettingsGeneralPage-->
+    <sys:String x:Key="StrLauncherHotkey">启动器热键</sys:String>
+    <sys:String x:Key="StrNotRegistered">未注册</sys:String>
+    <sys:String x:Key="StrInvalidHotkey">无效热键</sys:String>
+    <sys:String x:Key="StrLauncherWidth">启动器宽度</sys:String>
+    <sys:String x:Key="StrQueryResultViewCount">查询结果可视数量</sys:String>
+    <sys:String x:Key="StrQueryResultIconSize">查询结果图标大小</sys:String>
+    <sys:String x:Key="StrStartsWithWindows">自动随 Windows 启动</sys:String>
+    <sys:String x:Key="StrKeepLauncherWhenFocusIsLost">在焦点丢失时保持启动器开启</sys:String>
+
+    <!--SettingsPluginPage-->
+    <sys:String x:Key="StrReloadAllPlugins">重载所有插件</sys:String>
+    <sys:String x:Key="StrPluginWeight">插件权重</sys:String>
+
+    <!--SettingsHotkeyPage-->
+    <sys:String x:Key="StrErrorHotkeys">错误热键</sys:String>
+    <sys:String x:Key="StrCustomHotkeyTips">
+        在这里, 你可以自定义查询热键, 当查询热键触发时, 启动器会打开并自动输入指定的内容.
+    </sys:String>
+
+    <!--SettingsAboutPage-->
+    <sys:String x:Key="AppDescription">简单, 轻量, 快速的桌面启动器</sys:String>
+
+</ResourceDictionary>

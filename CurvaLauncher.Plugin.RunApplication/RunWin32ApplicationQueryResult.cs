@@ -1,16 +1,18 @@
 ﻿using System.Windows.Media;
-using CurvaLauncher.Utilities;
 using System.Diagnostics;
 using System.IO;
+using CurvaLauncher;
+using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.Plugin.RunApplication
 {
-    public class RunWin32ApplicationQueryResult : ISyncQueryResult
+    public class RunWin32ApplicationQueryResult : IAsyncQueryResult
     {
-        public RunWin32ApplicationQueryResult(CurvaLauncherContext context, string appName, string filename, float weight)
+        public RunWin32ApplicationQueryResult(CurvaLauncherContext context, string appName, string filename, string? commandLineArguments, float weight)
         {
             AppName = appName;
             FileName = filename;
+            CommandLineArguments = commandLineArguments;
             Weight = weight;
 
             context.Dispatcher.Invoke(() =>
@@ -31,16 +33,36 @@ namespace CurvaLauncher.Plugin.RunApplication
 
         public string AppName { get; }
         public string FileName { get; }
+        public string? CommandLineArguments { get; }
 
-        public void Invoke()
+        public async Task InvokeAsync(CancellationToken cancellationToken)
         {
-            Process.Start(
+            var process = Process.Start(
                 new ProcessStartInfo()
                 {
                     FileName = FileName,
+                    Arguments = CommandLineArguments,
                     WorkingDirectory = Path.GetDirectoryName(FileName),
                     UseShellExecute = true,
                 });
+
+            if (process == null)
+                return;
+
+            Task inputWait = Task.Run(process.WaitForInputIdle, cancellationToken);
+
+            while (process.MainWindowHandle == IntPtr.Zero)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    break;
+                if (process.HasExited)
+                    break;
+                
+                if (inputWait.IsCompleted)
+                    break;
+
+                await Task.Delay(1);
+            }
         }
     }
 }

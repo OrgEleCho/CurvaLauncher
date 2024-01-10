@@ -36,9 +36,8 @@
                             <Setter Property="Margin" Value="10 0 0 0"/>
                         </Style>
                     </StackPanel.Resources>
-                    <ui:Button Content="Exit CurvaLauncher" Command="{x:Static root:App.ShutdownCommand}"/>
-                    <ui:Button Content="Save" Command="{Binding SaveSettingsCommand}"
-                           Appearance="Primary"/>
+                    <ui:Button Content="{DynamicResource StrExitLauncher}" Command="{x:Static root:App.ShutdownCommand}"/>
+                    <ui:Button Content="{DynamicResource StrSave}" Command="{Binding SaveSettingsCommand}" Appearance="Primary"/>
                 </StackPanel>
             </Border>
 
@@ -52,20 +51,21 @@
                                     Frame="{Binding ElementName=frame}"
                                     Loaded="NavigationStoreLoaded">
                     <ui:NavigationStore.Items>
-                        <ui:NavigationItem Icon="AppGeneric20" Content="General" 
+                        <ui:NavigationItem Icon="AppGeneric20" Content="{DynamicResource StrGeneral}" 
                                            PageType="pages:SettingsGeneralPage" PageTag="General"/>
-                        <ui:NavigationItem Icon="PlugConnected20" Content="Plugin" 
+                        <ui:NavigationItem Icon="PlugConnected20" Content="{DynamicResource StrPlugin}" 
                                            PageType="pages:SettingsPluginPage" PageTag="Plugin"/>
-                        <ui:NavigationItem Icon="Keyboard20" Content="Hotkey"
+                        <ui:NavigationItem Icon="Keyboard20" Content="{DynamicResource StrHotkey}"
                                            PageType="pages:SettingsHotkeyPage" PageTag="Hotkey"/>
-                        <ui:NavigationItem Icon="Info20" Content="About" 
+                        <ui:NavigationItem Icon="Info20" Content="{DynamicResource StrAbout}" 
                                            PageType="pages:SettingsAboutPage" PageTag="About"/>
                     </ui:NavigationStore.Items>
                 </ui:NavigationStore>
 
                 <Frame Name="frame" Grid.Column="1" 
                        Margin="5 0"
-                       NavigationUIVisibility="Hidden"/>
+                       NavigationUIVisibility="Hidden">
+                </Frame>
             </Grid>
 
         </DockPanel>

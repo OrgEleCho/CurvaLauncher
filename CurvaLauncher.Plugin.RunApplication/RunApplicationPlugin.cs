@@ -25,7 +25,7 @@ namespace CurvaLauncher.Plugin.RunApplication
         public ImageSource Icon => laziedIcon.Value;
 
 
-        private Dictionary<string, string>? _win32appPathes;
+        private Dictionary<string, FileUtils.ShortcutTarget>? _win32appPathes;
 
         public RunApplicationPlugin()
         {
@@ -38,21 +38,27 @@ namespace CurvaLauncher.Plugin.RunApplication
 
             var allShotcutsInStartMenu = new List<string>();
 
-            allShotcutsInStartMenu.AddRange(
+            if (IndexLocations.HasFlag(IndexLocations.CommonPrograms))
+                allShotcutsInStartMenu.AddRange(
                 Directory.GetFiles(
                     Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms), "*.lnk", SearchOption.AllDirectories));
-            allShotcutsInStartMenu.AddRange(
-                Directory.GetFiles(
-                    Environment.GetFolderPath(Environment.SpecialFolder.Programs), "*.lnk", SearchOption.AllDirectories));
-            allShotcutsInStartMenu.AddRange(
-                Directory.GetFiles(
-                    Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "*.lnk", SearchOption.TopDirectoryOnly));
+
+            if (IndexLocations.HasFlag(IndexLocations.Programs))
+                allShotcutsInStartMenu.AddRange(
+                    Directory.GetFiles(
+                        Environment.GetFolderPath(Environment.SpecialFolder.Programs), "*.lnk", SearchOption.AllDirectories));
+
+            if (IndexLocations.HasFlag(IndexLocations.Desktop))
+                allShotcutsInStartMenu.AddRange(
+                    Directory.GetFiles(
+                        Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "*.lnk", SearchOption.TopDirectoryOnly));
 
             foreach (var shortcut in allShotcutsInStartMenu)
             {
-                if (FileUtils.GetShortcutTarget(shortcut) is not string target)
+                if (FileUtils.GetShortcutTarget(shortcut) is not FileUtils.ShortcutTarget target)
                     continue;
-                var ext = Path.GetExtension(target);
+
+                var ext = Path.GetExtension(target.FileName);
                 if (!string.Equals(ext, ".exe", StringComparison.OrdinalIgnoreCase))
                     continue;
 
@@ -80,7 +86,7 @@ namespace CurvaLauncher.Plugin.RunApplication
                 .Take(ResultCount);
 
             foreach (var result in results)
-                yield return new RunWin32ApplicationQueryResult(context, result.Key, result.Value, result.Weight);
+                yield return new RunWin32ApplicationQueryResult(context, result.Key, result.Value.FileName, result.Value.CommandLineArguments, result.Weight);
         }
     }
 }

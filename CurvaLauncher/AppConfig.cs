@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CurvaLauncher.Models;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.Json.Nodes;
@@ -29,6 +30,9 @@ public partial class AppConfig : ObservableObject
     private string _launcherHotkey = "Alt+Space";
 
     [ObservableProperty]
+    private AppLanguage _language = AppLanguage.Auto;
+
+    [ObservableProperty]
     private ObservableCollection<QueryHotkey> _customQueryHotkeys = new();
 
     [ObservableProperty]
@@ -36,6 +40,9 @@ public partial class AppConfig : ObservableObject
 
     [JsonIgnore]
     public double LauncherResultViewHeight => LauncherResultViewCount * 57 + LauncherResultViewCount;
+
+
+    public static IReadOnlyCollection<AppLanguage> AvailableLanguages { get; } = Enum.GetValues<AppLanguage>();
 
     
     public partial class PluginConfig : ObservableObject

@@ -26,27 +26,31 @@
                 </Grid.ColumnDefinitions>
 
                 <Image Grid.RowSpan="2"
-                                   Width="50"
-                                   Height="50"
-                                   Stretch="Uniform"
-                                   Source="/Assets/Icon128.png"/>
+                       Width="50"
+                       Height="50"
+                       Stretch="Uniform"
+                       Source="/Assets/Icon128.png"/>
 
                 <StackPanel Grid.Column="2">
                     <TextBlock Grid.Column="2"
-                                           Grid.Row="0"
-                                           Text="CurvaLauncher"
-                                           FontSize="16"
-                                           Margin="0 0 0 5"/>
+                               Grid.Row="0"
+                               Text="CurvaLauncher"
+                               FontSize="16"
+                               Margin="0 0 0 5"/>
 
                     <TextBlock Grid.Column="2"
-                                           Grid.Row="1"
-                                           Text="Simple, light and fast desktop launcher"/>
+                                Grid.Row="1"
+                                Text="{DynamicResource StrAppDescription}"/>
                 </StackPanel>
 
             </Grid>
 
-            <Label Content="Version:"
-                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <TextBlock>
+                    <Run Text="{DynamicResource StrVersion}"/>
+                    <Run Text=":"/>
+                </TextBlock>
+            </Label>
             <StackPanel>
                 <ui:Hyperlink>
 
@@ -55,9 +59,9 @@
             <TextBlock Margin="10 0 0 20">
                 <Run Text="{x:Static root:App.Version}"/>
                 <Run Text=" "/>
-                <Run Text="Check"
-                        Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
-                        Cursor="Hand">
+                <Run Text="{DynamicResource StrCheck}"
+                     Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"
+                     Cursor="Hand">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger EventName="MouseDown">
                             <behaviors:InvokeCommandAction Command="{Binding CheckVersionCommand}"/>
@@ -65,18 +69,21 @@
                     </behaviors:Interaction.Triggers>
                 </Run>
                 <ui:ProgressRing VerticalAlignment="Center" Margin="5 0 0 0"
-                                    IsIndeterminate="True"
-                                    Visibility="{Binding CheckVersionCommand.IsRunning,Converter={StaticResource bool2visibility}}">
+                                 IsIndeterminate="True"
+                                 Visibility="{Binding CheckVersionCommand.IsRunning,Converter={StaticResource bool2visibility}}">
                     <ui:ProgressRing.LayoutTransform>
                         <ScaleTransform ScaleX=".15" ScaleY=".15"/>
                     </ui:ProgressRing.LayoutTransform>
                 </ui:ProgressRing>
             </TextBlock>
 
-            <Label Content="Repository:"
-                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <TextBlock>
+                    <Run Text="{DynamicResource StrRepository}"/>
+                </TextBlock>
+            </Label>
             <ui:Hyperlink Content="{x:Static root:App.RepositoryAddress}"
-                                      NavigateUri="{x:Static root:App.RepositoryAddress}"/>
+                          NavigateUri="{x:Static root:App.RepositoryAddress}"/>
         </StackPanel>
     </Grid>
 </ui:UiPage>

@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--Common-->
+    <sys:String x:Key="StrCut">Cut</sys:String>
+    <sys:String x:Key="StrCopy">Copy</sys:String>
+    <sys:String x:Key="StrPaste">Paste</sys:String>
+    <sys:String x:Key="StrSettings">Settings</sys:String>
+    <sys:String x:Key="StrExit">Exit</sys:String>
+    <sys:String x:Key="StrAdd">Add</sys:String>
+    <sys:String x:Key="StrDelete">Delete</sys:String>
+    <sys:String x:Key="StrCheck">Check</sys:String>
+    <sys:String x:Key="StrTips">Tips</sys:String>
+    <sys:String x:Key="StrApply">Apply</sys:String>
+    <sys:String x:Key="StrSave">Save</sys:String>
+    <sys:String x:Key="StrGeneral">General</sys:String>
+    <sys:String x:Key="StrPlugin">Plugin</sys:String>
+    <sys:String x:Key="StrHotkey">Hotkey</sys:String>
+    <sys:String x:Key="StrAbout">About</sys:String>
+    <sys:String x:Key="StrTheme">Theme</sys:String>
+    <sys:String x:Key="StrLanguage">Language</sys:String>
+    <sys:String x:Key="StrVersion">Version</sys:String>
+    <sys:String x:Key="StrRepository">Repository</sys:String>
+
+    <!--LauncherWindow-->
+
+    <!--SettingsWindow-->
+    <sys:String x:Key="StrExitLauncher">Exit Launcher</sys:String>
+
+    <!--SettingsGeneralPage-->
+    <sys:String x:Key="StrLauncherHotkey">Launcher hotkey</sys:String>
+    <sys:String x:Key="StrNotRegistered">Not registered</sys:String>
+    <sys:String x:Key="StrInvalidHotkey">Invalid hotkey</sys:String>
+    <sys:String x:Key="StrLauncherWidth">Launcher width</sys:String>
+    <sys:String x:Key="StrQueryResultViewCount">Query result view count</sys:String>
+    <sys:String x:Key="StrQueryResultIconSize">Query result icon size</sys:String>
+    <sys:String x:Key="StrStartsWithWindows">Starts with Windows</sys:String>
+    <sys:String x:Key="StrKeepLauncherWhenFocusIsLost">Keep launcher when focus is lost</sys:String>
+
+    <!--SettingsPluginPage-->
+    <sys:String x:Key="StrReloadAllPlugins">Reload all plugins</sys:String>
+    <sys:String x:Key="StrPluginWeight">Plugin Weight</sys:String>
+
+    <!--SettingsHotkeyPage-->
+    <sys:String x:Key="StrErrorHotkeys">Error hotkeys</sys:String>
+    <sys:String x:Key="StrCustomHotkeyTips">
+        Here, you can customize the query hotkeys. When the hotkey is triggered, the Launcher opens and enters the specified content.
+    </sys:String>
+
+    <!--SettingsAboutPage-->
+    <sys:String x:Key="AppDescription">Simple, light and fast desktop launcher</sys:String>
+
+</ResourceDictionary>

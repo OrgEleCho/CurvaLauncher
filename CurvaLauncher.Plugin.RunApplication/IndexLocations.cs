@@ -1,7 +1,10 @@
 ﻿namespace CurvaLauncher.Plugin.RunApplication
 {
+    [Flags]
     public enum IndexLocations
     {
-        CommonPrograms, Programs, Desktop
+        CommonPrograms = 1, 
+        Programs = 2, 
+        Desktop = 4
     }
 }

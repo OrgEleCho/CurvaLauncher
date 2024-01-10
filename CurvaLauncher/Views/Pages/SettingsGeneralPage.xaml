@@ -4,11 +4,13 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
            xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+           xmlns:root="clr-namespace:CurvaLauncher"
            xmlns:local="clr-namespace:CurvaLauncher.Views.Pages"
            xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
            mc:Ignorable="d" 
            d:DesignHeight="450" d:DesignWidth="800"
            d:Background="White"
+           d:DataContext="{d:DesignInstance Type=local:SettingsGeneralPage,IsDesignTimeCreatable=False}"
            Title="SettingsGeneralPage">
 
     <ui:UiPage.Resources>
@@ -32,16 +34,26 @@
             <StackPanel Margin="0 0 0 10">
                 <StackPanel Orientation="Horizontal">
 
-                    <Label Content="Launcher hotkey:"
-                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                        <TextBlock>
+                            <Run Text="{DynamicResource StrLauncherHotkey}"/>
+                            <Run Text=":"/>
+                        </TextBlock>
+                    </Label>
 
                     <TextBlock Grid.Column="2" Margin="10 0 0 0"
-                                Text="[ Not registered ]"
-                                Visibility="{Binding ViewModel.HotkeyNotRegistered,Converter={StaticResource bool2visibility}}"/>
+                                Visibility="{Binding ViewModel.HotkeyNotRegistered,Converter={StaticResource bool2visibility}}">
+                        <Run Text="["/>
+                        <Run Text="{DynamicResource StrNotRegistered}"/>
+                        <Run Text="]"/>
+                    </TextBlock>
 
                     <TextBlock Grid.Column="3" Margin="10 0 0 0"
-                                Text="[ Invalid hotkey ]"
-                                Visibility="{Binding ViewModel.HotkeyNotValid,Converter={StaticResource bool2visibility}}"/>
+                                Visibility="{Binding ViewModel.HotkeyNotValid,Converter={StaticResource bool2visibility}}">
+                        <Run Text="["/>
+                        <Run Text="{DynamicResource StrInvalidHotkey}"/>
+                        <Run Text="]"/>
+                    </TextBlock>
                 </StackPanel>
 
                 <Grid>
@@ -59,37 +71,72 @@
                         </behaviors:Interaction.Triggers>
                     </ui:TextBox>
 
-                    <ui:Button Grid.Column="1" Content="Apply" Margin="10 0 0 0"
-                                VerticalAlignment="Stretch"
-                                Visibility="{Binding ViewModel.ShowHotkeyApplyButton,Converter={StaticResource bool2visibility}}"
-                                Command="{Binding ApplyHotkeyCommand}"/>
+                    <ui:Button Grid.Column="1" Margin="10 0 0 0"
+                               VerticalAlignment="Stretch"
+                               Content="{DynamicResource StrApply}"
+                               Visibility="{Binding ViewModel.ShowHotkeyApplyButton,Converter={StaticResource bool2visibility}}"
+                               Command="{Binding ApplyHotkeyCommand}"/>
                 </Grid>
             </StackPanel>
 
             <StackPanel Margin="0 0 0 10">
-                <Label Content="Launcher width:"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                    <TextBlock>
+                        <Run Text="{DynamicResource StrLauncherWidth}"/>
+                        <Run Text=":"/>
+                    </TextBlock>
+                </Label>
                 <TextBox VerticalContentAlignment="Center"
                          Text="{Binding ConfigService.Config.LauncherWidth}"/>
             </StackPanel>
 
             <StackPanel Margin="0 0 0 10">
-                <Label Content="Launcher result view count:"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                    <TextBlock>
+                        <Run Text="{DynamicResource StrQueryResultViewCount}"/>
+                        <Run Text=":"/>
+                    </TextBlock>
+                </Label>
                 <TextBox VerticalContentAlignment="Center"
                          Text="{Binding ConfigService.Config.LauncherResultViewCount}"/>
             </StackPanel>
 
             <StackPanel Margin="0 0 0 10">
-                <Label Content="Query result icon size:"
-                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                    <TextBlock>
+                        <Run Text="{DynamicResource StrQueryResultIconSize}"/>
+                        <Run Text=":"/>
+                    </TextBlock>
+                </Label>
                 <TextBox VerticalContentAlignment="Center"
                          Text="{Binding ConfigService.Config.QueryResultIconSize}"/>
             </StackPanel>
 
+            <StackPanel Margin="0 0 0 10">
+                <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                    <TextBlock>
+                        <Run Text="{DynamicResource StrLanguage}"/>
+                        <Run Text=":"/>
+                    </TextBlock>
+                </Label>
+                <ComboBox VerticalContentAlignment="Center"
+                          ItemsSource="{x:Static root:AppConfig.AvailableLanguages}"
+                          SelectedItem="{Binding ConfigService.Config.Language}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="SelectionChanged">
+                            <behaviors:InvokeCommandAction Command="{Binding GlobalizationService.ApplyLanguageCommand}"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </ComboBox>
+            </StackPanel>
+
             <CheckBox Margin="0 15 0 0"
-                      Content="Starts with windows"
-                      IsChecked="{Binding ConfigService.Config.StartsWithWindows}" >
+                      IsChecked="{Binding ConfigService.Config.StartsWithWindows}">
+                
+                <TextBlock>
+                        <Run Text="{DynamicResource StrStartsWithWindows}"/>
+                        <Run Text=":"/>
+                </TextBlock>
 
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="Checked">
@@ -103,8 +150,12 @@
             </CheckBox>
 
             <CheckBox Margin="0 0 0 0"
-                              Content="Keep launcher when focus is lost"
-                              IsChecked="{Binding ConfigService.Config.KeepLauncherWhenFocusLost}"/>
+                      IsChecked="{Binding ConfigService.Config.KeepLauncherWhenFocusLost}">
+                <TextBlock>
+                    <Run Text="{DynamicResource StrKeepLauncherWhenFocusIsLost}"/>
+                    <Run Text=":"/>
+                </TextBlock>
+            </CheckBox>
         </StackPanel>
     </Grid>
 </ui:UiPage>

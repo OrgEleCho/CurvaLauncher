@@ -9,7 +9,7 @@
            xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
            mc:Ignorable="d" 
            d:DataContext="{d:DesignInstance Type=local:SettingsHotkeyPage}"
-           d:DesignHeight="450" d:DesignWidth="800"
+           d:DesignHeight="550" d:DesignWidth="800"
            d:Background="White"
            Title="SettingsHotkeyPage">
 
@@ -53,13 +53,13 @@
 
                     <StackPanel HorizontalAlignment="Right"
                             Orientation="Horizontal">
-                        <ui:Button Content="Delete" Command="{Binding DeleteCommand}"/>
-                        <ui:Button Content="Add" Margin="10 0 0 0" Command="{Binding AddCommand}"/>
+                        <ui:Button Content="{DynamicResource StrDelete}" Command="{Binding DeleteCommand}"/>
+                        <ui:Button Content="{DynamicResource StrAdd}" Margin="10 0 0 0" Command="{Binding AddCommand}"/>
                     </StackPanel>
 
                     <StackPanel Margin="0 20 0 0">
                         <StackPanel Visibility="{Binding ViewModel.HasErrorHotkey,Converter={StaticResource bool2visibility}}">
-                            <Label Content="Error hotkeys:"
+                            <Label Content="{DynamicResource StrErrorHotkeys}"
                                Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
                             <ItemsControl Margin="10 0 0 0" 
                                       ItemsSource="{Binding ViewModel.ErrorHotkeys}"
@@ -83,8 +83,8 @@
                         </StackPanel>
 
                         <StackPanel Margin="20 40 20 0">
-                            <TextBlock FontSize="13" Margin="0 0 0 3">Tips:</TextBlock>
-                            <TextBlock TextWrapping="Wrap">Here, you can customize the query hotkeys. When the hotkey is triggered, the Launcher opens and enters the specified content.</TextBlock>
+                            <TextBlock FontSize="13" Margin="0 0 0 3" Text="{DynamicResource StrTips}"/>
+                            <TextBlock TextWrapping="Wrap" Text="{DynamicResource StrCustomHotkeyTips}"/>
                         </StackPanel>
                     </StackPanel>
 
@@ -96,8 +96,8 @@
                     VerticalAlignment="Bottom" 
                     HorizontalAlignment="Right"
                     Orientation="Horizontal">
-            <ui:Button Content="Check" Command="{Binding CheckHotkeysCommand}"/>
-            <ui:Button Content="Apply" Margin="10 0 0 0" Command="{Binding ApplyHotkeysCommand}"/>
+            <ui:Button Content="{DynamicResource StrCheck}" Command="{Binding CheckHotkeysCommand}"/>
+            <ui:Button Content="{DynamicResource StrApply}" Margin="10 0 0 0" Command="{Binding ApplyHotkeysCommand}"/>
         </StackPanel>
     </Grid>
 </ui:UiPage>
