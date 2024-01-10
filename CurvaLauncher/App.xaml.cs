@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Views;
 using CurvaLauncher.ViewModels;
-using Microsoft.Extensions.DependencyInjection;
-using CommunityToolkit.Mvvm.ComponentModel.__Internals;
-using System.Reflection;
-using System.Diagnostics;
+using CurvaLauncher.Views;
 using CurvaLauncher.Views.Pages;
-using Wpf.Ui.Mvvm.Contracts;
-using Wpf.Ui.Mvvm.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CurvaLauncher
 {
@@ -54,6 +45,7 @@ namespace CurvaLauncher
             services.AddSingleton<HotkeyService>();
             services.AddSingleton<PluginService>();
             services.AddSingleton<ConfigService>();
+            services.AddSingleton<ThemeService>();
             services.AddSingleton<PageService>();
 
             return services.BuildServiceProvider();
@@ -69,15 +61,29 @@ namespace CurvaLauncher
 
             base.OnStartup(e);
 
+            // 获取所需服务
+            var mainWindow = ServiceProvider
+                .GetRequiredService<MainWindow>();
+            var pluginService = ServiceProvider
+                .GetRequiredService<PluginService>();
             var hotkeyService = ServiceProvider
                 .GetRequiredService<HotkeyService>();
+            var themeService = ServiceProvider
+                .GetRequiredService<ThemeService>();
+
+
+            //// 初始化窗口
+            //new WindowInteropHelper(mainWindow)
+            //    .EnsureHandle();
+
+            // 加载插件
+            pluginService.LoadAllPlugins();
 
             // 初始化热键
             hotkeyService.Register();
 
-            // 创建窗口
-            ServiceProvider
-                .GetRequiredService<MainWindow>();
+            // 初始化主题
+            themeService.ApplyTheme();
 
             if (!hotkeyService.IsLauncherHotkeyRegistered)
             {

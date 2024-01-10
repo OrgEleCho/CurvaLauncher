@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CurvaLauncher.Plugin;
-using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.Models;
 

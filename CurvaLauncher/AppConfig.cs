@@ -41,18 +41,7 @@ public partial class AppConfig : ObservableObject
     [ObservableProperty]
     private AppTheme _theme;
 
-    [JsonIgnore]
-    public IReadOnlyCollection<AppTheme> Themes { get; } = [AppTheme.Light, AppTheme.Dark];
-
-    partial void OnThemeChanged(AppTheme value)
-    {
-        Wpf.Ui.Appearance.Theme.Apply(Theme switch
-        {
-            AppTheme.Dark => ThemeType.Dark,
-            AppTheme.Light => ThemeType.Light,
-            _ => ThemeType.Light,
-        });
-    }
+    public static IReadOnlyCollection<AppTheme> AvailableThemes { get; } = [AppTheme.Auto, AppTheme.Light, AppTheme.Dark];
 
     public partial class PluginConfig : ObservableObject
     {

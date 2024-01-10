@@ -19,36 +19,22 @@ public partial class SettingsGeneralPage : Wpf.Ui.Controls.UiPage
     public SettingsGeneralPage(
         SettingsGeneralViewModel viewModel,
         ConfigService configService,
-        HotkeyService hotkeyService)
+        HotkeyService hotkeyService,
+        ThemeService themeService)
     {
         ViewModel = viewModel;
         ConfigService = configService;
         HotkeyService = hotkeyService;
+        ThemeService = themeService;
         DataContext = this;
         
         InitializeComponent();
-        Initialize();
     }
 
     public SettingsGeneralViewModel ViewModel { get; }
     public ConfigService ConfigService { get; }
     public HotkeyService HotkeyService { get; }
-
-    private void Initialize()
-    {
-        RefreshThemeDisplay();
-        Theme.Changed += (_, _) => RefreshThemeDisplay();
-    }
-
-    private void RefreshThemeDisplay()
-    {
-        ConfigService.Config.Theme = Theme.GetAppTheme() switch
-        {
-            ThemeType.Dark => AppTheme.Dark,
-            ThemeType.Light => AppTheme.Light,
-            _ => AppTheme.Light,
-        };
-    }
+    public ThemeService ThemeService { get; }
 
     [RelayCommand]
     public void CheckHotkeyStatus()

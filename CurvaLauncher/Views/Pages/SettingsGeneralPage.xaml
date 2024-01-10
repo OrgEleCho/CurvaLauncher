@@ -4,6 +4,7 @@
            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+           xmlns:root="clr-namespace:CurvaLauncher"
            xmlns:local="clr-namespace:CurvaLauncher.Views.Pages"
            xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
            mc:Ignorable="d"
@@ -95,7 +96,14 @@
                        VerticalContentAlignment="Center"
                        Margin="0 0 10 0"
                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                <ComboBox ItemsSource="{Binding ConfigService.Config.Themes}" SelectedValue="{Binding ConfigService.Config.Theme}" />
+                <ComboBox ItemsSource="{x:Static root:AppConfig.AvailableThemes}"
+                          SelectedValue="{Binding ConfigService.Config.Theme}" >
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="SelectionChanged">
+                            <behaviors:InvokeCommandAction Command="{Binding ThemeService.ApplyThemeCommand}"/>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </ComboBox>
             </StackPanel>
 
             <CheckBox Margin="0 15 0 0"

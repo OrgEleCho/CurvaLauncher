@@ -8,5 +8,7 @@ namespace CurvaLauncher.Models;
 
 public enum AppTheme
 {
-    Light,Dark
+    Auto = default,
+    Light,
+    Dark
 }
