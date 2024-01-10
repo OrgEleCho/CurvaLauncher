@@ -3,8 +3,9 @@
     [Flags]
     public enum IndexLocations
     {
-        CommonPrograms = 1, 
-        Programs = 2, 
-        Desktop = 4
+        UWP = 1,
+        CommonPrograms = 2,
+        Programs = 4,
+        Desktop = 8
     }
 }
