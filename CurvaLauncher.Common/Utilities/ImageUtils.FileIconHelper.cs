@@ -84,20 +84,17 @@ namespace CurvaLauncher.Utilities
 
             static uint szSHFILEINFO = (uint)Marshal.SizeOf<SHFILEINFO>();
 
-            public static ImageSource? GetEmbededIconImage(string path, int iconSize)
+            public static ImageSource? GetEmbededIconImage(string path, int iconSize, int? iconIndex)
             {
 
                 // https://github.com/CoenraadS/Windows-Control-Panel-Items/
                 // https://gist.github.com/jnm2/79ed8330ceb30dea44793e3aa6c03f5b
 
-                string iconStringRaw = path;
-                var iconString = new List<string>(iconStringRaw.Split(new[] { ',' }, 2));
                 IntPtr iconPtr = IntPtr.Zero;
                 IntPtr dataFilePointer;
-                IntPtr iconIndex;
                 uint LOAD_LIBRARY_AS_DATAFILE = 0x00000002;
 
-                if (string.IsNullOrEmpty(iconString[0]))
+                if (string.IsNullOrEmpty(path))
                 {
                     //var e = new ArgumentException($"iconString empth {path}");
                     //e.Data.Add(nameof(path), path);
@@ -105,19 +102,15 @@ namespace CurvaLauncher.Utilities
                     return null;
                 }
 
-                if (iconString[0][0] == '@')
+                if (path[0] == '@')
                 {
-                    iconString[0] = iconString[0].Substring(1);
+                    path = path.Substring(1);
                 }
 
-                dataFilePointer = LoadLibraryEx(iconString[0], IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE);
-                if (iconString.Count == 2)
+                dataFilePointer = LoadLibraryEx(path, IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE);
+                if (iconIndex.HasValue)
                 {
-                    // C:\WINDOWS\system32\mblctr.exe,0
-                    // %SystemRoot%\System32\FirewallControlPanel.dll,-1
-                    var index = Math.Abs(int.Parse(iconString[1]));
-                    iconIndex = (IntPtr)index;
-                    iconPtr = LoadImage(dataFilePointer, iconIndex, 1, iconSize, iconSize, 0);
+                    iconPtr = LoadImage(dataFilePointer, iconIndex.Value, 1, iconSize, iconSize, 0);
                 }
 
                 if (iconPtr == IntPtr.Zero)

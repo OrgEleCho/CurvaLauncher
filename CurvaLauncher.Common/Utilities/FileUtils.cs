@@ -5,11 +5,11 @@ namespace CurvaLauncher.Utilities
 {
     public static class FileUtils
     {
-        public record class ShortcutTarget(string FileName, string? CommandLineArguments);
+        public record class ShortcutTarget(string FileName, string? Arguments, string? WorkingDirectory, string? IconPath, int IconIndex, bool UAC);
 
         public static ShortcutTarget? GetShortcutTarget(string file)
         {
-			try
+            try
 			{
                 var shortcut = Libraries.Securify.ShellLink.Shortcut.ReadFromFile(file);
 
@@ -23,10 +23,17 @@ namespace CurvaLauncher.Utilities
                     return null;
 
                 var commandLineArguments = shortcut.LinkFlags.HasFlag(LinkFlags.HasArguments) ?
-                    shortcut.StringData.CommandLineArguments :
+                    shortcut.StringData?.CommandLineArguments :
                     null;
 
-                return new ShortcutTarget(fileName, commandLineArguments);
+                var workingDirectory = shortcut.StringData?.WorkingDir;
+
+                var iconPath = shortcut.StringData?.IconLocation;
+                var iconIndex = shortcut.IconIndex;
+
+                var uac = shortcut.LinkFlags.HasFlag(LinkFlags.RunAsUser);
+
+                return new ShortcutTarget(fileName, commandLineArguments, workingDirectory, iconPath, iconIndex, uac);
             }
 			catch (Exception)
 			{

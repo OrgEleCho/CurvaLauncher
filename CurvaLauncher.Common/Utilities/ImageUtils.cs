@@ -15,14 +15,14 @@ namespace CurvaLauncher.Utilities
     {
         public static ImageSource EmptyImage => new DrawingImage();
 
-        public static ImageSource? GetEmbededIconImage(string filename, int iconSize)
+        public static ImageSource? GetEmbededIconImage(string filename, int iconSize, int? iconIndex)
         {
             if (!File.Exists(filename))
                 return null;
 
             try
             {
-                return FileIconHelper.GetEmbededIconImage(filename, iconSize);
+                return FileIconHelper.GetEmbededIconImage(filename, iconSize, iconIndex);
             }
             catch
             {
@@ -53,7 +53,7 @@ namespace CurvaLauncher.Utilities
             try
             {
                 return
-                    FileIconHelper.GetEmbededIconImage(filename, iconSize) ??
+                    FileIconHelper.GetEmbededIconImage(filename, iconSize, 1) ??
                     FileIconHelper.GetAssociatedIconImage(filename, iconSize > 32);
             }
             catch

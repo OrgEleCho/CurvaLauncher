@@ -2,8 +2,10 @@
 
 public class Win32AppInfo : AppInfo
 {
-    public string? CommandArguments { get; set; }
+    public string FilePath { get; set; } = string.Empty;
+    public string? Arguments { get; set; }
     public string? WorkingDirectory { get; set; }
     public string? IconPath { get; set; }
-    public bool IsUAC { get; set; } = false;
+    public int IconIndex { get; set; }
+    public bool IsUAC { get; set; }
 }
