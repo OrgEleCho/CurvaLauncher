@@ -2,9 +2,9 @@
 
 namespace CurvaLauncher.Plugin;
 
-public abstract class CurvaLauncherSyncCommandPlugin : CurvaLauncherCommandPlugin
+public abstract class CommandSyncPlugin : CommandPlugin
 {
-    protected CurvaLauncherSyncCommandPlugin(CurvaLauncherContext context) : base(context)
+    protected CommandSyncPlugin(CurvaLauncherContext context) : base(context)
     {
     }
 

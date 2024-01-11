@@ -1,6 +1,6 @@
 ﻿namespace CurvaLauncher.Plugin;
 
-public interface ICurvaLauncherSyncPlugin : ICurvaLauncherPlugin
+public interface ISyncPlugin : IPlugin
 {
     public void Initialize() { }
     public void Finish() { }

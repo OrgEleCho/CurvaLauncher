@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace CurvaLauncher.Plugin;
 
-public abstract class CurvaLauncherPlugin: ICurvaLauncherPlugin, INotifyPropertyChanging, INotifyPropertyChanged
+public abstract class Plugin: IPlugin, INotifyPropertyChanging, INotifyPropertyChanged
 {
     public abstract string Name { get; }
     public abstract string Description { get; }
@@ -13,7 +13,7 @@ public abstract class CurvaLauncherPlugin: ICurvaLauncherPlugin, INotifyProperty
 
     public CurvaLauncherContext HostContext { get; }
 
-    public CurvaLauncherPlugin(CurvaLauncherContext context)
+    public Plugin(CurvaLauncherContext context)
     {
         HostContext = context;
     }

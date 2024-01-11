@@ -1,8 +1,8 @@
 ﻿namespace CurvaLauncher.Plugin;
 
-public abstract class CurvaLauncherAsyncPlugin : CurvaLauncherPlugin, ICurvaLauncherAsyncPlugin
+public abstract class AsyncPlugin : Plugin, IAsyncPlugin
 {
-    protected CurvaLauncherAsyncPlugin(CurvaLauncherContext context) : base(context)
+    protected AsyncPlugin(CurvaLauncherContext context) : base(context)
     {
     }
 

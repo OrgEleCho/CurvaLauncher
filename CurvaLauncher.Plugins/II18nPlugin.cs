@@ -1,6 +1,6 @@
 ﻿namespace CurvaLauncher.Plugin;
 
-public interface ICurvaLauncherI18nPlugin : ICurvaLauncherPlugin
+public interface II18nPlugin : IPlugin
 {
     public object NameKey { get; }
     public object DescriptionKey { get; }

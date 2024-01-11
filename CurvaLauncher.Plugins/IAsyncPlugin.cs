@@ -1,6 +1,6 @@
 ﻿namespace CurvaLauncher.Plugin;
 
-public interface ICurvaLauncherAsyncPlugin : ICurvaLauncherPlugin
+public interface IAsyncPlugin : IPlugin
 {
     public Task InitializeAsync() => Task.CompletedTask;
     public Task FinishAsync() => Task.CompletedTask;

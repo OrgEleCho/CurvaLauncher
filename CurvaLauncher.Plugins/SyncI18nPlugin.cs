@@ -4,7 +4,7 @@ using CurvaLauncher.Apis;
 
 namespace CurvaLauncher.Plugin;
 
-public abstract class CurvaLauncherI18nSyncPlugin : CurvaLauncherSyncPlugin, ICurvaLauncherI18nPlugin
+public abstract class SyncI18nPlugin : SyncPlugin, II18nPlugin
 {
     readonly Type _pluginType;
 
@@ -14,7 +14,7 @@ public abstract class CurvaLauncherI18nSyncPlugin : CurvaLauncherSyncPlugin, ICu
     public abstract object NameKey { get; }
     public abstract object DescriptionKey { get; }
 
-    protected CurvaLauncherI18nSyncPlugin(CurvaLauncherContext context) : base(context)
+    protected SyncI18nPlugin(CurvaLauncherContext context) : base(context)
     {
         _pluginType = GetType();
         Assembly assembly = _pluginType.Assembly;

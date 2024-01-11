@@ -2,7 +2,7 @@
 
 namespace CurvaLauncher.Plugin;
 
-public abstract class CurvaLauncherCommandPlugin : CurvaLauncherPlugin
+public abstract class CommandPlugin : Plugin
 {
     [PluginOption("Command prefix")]
     public string Prefix { get; set; } = ">";
@@ -10,7 +10,7 @@ public abstract class CurvaLauncherCommandPlugin : CurvaLauncherPlugin
     [PluginOption("Command name ignore cases")]
     public bool IgnoreCases { get; set; } = true;
 
-    protected CurvaLauncherCommandPlugin(CurvaLauncherContext context) : base(context)
+    protected CommandPlugin(CurvaLauncherContext context) : base(context)
     {
     }
 
