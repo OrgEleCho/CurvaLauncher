@@ -3,7 +3,9 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
+using CurvaLauncher.Apis;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities;
 using CurvaLauncher.ViewModels;
@@ -98,6 +100,7 @@ namespace CurvaLauncher
             // 创建窗口
             ServiceProvider
                 .GetRequiredService<MainWindow>();
+
             // 初始化主题
             themeService.ApplyTheme();
 

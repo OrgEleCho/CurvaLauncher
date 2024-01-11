@@ -22,7 +22,7 @@ namespace CurvaLauncher.Views.Components
     public partial class PluginSwitchOption : PluginOption
     {
         public PluginSwitchOption(
-            IPlugin plugin,
+            CurvaLauncherPlugin plugin,
             string optionName,
             string? optionDescription,
             string optionPropertyName)

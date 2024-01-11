@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -60,7 +61,7 @@ public partial class ConfigService : ObservableObject
             Options = GetPluginOptions(pluginInstance.Plugin)
         };
 
-        JsonObject GetPluginOptions(IPlugin plugin)
+        JsonObject GetPluginOptions(CurvaLauncherPlugin plugin)
         {
             var props = plugin.GetType()
                 .GetProperties()

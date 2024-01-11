@@ -22,18 +22,18 @@
                        Width="50"
                        Height="50"
                        Stretch="Uniform"
-                       Source="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=Plugin.Icon}"/>
+                       Source="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.Plugin.Icon}"/>
 
                 <StackPanel Grid.Column="2">
                     <TextBlock Grid.Column="2"
                                Grid.Row="0"
-                               Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=Plugin.Name}"
+                               Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.Plugin.Name}"
                                FontSize="16"
                                Margin="0 0 0 5"/>
 
                     <TextBlock Grid.Column="2"
                                Grid.Row="1"
-                               Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=Plugin.Description}"/>
+                               Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.Plugin.Description}"/>
                 </StackPanel>
 
                 <ui:ToggleSwitch 

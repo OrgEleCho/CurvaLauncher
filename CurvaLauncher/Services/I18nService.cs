@@ -2,16 +2,22 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Models;
+using CurvaLauncher.Utilities.Resources;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CurvaLauncher.Services
 {
     public partial class I18nService
     {
+        record class I18nResourceDictionaries(ResourceDictionary Default, Dictionary<CultureInfo, ResourceDictionary> All);
+
+        private readonly IServiceProvider _serviceProvider;
         private readonly ConfigService _configService;
 
         private ResourceDictionary? _loadedDictionary;
@@ -23,21 +29,25 @@ namespace CurvaLauncher.Services
             [new CultureInfo("ja-JP")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("JaJp.xaml") },
         };
 
+        readonly Dictionary<Assembly, I18nResourceDictionaries> _assemblyResourceDictionaries = new();
+
         public I18nService(
+            IServiceProvider serviceProvider,
             ConfigService configService)
         {
+            _serviceProvider = serviceProvider;
             _configService = configService;
         }
 
-        private ResourceDictionary? GetMatchedResourceDictionary(CultureInfo cultureInfo)
+        private ResourceDictionary? GetMatchedResourceDictionary(CultureInfo cultureInfo, Dictionary<CultureInfo, ResourceDictionary> resourceDictionaries)
         {
-            foreach (var resourceKV in _resourceDictionaries)
+            foreach (var resourceKV in resourceDictionaries)
             {
                 if (cultureInfo.Equals(resourceKV.Key))
                     return resourceKV.Value;
             }
 
-            foreach (var resourceKV in _resourceDictionaries)
+            foreach (var resourceKV in resourceDictionaries)
             {
                 if (cultureInfo.TwoLetterISOLanguageName.Equals(resourceKV.Key.TwoLetterISOLanguageName))
                     return resourceKV.Value;
@@ -57,14 +67,18 @@ namespace CurvaLauncher.Services
 
         private static Uri GetResourceDictionaryPath(string filename)
         {
-            return new Uri($"pack://application:,,,/Globalization/{filename}");
+            return new Uri($"pack://application:,,,/I18n/{filename}");
         }
+
+        public CultureInfo CurrentCulture { get; private set; } = CultureInfo.CurrentCulture;
 
         [RelayCommand]
         public void ApplyLanguage()
         {
             var appLanguage = _configService.Config.Language;
-            var cultureInfo = appLanguage switch
+            var pluginService = _serviceProvider.GetRequiredService<PluginService>();
+
+            CurrentCulture = appLanguage switch
             {
                 AppLanguage.English => new CultureInfo("en"),
                 AppLanguage.ChineseSimplified => new CultureInfo("zh-Hans"),
@@ -73,10 +87,37 @@ namespace CurvaLauncher.Services
                 _ => CultureInfo.CurrentCulture
             };
 
-            var resourceDictionary = GetMatchedResourceDictionary(cultureInfo);
+            ResourceDictionary i18nDictionary = new();
 
-            if (resourceDictionary != null)
-                ApplyResourceDictionary(resourceDictionary);
+            if (GetMatchedResourceDictionary(CurrentCulture, _resourceDictionaries) is ResourceDictionary resourceDictionary)
+                i18nDictionary.MergedDictionaries.Add(resourceDictionary);
+
+
+            foreach (var assembly in pluginService.PluginInstances.Select(ins => ins.Plugin.GetType().Assembly))
+                if (_assemblyResourceDictionaries.TryGetValue(assembly, out var assemblyResourceDictionaries))
+                {
+                    if (GetMatchedResourceDictionary(CurrentCulture, assemblyResourceDictionaries.All) is ResourceDictionary assemblyResourceDictionary)
+                        i18nDictionary.MergedDictionaries.Add(new AssemblyResourceDictionary(assembly, assemblyResourceDictionary));
+                    else
+                        i18nDictionary.MergedDictionaries.Add(new AssemblyResourceDictionary(assembly, assemblyResourceDictionaries.Default));
+                }
+
+            ApplyResourceDictionary(i18nDictionary);
+
+            OnCurrentCultureChanged();
         }
+
+        public void AddAssemblyResourceDictionary(Assembly assembly, CultureInfo cultureInfo, ResourceDictionary resourceDictionary)
+        {
+            if (!_assemblyResourceDictionaries.TryGetValue(assembly, out var dicts))
+                _assemblyResourceDictionaries[assembly] = dicts = new(resourceDictionary, new());
+
+            dicts.All[cultureInfo] = resourceDictionary;
+        }
+
+        private void OnCurrentCultureChanged()
+            => CurrentCultureChanged?.Invoke(this, EventArgs.Empty);
+
+        public event EventHandler? CurrentCultureChanged;
     }
 }

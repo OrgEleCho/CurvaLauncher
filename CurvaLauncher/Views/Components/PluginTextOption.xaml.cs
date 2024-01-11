@@ -8,7 +8,7 @@ namespace CurvaLauncher.Views.Components;
 public partial class PluginTextOption : PluginOption
 {
     public PluginTextOption(
-        IPlugin plugin,
+        CurvaLauncherPlugin plugin,
         string optionName,
         string? optionDescription,
         string optionPropertyName,

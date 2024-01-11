@@ -7,27 +7,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher", "CurvaLaunc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Common", "CurvaLauncher.Common\CurvaLauncher.Common.csproj", "{128C4E51-88C8-4998-9DCD-2319350DA501}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin", "CurvaLauncher.Plugin\CurvaLauncher.Plugin.csproj", "{78ECD557-CE1D-4CDE-93B2-96EDC58654E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins", "CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj", "{78ECD557-CE1D-4CDE-93B2-96EDC58654E4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{BAACD50D-2F94-4A65-8B13-49031D617CAC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.Calculator", "CurvaLauncher.Plugin.Calculator\CurvaLauncher.Plugin.Calculator.csproj", "{C20DA5C5-0683-4997-8628-61337A0772FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Calculator", "CurvaLauncher.Plugins.Calculator\CurvaLauncher.Plugins.Calculator.csproj", "{C20DA5C5-0683-4997-8628-61337A0772FF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.OpenUrl", "CurvaLauncher.Plugin.OpenUrl\CurvaLauncher.Plugin.OpenUrl.csproj", "{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.OpenUrl", "CurvaLauncher.Plugins.OpenUrl\CurvaLauncher.Plugins.OpenUrl.csproj", "{F54A8D68-B0B0-4296-BE85-BBAD8400C0C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.RunProgram", "CurvaLauncher.Plugin.RunProgram\CurvaLauncher.Plugin.RunProgram.csproj", "{C4629C9C-ACAD-4062-968C-ACF8E38D4331}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.RunProgram", "CurvaLauncher.Plugins.RunProgram\CurvaLauncher.Plugins.RunProgram.csproj", "{C4629C9C-ACAD-4062-968C-ACF8E38D4331}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "TestConsole\TestConsole.csproj", "{8834754D-EB48-473A-A42E-DBE2EA4BEF82}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.Test", "CurvaLauncher.Plugin.Test\CurvaLauncher.Plugin.Test.csproj", "{8BB89FEB-49E1-44EE-83E0-5C30B6117675}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Test", "CurvaLauncher.Plugins.Test\CurvaLauncher.Plugins.Test.csproj", "{8BB89FEB-49E1-44EE-83E0-5C30B6117675}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.RunApplication", "CurvaLauncher.Plugin.RunApplication\CurvaLauncher.Plugin.RunApplication.csproj", "{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.RunApplication", "CurvaLauncher.Plugins.RunApplication\CurvaLauncher.Plugins.RunApplication.csproj", "{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.Hashing", "CurvaLauncher.Plugin.Hashing\CurvaLauncher.Plugin.Hashing.csproj", "{CF1ADC3E-EC03-462B-ADAC-2E2830D1ACB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Hashing", "CurvaLauncher.Plugins.Hashing\CurvaLauncher.Plugins.Hashing.csproj", "{CF1ADC3E-EC03-462B-ADAC-2E2830D1ACB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugin.Translator", "CurvaLauncher.Plugin.Translator\CurvaLauncher.Plugin.Translator.csproj", "{3B3D63F7-C121-42B4-9A32-A15C86EABA15}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Translator", "CurvaLauncher.Plugins.Translator\CurvaLauncher.Plugins.Translator.csproj", "{3B3D63F7-C121-42B4-9A32-A15C86EABA15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurvaLauncher.Plugin.QuickWebSearch", "CurvaLauncher.Plugin.QuickWebSearch\CurvaLauncher.Plugin.QuickWebSearch.csproj", "{2782D69A-3CE8-4222-83BE-50C6DBC4571F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.QuickWebSearch", "CurvaLauncher.Plugins.QuickWebSearch\CurvaLauncher.Plugins.QuickWebSearch.csproj", "{2782D69A-3CE8-4222-83BE-50C6DBC4571F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -10,7 +10,7 @@
                 <ui:ThemesDictionary Theme="Light"/>
                 <ui:ControlsDictionary/>
 
-                <ResourceDictionary x:Name="StringsFallback" Source="Globalization/EnUs.xaml"/>
+                <ResourceDictionary x:Name="StringsFallback" Source="I18n/EnUs.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

@@ -25,7 +25,5 @@ static class ScrollViewerUtils
     {
         if (d is not Control control)
             throw new ArgumentException("Unsupport");
-
-
     }
 }

@@ -22,7 +22,7 @@ namespace CurvaLauncher.Views.Components
     /// </summary>
     public partial class PluginSelectOption : PluginOption
     {
-        public PluginSelectOption(IPlugin plugin, 
+        public PluginSelectOption(CurvaLauncherPlugin plugin, 
             string optionName, 
             string? optionDescription,
             string optionPropertyName,

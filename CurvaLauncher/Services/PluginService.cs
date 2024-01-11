@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Models;
 using CurvaLauncher.Plugin;
+using CurvaLauncher.PluginInteraction;
 
 namespace CurvaLauncher.Services;
 
@@ -21,7 +22,6 @@ public partial class PluginService
     private readonly ConfigService _configService;
 
     public string Path { get; set; } = "Plugins";
-    public string ConfigFileName { get; set; } = "Config.json";
 
     public ObservableCollection<CurvaLauncherPluginInstance> PluginInstances { get; } = new();
 
@@ -34,7 +34,7 @@ public partial class PluginService
     }
 
 
-    private DirectoryInfo EnsurePluginDirectories()
+    private DirectoryInfo EnsurePluginDirectory()
     {
         DirectoryInfo dir = new(_pathService.GetPath(Path));
 
@@ -48,7 +48,7 @@ public partial class PluginService
     {
         plugins = new List<CurvaLauncherPluginInstance>();
 
-        var dir = EnsurePluginDirectories();
+        var dir = EnsurePluginDirectory();
         var dllFiles = dir.GetFiles("*.dll");
 
         AppConfig config = _configService.Config;
@@ -69,7 +69,7 @@ public partial class PluginService
             var assembly = Assembly.LoadFile(dllFilePath);
 
             Type? pluginType = assembly.ExportedTypes
-                .Where(type => type.IsAssignableTo(typeof(ISyncPlugin)) || type.IsAssignableTo(typeof(IAsyncPlugin)))
+                .Where(type => type.IsAssignableTo(typeof(CurvaLauncherSyncPlugin)) || type.IsAssignableTo(typeof(CurvaLauncherAsyncPlugin)))
                 .FirstOrDefault();
 
             if (pluginType == null)
@@ -129,9 +129,9 @@ public partial class PluginService
     {
         foreach (var plugin in PluginInstances.Where(ins => ins.IsEnabled))
         {
-            if (plugin.Plugin is ISyncPlugin syncPlugin)
+            if (plugin.Plugin is CurvaLauncherSyncPlugin syncPlugin)
                 syncPlugin.Initialize();
-            else if (plugin.Plugin is IAsyncPlugin asyncPlugin)
+            else if (plugin.Plugin is CurvaLauncherAsyncPlugin asyncPlugin)
                 await asyncPlugin.InitializeAsync();
         }
     }

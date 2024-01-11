@@ -10,6 +10,8 @@
     <ApplicationIcon>Icon128.ico</ApplicationIcon>
 
     <Version>0.4.0-alpha</Version>
+
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,7 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CurvaLauncher.Common\CurvaLauncher.Common.csproj" />
-    <ProjectReference Include="..\CurvaLauncher.Plugin\CurvaLauncher.Plugin.csproj" />
+    <ProjectReference Include="..\CurvaLauncher.Plugin\CurvaLauncher.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>

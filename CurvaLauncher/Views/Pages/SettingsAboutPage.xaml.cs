@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CommunityToolkit.Mvvm.Input;
+using CurvaLauncher.Apis;
 using CurvaLauncher.Utilities;
 using CurvaLauncher.ViewModels;
 

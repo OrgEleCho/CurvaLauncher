@@ -4,13 +4,13 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace CurvaLauncher.Views.Components;
 
 public partial class PluginOptionsControl : UserControl
 {
     public CurvaLauncherPluginInstance PluginInstance { get; }
-    public IPlugin Plugin => PluginInstance.Plugin;
 
     public PluginOptionsControl(CurvaLauncherPluginInstance pluginInstance)
     {
@@ -46,7 +46,6 @@ public partial class PluginOptionsControl : UserControl
             return null;
         }
     }
-
 
     private void BuildOptions()
     {

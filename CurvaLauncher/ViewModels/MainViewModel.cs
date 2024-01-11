@@ -48,11 +48,6 @@ public partial class MainViewModel : ObservableObject
 
         if (!string.IsNullOrWhiteSpace(queryText))
         {
-            var context = new CurvaLauncherContext(dispatcher, _configService.Config.QueryResultIconSize)
-            {
-                Alternate = Keyboard.Modifiers.HasFlag(ModifierKeys.Alt),
-            };
-
             SortedCollection<QueryResultModel, float> queryResults = new()
             {
                 SortingRoot = m => m.Weight,
@@ -68,7 +63,7 @@ public partial class MainViewModel : ObservableObject
 
                     await pluginInstance.InitTask;
 
-                    await foreach (var result in pluginInstance.QueryAsync(context, queryText))
+                    await foreach (var result in pluginInstance.QueryAsync(queryText))
                     {
                         if (cancellationToken.IsCancellationRequested)
                             return;

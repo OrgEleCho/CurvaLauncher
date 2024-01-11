@@ -1,23 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
+using CurvaLauncher.Apis;
 
 namespace CurvaLauncher
 {
-    public class CurvaLauncherContext
+    public abstract class CurvaLauncherContext
     {
-        public CurvaLauncherContext(Dispatcher dispatcher, int requiredIconSize)
-        {
-            Dispatcher = dispatcher;
-            RequiredIconSize = requiredIconSize;
-        }
+        public abstract Dispatcher Dispatcher { get; }
+        public abstract int RequiredIconSize { get; }
 
-        public Dispatcher Dispatcher { get; }
-        public int RequiredIconSize { get; }
+        public abstract CultureInfo CurrentCulture { get; }
 
-        public bool Alternate { get; set; }
+
+        public abstract ICommonApi Api { get; }
+        public abstract IFileApi FileApi { get; }
+        public abstract IImageApi ImageApi { get; }
+        public abstract IStringApi StringApi { get; }
+        public abstract ICommandLineApi CommandLineApi { get; }
+
+
+
+        public abstract bool IsShiftKeyPressed();
+        public abstract bool IsCtrlKeyPressed();
+        public abstract bool IsAltKeyPressed();
+
+        public abstract void AddI18nResourceDictionary(Assembly assembly, CultureInfo cultureInfo, ResourceDictionary resourceDictionary);
+        public abstract object GetI18nResourceValue(Assembly assembly, object? key);
+        public abstract string? GetI18nResourceString(Assembly assembly, object? key);
+
+
+        public abstract event EventHandler? AppLanguageChanged;
     }
 }

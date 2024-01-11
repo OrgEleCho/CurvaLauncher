@@ -26,7 +26,7 @@ namespace CurvaLauncher.Views.Components
         readonly List<CheckBox> _allInputs = new();
 
         public PluginFlagsOption(
-            IPlugin plugin,
+            CurvaLauncherPlugin plugin,
             string optionName,
             string? optionDescription,
             PropertyInfo optionProperty,

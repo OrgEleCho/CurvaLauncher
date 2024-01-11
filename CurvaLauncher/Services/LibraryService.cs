@@ -39,7 +39,7 @@ namespace CurvaLauncher.Services
             var dir = EnsureLibrariesDirectory();
             var dllFiles = dir.EnumerateFiles("*.dll");
 
-            NativeLibrary.SetDllImportResolver()
+            //NativeLibrary.SetDllImportResolver()
 
             foreach (var dllFile in dllFiles)
             {
