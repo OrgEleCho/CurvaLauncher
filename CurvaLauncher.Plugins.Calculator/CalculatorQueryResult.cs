@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace CurvaLauncher.Plugin.Calculator
+namespace CurvaLauncher.Plugins.Calculator
 {
     public class CalculatorQueryResult : ISyncQueryResult
     {

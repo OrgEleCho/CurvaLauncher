@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CurvaLauncher.Plugin.RunApplication.Properties {
+namespace CurvaLauncher.Plugins.RunApplication.Properties {
     using System;
     
     

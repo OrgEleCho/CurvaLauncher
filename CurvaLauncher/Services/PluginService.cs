@@ -11,7 +11,7 @@ using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Models;
-using CurvaLauncher.Plugin;
+using CurvaLauncher.Plugins;
 using CurvaLauncher.PluginInteraction;
 
 namespace CurvaLauncher.Services;
@@ -69,7 +69,7 @@ public partial class PluginService
             var assembly = Assembly.LoadFile(dllFilePath);
 
             Type? pluginType = assembly.ExportedTypes
-                .Where(type => type.IsAssignableTo(typeof(CurvaLauncherSyncPlugin)) || type.IsAssignableTo(typeof(CurvaLauncherAsyncPlugin)))
+                .Where(type => type.IsAssignableTo(typeof(ISyncPlugin)) || type.IsAssignableTo(typeof(IAsyncPlugin)))
                 .FirstOrDefault();
 
             if (pluginType == null)
@@ -129,9 +129,9 @@ public partial class PluginService
     {
         foreach (var plugin in PluginInstances.Where(ins => ins.IsEnabled))
         {
-            if (plugin.Plugin is CurvaLauncherSyncPlugin syncPlugin)
+            if (plugin.Plugin is ISyncPlugin syncPlugin)
                 syncPlugin.Initialize();
-            else if (plugin.Plugin is CurvaLauncherAsyncPlugin asyncPlugin)
+            else if (plugin.Plugin is IAsyncPlugin asyncPlugin)
                 await asyncPlugin.InitializeAsync();
         }
     }

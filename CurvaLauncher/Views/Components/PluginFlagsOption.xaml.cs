@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CurvaLauncher.Plugin;
+using CurvaLauncher.Plugins;
 
 namespace CurvaLauncher.Views.Components
 {
@@ -26,7 +26,7 @@ namespace CurvaLauncher.Views.Components
         readonly List<CheckBox> _allInputs = new();
 
         public PluginFlagsOption(
-            CurvaLauncherPlugin plugin,
+            IPlugin plugin,
             string optionName,
             string? optionDescription,
             PropertyInfo optionProperty,

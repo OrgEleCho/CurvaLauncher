@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using CurvaLauncher.Utilities;
 
-namespace CurvaLauncher.Plugin.Test
+namespace CurvaLauncher.Plugins.Test
 {
 
     public class TestPlugin : CurvaLauncherSyncPlugin

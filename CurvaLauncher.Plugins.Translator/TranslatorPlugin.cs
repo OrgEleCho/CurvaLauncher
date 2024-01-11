@@ -1,8 +1,8 @@
 ﻿using System.Windows.Media;
 using CurvaLauncher.Apis;
-using CurvaLauncher.Plugin.Translator.Properties;
+using CurvaLauncher.Plugins.Translator.Properties;
 
-namespace CurvaLauncher.Plugin.Translator
+namespace CurvaLauncher.Plugins.Translator
 {
 
     public class TranslatorPlugin : CurvaLauncherSyncCommandPlugin

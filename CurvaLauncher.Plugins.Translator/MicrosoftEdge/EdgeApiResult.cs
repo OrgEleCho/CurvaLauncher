@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CurvaLauncher.Plugin.Translator.MicrosoftEdge
+namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
 {
     using System;
     using System.Collections.Generic;

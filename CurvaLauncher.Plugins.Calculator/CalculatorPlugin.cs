@@ -2,13 +2,13 @@
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
-using CurvaLauncher.Plugin.Calculator.Properties;
+using CurvaLauncher.Plugins.Calculator.Properties;
 using NCalculatorLib;
 
-namespace CurvaLauncher.Plugin.Calculator
+namespace CurvaLauncher.Plugins.Calculator
 {
 
-    public class CalculatorPlugin : CurvaLauncherI18nSyncPlugin
+    public class CalculatorPlugin : SyncI18nPlugin
     {
         readonly Lazy<ImageSource> laziedIcon;
 

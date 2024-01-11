@@ -7,7 +7,7 @@ using System.Windows.Threading;
 using CurvaLauncher.Utilities;
 using System.Text;
 
-namespace CurvaLauncher.Plugin.RunProgram
+namespace CurvaLauncher.Plugins.RunProgram
 {
     public class RunProgramQueryResult : ISyncQueryResult
     {

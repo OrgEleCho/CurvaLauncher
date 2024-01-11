@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace CurvaLauncher.Plugin.OpenUrl
+namespace CurvaLauncher.Plugins.OpenUrl
 {
     public class OpenUrlQueryResult : ISyncQueryResult
     {

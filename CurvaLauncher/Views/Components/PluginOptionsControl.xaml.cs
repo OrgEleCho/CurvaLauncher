@@ -1,5 +1,5 @@
 ﻿using CurvaLauncher.Models;
-using CurvaLauncher.Plugin;
+using CurvaLauncher.Plugins;
 using System;
 using System.Linq;
 using System.Reflection;

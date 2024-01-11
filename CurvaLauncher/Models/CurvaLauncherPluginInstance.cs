@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CurvaLauncher.Plugin;
+using CurvaLauncher.Plugins;
 using CurvaLauncher.PluginInteraction;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities.Resources;
@@ -13,19 +13,19 @@ namespace CurvaLauncher.Models;
 
 public partial class CurvaLauncherPluginInstance : ObservableObject
 {
-    public CurvaLauncherPlugin Plugin { get; }
+    public IPlugin Plugin { get; }
     public Task InitTask { get; private set; } = Task.CompletedTask;
 
 
-    private CurvaLauncherPluginInstance(CurvaLauncherPlugin plugin)
+    private CurvaLauncherPluginInstance(IPlugin plugin)
     {
         Plugin = plugin;
-        if (plugin is ICurvaLauncherI18nPlugin i18nPlugin)
+        if (plugin is II18nPlugin i18nPlugin)
         {
             var assembly = plugin.GetType().Assembly;
         }
 
-        if (plugin is not CurvaLauncherSyncPlugin && plugin is not CurvaLauncherAsyncPlugin)
+        if (plugin is not ISyncPlugin && plugin is not IAsyncPlugin)
             throw new ArgumentException("Invalid plugin", nameof(plugin));
     }
 
@@ -39,11 +39,11 @@ public partial class CurvaLauncherPluginInstance : ObservableObject
     {
         if (value)
         {
-            if (Plugin is CurvaLauncherAsyncPlugin asyncPlugin)
+            if (Plugin is IAsyncPlugin asyncPlugin)
             {
                 InitTask = asyncPlugin.InitializeAsync();
             }
-            else if (Plugin is CurvaLauncherSyncPlugin syncPlugin)
+            else if (Plugin is ISyncPlugin syncPlugin)
             {
                 syncPlugin.Initialize();
                 InitTask = Task.CompletedTask;
@@ -51,11 +51,11 @@ public partial class CurvaLauncherPluginInstance : ObservableObject
         }
         else
         {
-            if (Plugin is CurvaLauncherAsyncPlugin asyncPlugin)
+            if (Plugin is IAsyncPlugin asyncPlugin)
             {
                 InitTask = asyncPlugin.FinishAsync();
             }
-            else if (Plugin is CurvaLauncherSyncPlugin syncPlugin)
+            else if (Plugin is ISyncPlugin syncPlugin)
             {
                 syncPlugin.Finish();
                 InitTask = Task.CompletedTask;
@@ -65,12 +65,12 @@ public partial class CurvaLauncherPluginInstance : ObservableObject
 
     public async IAsyncEnumerable<IQueryResult> QueryAsync(string query)
     {
-        if (Plugin is CurvaLauncherAsyncPlugin asyncPlugin)
+        if (Plugin is IAsyncPlugin asyncPlugin)
         {
             await foreach (var result in asyncPlugin.QueryAsync(query))
                 yield return result;
         }
-        else if (Plugin is CurvaLauncherSyncPlugin syncPlugin)
+        else if (Plugin is ISyncPlugin syncPlugin)
         {
             foreach (var result in syncPlugin.Query(query))
                 yield return result;
@@ -82,16 +82,16 @@ public partial class CurvaLauncherPluginInstance : ObservableObject
     {
         curvaLauncherPlugin = null;
 
-        if (!type.IsAssignableTo(typeof(CurvaLauncherPlugin)))
+        if (!type.IsAssignableTo(typeof(IPlugin)))
             return false;
 
         try
         {
             var plugin = Activator.CreateInstance(type, CurvaLauncherContextImpl.Instance);
 
-            if (plugin is CurvaLauncherAsyncPlugin asyncPlugin)
+            if (plugin is IAsyncPlugin asyncPlugin)
                 curvaLauncherPlugin = new CurvaLauncherPluginInstance(asyncPlugin);
-            else if (plugin is CurvaLauncherSyncPlugin syncPlugin)
+            else if (plugin is ISyncPlugin syncPlugin)
                 curvaLauncherPlugin = new CurvaLauncherPluginInstance(syncPlugin);
 
             return curvaLauncherPlugin != null;

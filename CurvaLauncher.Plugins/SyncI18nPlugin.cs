@@ -2,7 +2,7 @@
 using System.Windows;
 using CurvaLauncher.Apis;
 
-namespace CurvaLauncher.Plugin;
+namespace CurvaLauncher.Plugins;
 
 public abstract class SyncI18nPlugin : SyncPlugin, II18nPlugin
 {

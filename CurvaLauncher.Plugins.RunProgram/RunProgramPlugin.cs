@@ -3,11 +3,11 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using CurvaLauncher.Utilities;
 using Microsoft.Win32;
-using CurvaLauncher.Plugin.RunProgram.Properties;
+using CurvaLauncher.Plugins.RunProgram.Properties;
 using System.Text;
 using CurvaLauncher.Apis;
 
-namespace CurvaLauncher.Plugin.RunProgram
+namespace CurvaLauncher.Plugins.RunProgram
 {
     public class RunProgramPlugin : CurvaLauncherSyncPlugin
     {

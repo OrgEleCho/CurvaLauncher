@@ -2,9 +2,9 @@
 using System.Windows.Media;
 using System.Windows.Threading;
 using CurvaLauncher.Utilities;
-using CurvaLauncher.Plugin.OpenUrl.Properties;
+using CurvaLauncher.Plugins.OpenUrl.Properties;
 
-namespace CurvaLauncher.Plugin.OpenUrl
+namespace CurvaLauncher.Plugins.OpenUrl
 {
     public class OpenUrlPlugin : CurvaLauncherSyncPlugin
     {

@@ -1,19 +1,22 @@
-﻿using System.Security.Cryptography;
+﻿using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Media;
 using CurvaLauncher.Apis;
-using CurvaLauncher.Plugin.Hashing.Properties;
+using CurvaLauncher.Plugins.Hashing.Properties;
 
-namespace CurvaLauncher.Plugin.Hashing;
+namespace CurvaLauncher.Plugins.Hashing;
 
-public class HashingPlugin : CurvaLauncherSyncCommandPlugin
+public class HashingPlugin : CommandSyncI18nPlugin
 {
     private readonly Lazy<ImageSource> _laziedImageSource;
 
-    public override string Name => "Hashing";
-    public override string Description => "Get a summary of data";
-    public override System.Windows.Media.ImageSource Icon => _laziedImageSource.Value;
+    public override ImageSource Icon => _laziedImageSource.Value;
     public override IEnumerable<string> CommandNames => _hashAlgorithmMap.Keys;
+
+    public override object NameKey => "StrPluginName";
+    public override object DescriptionKey => "StrPluginDescription";
+
 
     static Dictionary<string, HashAlgorithm> _hashAlgorithmMap = new()
     {
@@ -74,5 +77,13 @@ public class HashingPlugin : CurvaLauncherSyncCommandPlugin
                                                     1);
             }
         }
+    }
+
+    public override IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries()
+    {
+        yield return I18nResourceDictionary.Create(new CultureInfo("en-US"), "I18n/EnUs.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hans"), "I18n/ZhHans.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hant"), "I18n/ZhHant.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("ja-JP"), "I18n/JaJp.xaml");
     }
 }

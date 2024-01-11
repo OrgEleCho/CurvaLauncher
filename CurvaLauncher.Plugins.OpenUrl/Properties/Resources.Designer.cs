@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CurvaLauncher.Plugin.OpenUrl.Properties {
+namespace CurvaLauncher.Plugins.OpenUrl.Properties {
     using System;
     
     

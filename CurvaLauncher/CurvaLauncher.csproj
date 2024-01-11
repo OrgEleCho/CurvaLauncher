@@ -31,11 +31,13 @@
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="SharpVectors.Wpf" Version="1.8.2" />
     <PackageReference Include="WPF-UI" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CurvaLauncher.Common\CurvaLauncher.Common.csproj" />
+    <ProjectReference Include="..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj" />
     <ProjectReference Include="..\CurvaLauncher.Plugin\CurvaLauncher.Plugins.csproj" />
   </ItemGroup>
 

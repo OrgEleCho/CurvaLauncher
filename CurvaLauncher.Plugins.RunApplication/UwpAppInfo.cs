@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace CurvaLauncher.Plugin.RunApplication;
+namespace CurvaLauncher.Plugins.RunApplication;
 
 public class UwpAppInfo : AppInfo
 {

@@ -1,23 +1,21 @@
 ﻿using System.Reflection;
-using System.Windows;
-using CurvaLauncher.Apis;
 
 namespace CurvaLauncher.Plugins;
 
-public abstract class AsyncI18nPlugin : AsyncPlugin, II18nPlugin
+public abstract class CommandAsyncI18nPlugin : CommandAsyncPlugin, II18nPlugin
 {
-    readonly Type pluginType;
+    readonly Type _pluginType;
 
-    public override string Name => HostContext.GetI18nResourceString(pluginType.Assembly, NameKey) ?? GetType().Name;
-    public override string Description => HostContext.GetI18nResourceString(pluginType.Assembly, DescriptionKey) ?? string.Empty;
+    public override string Name => HostContext.GetI18nResourceString(_pluginType.Assembly, NameKey) ?? GetType().Name;
+    public override string Description => HostContext.GetI18nResourceString(_pluginType.Assembly, DescriptionKey) ?? string.Empty;
 
     public abstract object NameKey { get; }
     public abstract object DescriptionKey { get; }
 
-    protected AsyncI18nPlugin(CurvaLauncherContext context) : base(context)
+    protected CommandAsyncI18nPlugin(CurvaLauncherContext context) : base(context)
     {
-        pluginType = GetType();
-        Assembly assembly = pluginType.Assembly;
+        _pluginType = GetType();
+        Assembly assembly = _pluginType.Assembly;
 
         foreach (var i18nResourceDictionary in GetI18nResourceDictionaries())
             context.AddI18nResourceDictionary(assembly, i18nResourceDictionary.CultureInfo, i18nResourceDictionary.ResourceDictionary);

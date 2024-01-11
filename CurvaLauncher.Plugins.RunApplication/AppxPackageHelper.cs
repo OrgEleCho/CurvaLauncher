@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace CurvaLauncher.Plugin.RunApplication;
+namespace CurvaLauncher.Plugins.RunApplication;
 
 public class AppxPackageHelper
 {

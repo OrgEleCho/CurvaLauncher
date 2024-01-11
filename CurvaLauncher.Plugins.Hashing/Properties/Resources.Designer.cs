@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CurvaLauncher.Plugin.Hashing.Properties {
+namespace CurvaLauncher.Plugins.Hashing.Properties {
     using System;
     
     

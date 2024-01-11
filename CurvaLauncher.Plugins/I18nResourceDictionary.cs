@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Windows;
 
-namespace CurvaLauncher.Plugin;
+namespace CurvaLauncher.Plugins;
 
 public record class I18nResourceDictionary(CultureInfo CultureInfo, ResourceDictionary ResourceDictionary)
 {

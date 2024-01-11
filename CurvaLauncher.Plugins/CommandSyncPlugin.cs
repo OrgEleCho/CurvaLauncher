@@ -1,6 +1,6 @@
 ﻿using CurvaLauncher.Apis;
 
-namespace CurvaLauncher.Plugin;
+namespace CurvaLauncher.Plugins;
 
 public abstract class CommandSyncPlugin : CommandPlugin
 {

@@ -1,4 +1,4 @@
-﻿namespace CurvaLauncher.Plugin.Translator
+﻿namespace CurvaLauncher.Plugins.Translator
 {
     public class TranslateException : Exception
     {

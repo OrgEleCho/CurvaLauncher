@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CurvaLauncher.Plugin.Translator.Youdao
+namespace CurvaLauncher.Plugins.Translator.Youdao
 {
     using System;
     using System.Collections.Generic;

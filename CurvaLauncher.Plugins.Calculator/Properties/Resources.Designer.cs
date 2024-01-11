@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CurvaLauncher.Plugin.Calculator.Properties {
+namespace CurvaLauncher.Plugins.Calculator.Properties {
     using System;
     
     

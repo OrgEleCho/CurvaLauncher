@@ -1,4 +1,4 @@
-﻿namespace CurvaLauncher.Plugin.RunApplication;
+﻿namespace CurvaLauncher.Plugins.RunApplication;
 
 public abstract class AppInfo
 {

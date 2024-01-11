@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 
-namespace CurvaLauncher.Plugin.Test
+namespace CurvaLauncher.Plugins.Test
 {
     public class TestQueryResult : IAsyncQueryResult
     {

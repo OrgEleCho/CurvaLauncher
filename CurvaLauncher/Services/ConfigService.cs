@@ -8,7 +8,7 @@ using System.Text.Json.Nodes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Models;
-using CurvaLauncher.Plugin;
+using CurvaLauncher.Plugins;
 using CurvaLauncher.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -61,7 +61,7 @@ public partial class ConfigService : ObservableObject
             Options = GetPluginOptions(pluginInstance.Plugin)
         };
 
-        JsonObject GetPluginOptions(CurvaLauncherPlugin plugin)
+        JsonObject GetPluginOptions(IPlugin plugin)
         {
             var props = plugin.GetType()
                 .GetProperties()

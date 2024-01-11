@@ -1,4 +1,4 @@
-﻿namespace CurvaLauncher.Plugin.Test
+﻿namespace CurvaLauncher.Plugins.Test
 {
     [Flags]
     public enum MyFlagEnums

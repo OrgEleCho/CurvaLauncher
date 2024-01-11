@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using CurvaLauncher.Apis;
 
-namespace CurvaLauncher.Plugin.QuickWebSearch
+namespace CurvaLauncher.Plugins.QuickWebSearch
 {
     public class QuickWebSearchQueryResult : ISyncQueryResult
     {

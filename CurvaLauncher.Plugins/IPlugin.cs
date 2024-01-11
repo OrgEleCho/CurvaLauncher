@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace CurvaLauncher.Plugin;
+namespace CurvaLauncher.Plugins;
 
 public interface IPlugin
 {

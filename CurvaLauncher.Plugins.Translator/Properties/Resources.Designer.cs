@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CurvaLauncher.Plugin.Translator.Properties {
+namespace CurvaLauncher.Plugins.Translator.Properties {
     using System;
     
     

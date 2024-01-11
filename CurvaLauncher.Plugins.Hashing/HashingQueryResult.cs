@@ -3,7 +3,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace CurvaLauncher.Plugin.Hashing;
+namespace CurvaLauncher.Plugins.Hashing;
 
 public class HashingQueryResult : IAsyncQueryResult
 {

@@ -1,9 +1,9 @@
 ﻿using System.Windows.Media;
 using CurvaLauncher.Apis;
-using CurvaLauncher.Plugin.QuickWebSearch.Properties;
+using CurvaLauncher.Plugins.QuickWebSearch.Properties;
 using CurvaLauncher.Utilities;
 
-namespace CurvaLauncher.Plugin.QuickWebSearch
+namespace CurvaLauncher.Plugins.QuickWebSearch
 {
     public class QuickWebSearchPlugin : CurvaLauncherSyncCommandPlugin
     {

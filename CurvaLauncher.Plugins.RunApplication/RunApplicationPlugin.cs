@@ -1,12 +1,12 @@
 ﻿using System.Windows.Media;
 using System.IO;
-using CurvaLauncher.Plugin.RunApplication.Properties;
+using CurvaLauncher.Plugins.RunApplication.Properties;
 using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Xml;
 using CurvaLauncher.Apis;
 
-namespace CurvaLauncher.Plugin.RunApplication;
+namespace CurvaLauncher.Plugins.RunApplication;
 
 public class RunApplicationPlugin : CurvaLauncherSyncPlugin
 {

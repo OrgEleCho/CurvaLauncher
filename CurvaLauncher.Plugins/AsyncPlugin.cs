@@ -1,4 +1,4 @@
-﻿namespace CurvaLauncher.Plugin;
+﻿namespace CurvaLauncher.Plugins;
 
 public abstract class AsyncPlugin : Plugin, IAsyncPlugin
 {

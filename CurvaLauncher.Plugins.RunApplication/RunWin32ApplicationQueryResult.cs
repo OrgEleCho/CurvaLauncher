@@ -4,7 +4,7 @@ using System.IO;
 using CurvaLauncher;
 using System.Text.RegularExpressions;
 
-namespace CurvaLauncher.Plugin.RunApplication;
+namespace CurvaLauncher.Plugins.RunApplication;
 
 public class RunWin32ApplicationQueryResult : ISyncQueryResult
 {

@@ -1,4 +1,4 @@
-﻿using CurvaLauncher.Plugin;
+﻿using CurvaLauncher.Plugins;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -11,7 +11,7 @@ public class PluginOption : UserControl
         DefaultStyleKeyProperty.OverrideMetadata(typeof(PluginOption), new FrameworkPropertyMetadata(typeof(PluginOption)));
     }
 
-    public PluginOption(CurvaLauncherPlugin plugin, string optionName, string? optionDescription, string optionPropertyName)
+    public PluginOption(IPlugin plugin, string optionName, string? optionDescription, string optionPropertyName)
     {
         Plugin = plugin;
         OptionName = optionName;
@@ -19,7 +19,7 @@ public class PluginOption : UserControl
         OptionPropertyName = optionPropertyName;
     }
 
-    public CurvaLauncherPlugin Plugin { get; }
+    public IPlugin Plugin { get; }
     public string OptionPropertyName { get; }
 
 

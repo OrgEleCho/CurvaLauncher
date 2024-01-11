@@ -1,4 +1,4 @@
-﻿using CurvaLauncher.Plugin;
+﻿using CurvaLauncher.Plugins;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -8,7 +8,7 @@ namespace CurvaLauncher.Views.Components;
 public partial class PluginTextOption : PluginOption
 {
     public PluginTextOption(
-        CurvaLauncherPlugin plugin,
+        IPlugin plugin,
         string optionName,
         string? optionDescription,
         string optionPropertyName,

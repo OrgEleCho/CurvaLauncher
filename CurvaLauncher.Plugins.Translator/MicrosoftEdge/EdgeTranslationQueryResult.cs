@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace CurvaLauncher.Plugin.Translator.MicrosoftEdge
+namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
 {
     public class EdgeTranslationQueryResult : IAsyncQueryResult
     {

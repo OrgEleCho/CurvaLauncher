@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CurvaLauncher.Plugin.QuickWebSearch.Properties {
+namespace CurvaLauncher.Plugins.QuickWebSearch.Properties {
     using System;
     
     

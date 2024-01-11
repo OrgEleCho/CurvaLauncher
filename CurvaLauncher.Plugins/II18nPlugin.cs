@@ -1,4 +1,4 @@
-﻿namespace CurvaLauncher.Plugin;
+﻿namespace CurvaLauncher.Plugins;
 
 public interface II18nPlugin : IPlugin
 {

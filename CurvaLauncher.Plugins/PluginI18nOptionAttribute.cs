@@ -1,4 +1,4 @@
-﻿namespace CurvaLauncher.Plugin;
+﻿namespace CurvaLauncher.Plugins;
 
 [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
 public sealed class PluginI18nOptionAttribute : Attribute

@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using CurvaLauncher.Plugin;
+using CurvaLauncher.Plugins;
 
 namespace CurvaLauncher.Views.Components
 {
@@ -22,7 +22,7 @@ namespace CurvaLauncher.Views.Components
     /// </summary>
     public partial class PluginSelectOption : PluginOption
     {
-        public PluginSelectOption(CurvaLauncherPlugin plugin, 
+        public PluginSelectOption(IPlugin plugin, 
             string optionName, 
             string? optionDescription,
             string optionPropertyName,
