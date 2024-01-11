@@ -149,7 +149,7 @@
                         </ComboBox.ItemTemplate>
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="SelectionChanged">
-                                <behaviors:InvokeCommandAction Command="{Binding GlobalizationService.ApplyLanguageCommand}"/>
+                                <behaviors:InvokeCommandAction Command="{Binding I18nService.ApplyLanguageCommand}"/>
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
                     </ComboBox>

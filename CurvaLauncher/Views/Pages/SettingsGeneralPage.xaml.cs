@@ -21,13 +21,13 @@ namespace CurvaLauncher.Views.Pages
             ConfigService configService,
             HotkeyService hotkeyService,
             ThemeService themeService,
-            GlobalizationService globalizationService)
+            I18nService i18nService)
         {
             ViewModel = viewModel;
             ConfigService = configService;
             HotkeyService = hotkeyService;
             ThemeService = themeService;
-            GlobalizationService = globalizationService;
+            I18nService = i18nService;
             DataContext = this;
 
             InitializeComponent();
@@ -37,7 +37,7 @@ namespace CurvaLauncher.Views.Pages
         public ConfigService ConfigService { get; }
         public HotkeyService HotkeyService { get; }
         public ThemeService ThemeService { get; }
-        public GlobalizationService GlobalizationService { get; }
+        public I18nService I18nService { get; }
 
         [RelayCommand]
         public void CheckHotkeyStatus()

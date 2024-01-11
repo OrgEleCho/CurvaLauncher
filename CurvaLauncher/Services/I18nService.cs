@@ -10,7 +10,7 @@ using CurvaLauncher.Models;
 
 namespace CurvaLauncher.Services
 {
-    public partial class GlobalizationService
+    public partial class I18nService
     {
         private readonly ConfigService _configService;
 
@@ -23,7 +23,7 @@ namespace CurvaLauncher.Services
             [new CultureInfo("ja-JP")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("JaJp.xaml") },
         };
 
-        public GlobalizationService(
+        public I18nService(
             ConfigService configService)
         {
             _configService = configService;
