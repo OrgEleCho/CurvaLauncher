@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">執行程式</sys:String>
+    <sys:String x:Key="StrPluginDescription">執行 PATH 下與已註冊的應用程式</sys:String>
+
+    <sys:String x:Key="StrIncludeDirectories">包括目錄</sys:String>
+    <sys:String x:Key="StrExcludeDirectories">排除目錄</sys:String>
+    <sys:String x:Key="StrEnableAppsIndexing">啟用應用程式索引</sys:String>
+</ResourceDictionary>

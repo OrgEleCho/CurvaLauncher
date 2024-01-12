@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,11 +30,26 @@ namespace CurvaLauncher.Views.Components
             : base(plugin, optionName, optionDescription, optionPropertyName)
         {
             InitializeComponent();
+            BuildOptionControls();
+        }
 
+        public PluginSwitchOption(
+            Assembly resourceAssembly,
+            IPlugin plugin,
+            object optionNameKey,
+            object? optionDescriptionKey,
+            string optionPropertyName) : base(resourceAssembly, plugin, optionNameKey, optionDescriptionKey, optionPropertyName)
+        {
+            InitializeComponent();
+            BuildOptionControls();
+        }
+
+        void BuildOptionControls()
+        {
             input.SetBinding(CheckBox.IsCheckedProperty, new Binding
             {
-                Source = plugin,
-                Path = new PropertyPath(optionPropertyName),
+                Source = Plugin,
+                Path = new PropertyPath(OptionPropertyName),
                 Mode = BindingMode.TwoWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             });

@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">Quick Web Search</sys:String>
+    <sys:String x:Key="StrPluginDescription">Quick search the web for something</sys:String>
+    
+    <sys:String x:Key="StrCommandNameForBaidu">Command name for Baidu</sys:String>
+    <sys:String x:Key="StrCommandNameForBing">Command name for Bing</sys:String>
+    <sys:String x:Key="StrCommandNameForGoogle">Command name for Google</sys:String>
+    <sys:String x:Key="StrCommandNameForDuckDuckGo">Command name for DuckDuckGo</sys:String>
+    
+</ResourceDictionary>

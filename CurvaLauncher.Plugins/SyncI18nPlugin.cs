@@ -17,10 +17,9 @@ public abstract class SyncI18nPlugin : SyncPlugin, II18nPlugin
     protected SyncI18nPlugin(CurvaLauncherContext context) : base(context)
     {
         _pluginType = GetType();
-        Assembly assembly = _pluginType.Assembly;
 
         foreach (var i18nResourceDictionary in GetI18nResourceDictionaries())
-            context.AddI18nResourceDictionary(assembly, i18nResourceDictionary.CultureInfo, i18nResourceDictionary.ResourceDictionary);
+            context.AddI18nResourceDictionary(i18nResourceDictionary.Assembly, i18nResourceDictionary.CultureInfo, i18nResourceDictionary.ResourceDictionary);
 
         context.AppLanguageChanged += (s, e) =>
         {

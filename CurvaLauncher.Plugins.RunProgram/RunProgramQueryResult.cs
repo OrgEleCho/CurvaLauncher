@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using CurvaLauncher.Utilities;
 using System.Text;
 
 namespace CurvaLauncher.Plugins.RunProgram
@@ -18,7 +17,7 @@ namespace CurvaLauncher.Plugins.RunProgram
 
             context.Dispatcher.Invoke(() =>
             {
-                icon = ImageUtils.GetFileIcon(filename, context.RequiredIconSize);
+                icon = context.ImageApi.GetFileIcon(filename, context.RequiredIconSize);
             });
         }
 

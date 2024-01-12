@@ -2,7 +2,7 @@
 
 namespace CurvaLauncher.Plugins;
 
-public abstract class CommandAsyncPlugin : CommandPlugin
+public abstract class CommandAsyncPlugin : CommandPlugin, IAsyncPlugin
 {
     protected CommandAsyncPlugin(CurvaLauncherContext context) : base(context)
     {
@@ -11,9 +11,9 @@ public abstract class CommandAsyncPlugin : CommandPlugin
     public virtual Task InitializeAsync() => Task.CompletedTask;
     public virtual Task FinishAsync() => Task.CompletedTask;
 
-    public abstract IAsyncEnumerable<IQueryResult> ExecuteCommandAsync(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments);
+    public abstract IAsyncEnumerable<IQueryResult> ExecuteCommandAsync(string commandName, CommandLineSegment[] arguments);
 
-    public async IAsyncEnumerable<IQueryResult> QueryAsync(CurvaLauncherContext context, string query)
+    public async IAsyncEnumerable<IQueryResult> QueryAsync(string query)
     {
         if (string.IsNullOrWhiteSpace(query))
             yield break;
@@ -40,7 +40,7 @@ public abstract class CommandAsyncPlugin : CommandPlugin
         {
             if (commandName.Equals(commandNameSegment.Value, IgnoreCases ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCultureIgnoreCase))
             {
-                await foreach (var result in ExecuteCommandAsync(context, commandName, argumentSegments))
+                await foreach (var result in ExecuteCommandAsync(commandName, argumentSegments))
                     yield return result;
 
                 yield break;

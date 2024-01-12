@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Media;
@@ -9,9 +10,7 @@ namespace CurvaLauncher.Plugins.Hashing;
 
 public class HashingPlugin : CommandSyncI18nPlugin
 {
-    private readonly Lazy<ImageSource> _laziedImageSource;
-
-    public override ImageSource Icon => _laziedImageSource.Value;
+    public override ImageSource Icon { get; }
     public override IEnumerable<string> CommandNames => _hashAlgorithmMap.Keys;
 
     public override object NameKey => "StrPluginName";
@@ -30,10 +29,10 @@ public class HashingPlugin : CommandSyncI18nPlugin
     public HashingPlugin(CurvaLauncherContext context) : base(context)
     {
         Prefix = "#";
-        _laziedImageSource = new Lazy<ImageSource>(() => HostContext.ImageApi.CreateFromSvg(Resources.IconSvg)!);
+        Icon = context.ImageApi.CreateFromSvg(Resources.IconSvg)!;
     }
 
-    public override IEnumerable<IQueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
+    public override IEnumerable<IQueryResult> ExecuteCommand(string commandName, CommandLineSegment[] arguments)
     {
         string algorithmName = commandName.ToUpper();
         if (_hashAlgorithmMap.TryGetValue(algorithmName, out var hashAlgorithm))
@@ -81,6 +80,9 @@ public class HashingPlugin : CommandSyncI18nPlugin
 
     public override IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries()
     {
+        foreach (var item in base.GetI18nResourceDictionaries())
+            yield return item;
+
         yield return I18nResourceDictionary.Create(new CultureInfo("en-US"), "I18n/EnUs.xaml");
         yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hans"), "I18n/ZhHans.xaml");
         yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hant"), "I18n/ZhHant.xaml");

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,19 +32,36 @@ namespace CurvaLauncher.Views.Components
             Selections = selections;
 
             InitializeComponent();
+            BuildOptionControls();
+        }
+        public PluginSelectOption(
+            Assembly resourceAssembly,
+            IPlugin plugin,
+            object optionNameKey,
+            object? optionDescriptionKey,
+            string optionPropertyName,
+            IEnumerable selections) : base(resourceAssembly, plugin, optionNameKey, optionDescriptionKey, optionPropertyName)
+        {
+            Selections = selections;
 
-            foreach (var selection in selections)
+            InitializeComponent();
+            BuildOptionControls();
+        }
+
+        public IEnumerable Selections { get; }
+
+        void BuildOptionControls()
+        {
+            foreach (var selection in Selections)
                 input.Items.Add(selection);
 
             input.SetBinding(ComboBox.SelectedItemProperty, new Binding
             {
-                Source = plugin,
-                Path = new PropertyPath(optionPropertyName),
+                Source = Plugin,
+                Path = new PropertyPath(OptionPropertyName),
                 Mode = BindingMode.TwoWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             });
         }
-
-        public IEnumerable Selections { get; }
     }
 }

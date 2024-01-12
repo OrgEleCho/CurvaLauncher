@@ -2,5 +2,5 @@
 
 public abstract class AppInfo
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = string.Empty;
 }

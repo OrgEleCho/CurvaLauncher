@@ -32,29 +32,33 @@
         <Grid Margin="15 15 0 0">
             <ScrollViewer>
                 <StackPanel>
-                    <ItemsControl ItemsSource="{Binding ConfigService.Config.CustomQueryHotkeys}"
-                          d:ItemsSource="{d:SampleData ItemCount=5}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="models:QueryHotkey">
-                                <Grid Margin="0 0 0 10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="30"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
+                    <ui:Card>
+                        <ItemsControl ItemsSource="{Binding ConfigService.Config.CustomQueryHotkeys}"
+                                      d:ItemsSource="{d:SampleData ItemCount=5}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="models:QueryHotkey">
+                                    <Grid Margin="0 0 0 10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBox MinWidth="120" Text="{Binding Hotkey}"/>
-                                    <ui:SymbolIcon Grid.Column="1" Symbol="ArrowRight20"/>
-                                    <TextBox Grid.Column="2" Text="{Binding QueryText}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                        <TextBox MinWidth="120" Text="{Binding Hotkey}"/>
+                                        <ui:SymbolIcon Grid.Column="1" Symbol="ArrowRight20"/>
+                                        <TextBox Grid.Column="2" Text="{Binding QueryText}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ui:Card>
 
-                    <StackPanel HorizontalAlignment="Right"
+                    <StackPanel HorizontalAlignment="Left" Margin="0 8 0 0"
                             Orientation="Horizontal">
-                        <ui:Button Content="{DynamicResource StrDelete}" Command="{Binding DeleteCommand}"/>
-                        <ui:Button Content="{DynamicResource StrAdd}" Margin="10 0 0 0" Command="{Binding AddCommand}"/>
+                        <ui:Button Content="{DynamicResource StrAdd}" Command="{Binding AddCommand}"/>
+                        <ui:Button Content="{DynamicResource StrDelete}" Margin="8 0 0 0" Command="{Binding DeleteCommand}"/>
+                        <ui:Button Content="{DynamicResource StrCheck}" Margin="8 0 0 0" Command="{Binding CheckHotkeysCommand}"/>
+                        <ui:Button Content="{DynamicResource StrApply}" Margin="8 0 0 0" Command="{Binding ApplyHotkeysCommand}"/>
                     </StackPanel>
 
                     <StackPanel Margin="0 20 0 0">
@@ -91,13 +95,5 @@
                 </StackPanel>
             </ScrollViewer>
         </Grid>
-
-        <StackPanel Grid.Row="1" Margin="10"
-                    VerticalAlignment="Bottom" 
-                    HorizontalAlignment="Right"
-                    Orientation="Horizontal">
-            <ui:Button Content="{DynamicResource StrCheck}" Command="{Binding CheckHotkeysCommand}"/>
-            <ui:Button Content="{DynamicResource StrApply}" Margin="10 0 0 0" Command="{Binding ApplyHotkeysCommand}"/>
-        </StackPanel>
     </Grid>
 </ui:UiPage>

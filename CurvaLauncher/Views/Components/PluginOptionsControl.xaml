@@ -51,6 +51,8 @@
                             <Run Text=":"/>
                         </TextBlock>
                         <ui:NumberBox Margin="3 3 0 0 "
+                                      SmallChange="0.1"
+                                      LargeChange="0.3"
                                       Value="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.Weight,UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </Grid>

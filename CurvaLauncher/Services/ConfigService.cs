@@ -65,7 +65,7 @@ public partial class ConfigService : ObservableObject
         {
             var props = plugin.GetType()
                 .GetProperties()
-                .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null);
+                .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null || p.GetCustomAttribute<PluginI18nOptionAttribute>() is not null);
 
             JsonObject json = new();
             foreach (var property in props)

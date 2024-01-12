@@ -3,4 +3,5 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="StrPluginName">電卓</sys:String>
     <sys:String x:Key="StrPluginDescription">数学的な式を計算するために使う</sys:String>
+    <sys:String x:Key="StrPrefix">接頭辞</sys:String>
 </ResourceDictionary>

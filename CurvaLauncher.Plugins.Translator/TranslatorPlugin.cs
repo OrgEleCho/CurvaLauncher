@@ -1,22 +1,24 @@
-﻿using System.Windows.Media;
+﻿using System.Globalization;
+using System.Net.Http;
+using System.Windows.Media;
 using CurvaLauncher.Apis;
 using CurvaLauncher.Plugins.Translator.Properties;
 
 namespace CurvaLauncher.Plugins.Translator
 {
 
-    public class TranslatorPlugin : CurvaLauncherSyncCommandPlugin
+    public class TranslatorPlugin : CommandSyncI18nPlugin
     {
-        [PluginOption]
+        [PluginI18nOption("StrCommandName")]
         public string CommandName { get; set; } = "Trans";
 
-        [PluginOption]
+        [PluginI18nOption("StrTranslatorAPI")]
         public TranslatorAPI TranslatorAPI { get; set; } = TranslatorAPI.Youdao;
 
-        [PluginOption]
+        [PluginI18nOption("StrSourceLanguage")]
         public string SourceLanguage { get; set; } = "Auto";
 
-        [PluginOption]
+        [PluginI18nOption("StrTargetLanguage")]
         public string TargetLanguage { get; set; } = "Auto";
 
 
@@ -30,17 +32,16 @@ namespace CurvaLauncher.Plugins.Translator
 
 
         HttpClient? _httpClient;
-        readonly Lazy<ImageSource> _laziedIcon;
 
-        public override string Name => "Translator";
+        public override ImageSource Icon { get; }
 
-        public override string Description => "Translate texts with free APIs";
+        public override object NameKey => "StrPluginName";
 
-        public override ImageSource Icon => _laziedIcon.Value;
+        public override object DescriptionKey => "StrPluginDescription";
 
         public TranslatorPlugin(CurvaLauncherContext context) : base(context)
         {
-            _laziedIcon = new Lazy<ImageSource>(() => context.ImageApi.CreateFromSvg(Resources.IconSvg)!);
+            Icon = context.ImageApi.CreateFromSvg(Resources.IconSvg)!;
         }
 
         public override void Initialize()
@@ -57,7 +58,7 @@ namespace CurvaLauncher.Plugins.Translator
             _httpClient = null;
         }
 
-        public override IEnumerable<IQueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments)
+        public override IEnumerable<IQueryResult> ExecuteCommand(string commandName, CommandLineSegment[] arguments)
         {
             if (!Enum.IsDefined<TranslatorAPI>(TranslatorAPI))
                 yield break;
@@ -70,7 +71,7 @@ namespace CurvaLauncher.Plugins.Translator
                 yield break;
             }
 
-            string text = context.CommandLineApi.Concat(arguments);
+            string text = HostContext.CommandLineApi.Concat(arguments);
 
             string? sourceLanguage = SourceLanguage;
             string? targetLanguage = TargetLanguage;
@@ -87,6 +88,14 @@ namespace CurvaLauncher.Plugins.Translator
 
                 _ => throw new Exception("This would never happen")
             };
+        }
+
+        public override IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries()
+        {
+            yield return I18nResourceDictionary.Create(new CultureInfo("en-US"), "I18n/EnUs.xaml");
+            yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hans"), "I18n/ZhHans.xaml");
+            yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hant"), "I18n/ZhHant.xaml");
+            yield return I18nResourceDictionary.Create(new CultureInfo("ja-JP"), "I18n/JaJp.xaml");
         }
     }
 }

@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">快速網絡搜尋</sys:String>
+    <sys:String x:Key="StrPluginDescription">快速搜索網絡上的某些內容</sys:String>
+    
+    <sys:String x:Key="StrCommandNameForBaidu">百度的命令名稱</sys:String>
+    <sys:String x:Key="StrCommandNameForBing">必應的命令名稱</sys:String>
+    <sys:String x:Key="StrCommandNameForGoogle">谷歌的命令名稱</sys:String>
+    <sys:String x:Key="StrCommandNameForDuckDuckGo">DuckDuckGo 的命令名稱</sys:String>
+</ResourceDictionary>

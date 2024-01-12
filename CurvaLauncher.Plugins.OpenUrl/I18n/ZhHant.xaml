@@ -1,0 +1,6 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">打開網址</sys:String>
+    <sys:String x:Key="StrPluginDescription">使用網頁瀏覽器打開網址</sys:String>
+</ResourceDictionary>

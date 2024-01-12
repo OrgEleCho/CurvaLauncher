@@ -3,4 +3,5 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="StrPluginName">Calculator</sys:String>
     <sys:String x:Key="StrPluginDescription">Math expression calculation</sys:String>
+    <sys:String x:Key="StrPrefix">Prefix</sys:String>
 </ResourceDictionary>

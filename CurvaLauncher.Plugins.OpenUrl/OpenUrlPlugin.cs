@@ -1,29 +1,28 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Windows.Media;
 using System.Windows.Threading;
-using CurvaLauncher.Utilities;
 using CurvaLauncher.Plugins.OpenUrl.Properties;
 
 namespace CurvaLauncher.Plugins.OpenUrl
 {
-    public class OpenUrlPlugin : CurvaLauncherSyncPlugin
+    public class OpenUrlPlugin : SyncI18nPlugin
     {
-        readonly Lazy<ImageSource> laziedIcon = new Lazy<ImageSource>(() => ImageUtils.CreateFromSvg(Resources.IconSvg)!);
-
         public static Regex UrlRegex { get; } 
             = new Regex(@"(http|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?");
 
-        public ImageSource Icon => laziedIcon.Value;
+        public override ImageSource Icon { get; }
 
-        public string Name => "Open URL";
+        public override object NameKey => "StrPluginName";
+        public override object DescriptionKey => "StrPluginDescription";
 
-        public string Description => "Use web browser to open URL";
+        public OpenUrlPlugin(CurvaLauncherContext context) : base(context)
+        {
+            Icon = context.ImageApi.CreateFromSvg(Resources.IconSvg)!;
+        }
 
-        public void Initialize() { }
-        public void Finish() { }
 
-
-        public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
+        public override IEnumerable<IQueryResult> Query(string query)
         {
             if (!UrlRegex.IsMatch(query))
                 yield break;
@@ -33,7 +32,15 @@ namespace CurvaLauncher.Plugins.OpenUrl
                 !uri.Scheme.Equals("https", StringComparison.OrdinalIgnoreCase))
                 yield break;
 
-            yield return new OpenUrlQueryResult(context, uri);
+            yield return new OpenUrlQueryResult(HostContext, uri);
+        }
+
+        public override IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries()
+        {
+            yield return I18nResourceDictionary.Create(new CultureInfo("en-US"), "I18n/EnUs.xaml");
+            yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hans"), "I18n/ZhHans.xaml");
+            yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hant"), "I18n/ZhHant.xaml");
+            yield return I18nResourceDictionary.Create(new CultureInfo("ja-JP"), "I18n/JaJp.xaml");
         }
     }
 }

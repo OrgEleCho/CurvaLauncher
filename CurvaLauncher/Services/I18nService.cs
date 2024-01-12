@@ -92,15 +92,13 @@ namespace CurvaLauncher.Services
             if (GetMatchedResourceDictionary(CurrentCulture, _resourceDictionaries) is ResourceDictionary resourceDictionary)
                 i18nDictionary.MergedDictionaries.Add(resourceDictionary);
 
-
-            foreach (var assembly in pluginService.PluginInstances.Select(ins => ins.Plugin.GetType().Assembly))
-                if (_assemblyResourceDictionaries.TryGetValue(assembly, out var assemblyResourceDictionaries))
-                {
-                    if (GetMatchedResourceDictionary(CurrentCulture, assemblyResourceDictionaries.All) is ResourceDictionary assemblyResourceDictionary)
-                        i18nDictionary.MergedDictionaries.Add(new AssemblyResourceDictionary(assembly, assemblyResourceDictionary));
-                    else
-                        i18nDictionary.MergedDictionaries.Add(new AssemblyResourceDictionary(assembly, assemblyResourceDictionaries.Default));
-                }
+            foreach (var assemblyResourceDictionariesKV in _assemblyResourceDictionaries)
+            {
+                if (GetMatchedResourceDictionary(CurrentCulture, assemblyResourceDictionariesKV.Value.All) is ResourceDictionary assemblyResourceDictionary)
+                    i18nDictionary.MergedDictionaries.Add(new AssemblyResourceDictionary(assemblyResourceDictionariesKV.Key, assemblyResourceDictionary));
+                else
+                    i18nDictionary.MergedDictionaries.Add(new AssemblyResourceDictionary(assemblyResourceDictionariesKV.Key, assemblyResourceDictionariesKV.Value.Default));
+            }
 
             ApplyResourceDictionary(i18nDictionary);
 

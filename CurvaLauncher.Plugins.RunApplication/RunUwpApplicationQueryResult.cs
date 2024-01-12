@@ -22,21 +22,20 @@ public class RunUwpApplicationQueryResult : ISyncQueryResult
         AppInfo = appInfo;
         Weight = weight;
 
-        if (File.Exists(appInfo.LogoPath) && 
-            Uri.TryCreate(appInfo.LogoPath, UriKind.Absolute, out var logoUri))
-        {
-            context.Dispatcher.Invoke(() =>
-            {
-                Icon = new BitmapImage(logoUri);
-            });
-        }
+        var sortedLogos = appInfo.AppLogos.OrderBy(logo => logo.Size);
+        var sortedLargerLogos = sortedLogos.Where(logo => logo.Size >= context.RequiredIconSize);
+
+        if (sortedLargerLogos.Any())
+            Icon = context.Dispatcher.Invoke(() => new BitmapImage(new Uri(sortedLargerLogos.First().Path)));
+        else if (sortedLogos.Any())
+            Icon = context.Dispatcher.Invoke(() => new BitmapImage(new Uri(sortedLogos.First().Path)));
     }
 
     public void Invoke()
     {
         Process.Start(new ProcessStartInfo()
         {
-            FileName = $@"shell:appsFolder\Microsoft.MinecraftUWP_8wekyb3d8bbwe!{AppInfo.ApplicationId}",
+            FileName = $@"shell:appsFolder\{AppInfo.FamilyID}!{AppInfo.ApplicationId}",
             UseShellExecute = true
         });
     }

@@ -4,18 +4,11 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="I18n\EnUs.xaml" />
-    <None Remove="I18n\JaJp.xaml" />
-    <None Remove="I18n\ZhHans.xaml" />
-    <None Remove="I18n\ZhHant.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj" />
-    <ProjectReference Include="..\CurvaLauncher.Plugin\CurvaLauncher.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,25 +24,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Include="I18n\EnUs.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="I18n\JaJp.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="I18n\ZhHans.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="I18n\ZhHant.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
 
   <Target Name="CopyOutput" AfterTargets="Build">

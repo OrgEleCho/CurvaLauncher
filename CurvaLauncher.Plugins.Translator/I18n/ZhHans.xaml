@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">翻译器</sys:String>
+    <sys:String x:Key="StrPluginDescription">使用免费的 API 进行文本翻译</sys:String>
+
+    <sys:String x:Key="StrCommandName">命令名称</sys:String>
+    <sys:String x:Key="StrTranslatorAPI">翻译 API</sys:String>
+    <sys:String x:Key="StrSourceLanguage">源语言</sys:String>
+    <sys:String x:Key="StrTargetLanguage">目标语言</sys:String>
+</ResourceDictionary>

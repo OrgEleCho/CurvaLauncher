@@ -1,0 +1,8 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">運行應用程式</sys:String>
+    <sys:String x:Key="StrPluginDescription">運行安裝在您的電腦上的應用程式</sys:String>
+    <sys:String x:Key="StrResultCount">結果數量</sys:String>
+    <sys:String x:Key="StrStrIndexLocations">索引位置</sys:String>
+</ResourceDictionary>

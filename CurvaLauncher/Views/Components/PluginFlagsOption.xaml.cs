@@ -34,6 +34,27 @@ namespace CurvaLauncher.Views.Components
         {
             InitializeComponent();
 
+            BuildOptionControls(optionProperty, enumType);
+            UpdateInputs(optionProperty.GetValue(plugin)!);
+        }
+
+        public PluginFlagsOption(
+            Assembly resourceAssembly,
+            IPlugin plugin,
+            object optionNameKey,
+            object? optionDescriptionKey,
+            PropertyInfo optionProperty,
+            Type enumType) : base(resourceAssembly, plugin, optionNameKey, optionDescriptionKey, optionProperty.Name)
+        {
+            InitializeComponent();
+
+            BuildOptionControls(optionProperty, enumType);
+            UpdateInputs(optionProperty.GetValue(plugin)!);
+        }
+
+        void BuildOptionControls(PropertyInfo optionProperty, Type enumType)
+        {
+
             foreach (var value in Enum.GetValues(enumType))
             {
                 var enumName = Enum.GetName(enumType, value);
@@ -46,32 +67,32 @@ namespace CurvaLauncher.Views.Components
 
                 checkbox.Checked += (s, e) =>
                 {
-                    dynamic currentOptionValue = optionProperty.GetValue(plugin)!;
+                    dynamic currentOptionValue = optionProperty.GetValue(Plugin)!;
                     dynamic newOptionValue = currentOptionValue | dynamicValue;  // set flag
 
-                    optionProperty.SetValue(plugin, newOptionValue);
+                    optionProperty.SetValue(Plugin, newOptionValue);
                     UpdateInputs(newOptionValue);
                 };
 
                 checkbox.Unchecked += (s, e) =>
                 {
-                    dynamic currentOptionValue = optionProperty.GetValue(plugin)!;
+                    dynamic currentOptionValue = optionProperty.GetValue(Plugin)!;
                     dynamic newOptionValue = currentOptionValue & ~dynamicValue;  // clear flag
 
-                    optionProperty.SetValue(plugin, newOptionValue);
+                    optionProperty.SetValue(Plugin, newOptionValue);
                     UpdateInputs(newOptionValue);
                 };
 
                 _allInputs.Add(checkbox);
             }
 
-            if (plugin is INotifyPropertyChanged observablePlugin)
+            if (Plugin is INotifyPropertyChanged observablePlugin)
             {
                 observablePlugin.PropertyChanged += (s, e) =>
                 {
                     if (e.PropertyName == optionProperty.Name)
                     {
-                        var newFlagsValue = optionProperty.GetValue(plugin)!;
+                        var newFlagsValue = optionProperty.GetValue(Plugin)!;
 
                         UpdateInputs(newFlagsValue);
                     }
@@ -87,8 +108,6 @@ namespace CurvaLauncher.Views.Components
             {
                 _allInputs[i].Margin = new Thickness(0, 3, 15, 3);
             }
-
-            UpdateInputs(optionProperty.GetValue(plugin)!);
         }
 
         void UpdateInputs(object newFlagsValue)

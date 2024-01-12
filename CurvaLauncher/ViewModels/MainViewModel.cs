@@ -128,12 +128,18 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public void SelectNext()
     {
+        if (QueryResults.Count == 0)
+            return;
+
         SelectedQueryResultIndex = (SelectedQueryResultIndex + 1) % QueryResults.Count;
     }
 
     [RelayCommand]
     public void SelectPrev()
     {
+        if (QueryResults.Count == 0)
+            return;
+
         int newIndex = (SelectedQueryResultIndex - 1) % QueryResults.Count;
         if (newIndex == -1)
             newIndex = QueryResults.Count - 1;

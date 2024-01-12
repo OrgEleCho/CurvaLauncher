@@ -17,10 +17,9 @@ public abstract class AsyncI18nPlugin : AsyncPlugin, II18nPlugin
     protected AsyncI18nPlugin(CurvaLauncherContext context) : base(context)
     {
         pluginType = GetType();
-        Assembly assembly = pluginType.Assembly;
 
         foreach (var i18nResourceDictionary in GetI18nResourceDictionaries())
-            context.AddI18nResourceDictionary(assembly, i18nResourceDictionary.CultureInfo, i18nResourceDictionary.ResourceDictionary);
+            context.AddI18nResourceDictionary(i18nResourceDictionary.Assembly, i18nResourceDictionary.CultureInfo, i18nResourceDictionary.ResourceDictionary);
 
         context.AppLanguageChanged += (s, e) =>
         {

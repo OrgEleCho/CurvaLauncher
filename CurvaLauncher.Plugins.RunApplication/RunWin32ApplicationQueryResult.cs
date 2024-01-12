@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using CurvaLauncher;
 using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
@@ -29,9 +30,17 @@ public class RunWin32ApplicationQueryResult : ISyncQueryResult
         context.Dispatcher.Invoke(() =>
         {
             var iconPath = appInfo.IconPath ?? appInfo.FilePath;
-            var iconIndex = appInfo.IconIndex;
 
-            icon = context.ImageApi.GetEmbededIconImage(iconPath, context.RequiredIconSize, iconIndex);
+            if (!iconPath.EndsWith(".ico"))
+            {
+                var iconIndex = appInfo.IconIndex;
+                icon = context.ImageApi.GetEmbededIconImage(iconPath, context.RequiredIconSize, iconIndex);
+            }
+            else
+            {
+                if (File.Exists(iconPath))
+                    icon = new BitmapImage(new Uri(iconPath));
+            }
         });
     }
 

@@ -1,7 +1,7 @@
 ﻿namespace CurvaLauncher.Plugins;
 
 [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
-public sealed class PluginOptionAttribute : Attribute
+public sealed class PluginOptionAttribute : Attribute, IPluginOptionAttribute
 {
     public string? Name { get; set; }
     public string? Description { get; set; }

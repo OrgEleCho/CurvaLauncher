@@ -10,19 +10,17 @@ namespace CurvaLauncher.Plugins.Calculator
 
     public class CalculatorPlugin : SyncI18nPlugin
     {
-        readonly Lazy<ImageSource> laziedIcon;
-
-        [PluginOption]
+        [PluginI18nOption("StrPrefix")]
         public string Prefix { get; set; } = "=";
 
-        public override ImageSource Icon => laziedIcon.Value;
+        public override ImageSource Icon { get; }
 
         public override object NameKey => "StrPluginName";
         public override object DescriptionKey => "StrPluginDescription";
 
         public CalculatorPlugin(CurvaLauncherContext context) : base(context)
         {
-            laziedIcon = new Lazy<ImageSource>(() => context.ImageApi.CreateFromSvg(Resources.IconSvg)!);
+            Icon = context.ImageApi.CreateFromSvg(Resources.IconSvg)!;
         }
 
         public override IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries()

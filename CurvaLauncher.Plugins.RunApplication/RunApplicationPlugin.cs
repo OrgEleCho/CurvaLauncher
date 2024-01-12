@@ -5,29 +5,28 @@ using Microsoft.Win32;
 using System.Text.RegularExpressions;
 using System.Xml;
 using CurvaLauncher.Apis;
+using System.Globalization;
+using CurvaLauncher.Plugins.RunApplication.UWP;
+using System.Runtime.InteropServices;
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
-public class RunApplicationPlugin : CurvaLauncherSyncPlugin
+public class RunApplicationPlugin : SyncI18nPlugin
 {
-    readonly Lazy<ImageSource> laziedIcon;
-
-
-    [PluginOption]
+    [PluginI18nOption("StrResultCount")]
     public int ResultCount { get; set; } = 5;
 
-    [PluginOption]
+    [PluginI18nOption("StrIndexLocations")]
     public IndexLocations IndexLocations { get; set; } =
-        IndexLocations.AppsFolder |
+        IndexLocations.UWP |
         IndexLocations.CommonPrograms |
         IndexLocations.Programs |
         IndexLocations.Desktop;
 
-    public override string Name => "Run Application";
-    public override string Description => "Run Applications installed on your PC";
-    public override ImageSource Icon => laziedIcon.Value;
+    public override ImageSource Icon { get; }
 
-    static readonly int[] s_uwpIconSizes = [44, 150, 310];
+    public override object NameKey => "StrPluginName";
+    public override object DescriptionKey => "StrPluginDescription";
 
 
     private Dictionary<string, AppInfo>? _apps;
@@ -35,7 +34,7 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
 
     public RunApplicationPlugin(CurvaLauncherContext context) : base(context)
     {
-        laziedIcon = new Lazy<ImageSource>(() => HostContext.ImageApi.CreateFromSvg(Resources.IconSvg)!);
+        Icon = HostContext.ImageApi.CreateFromSvg(Resources.IconSvg)!;
     }
 
     public override void Initialize()
@@ -44,11 +43,6 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
 
         InitializeWin32();
         InitializeUwp();
-    }
-
-    private void InitializeAppsFolder()
-    {
-        var appxFactory = new AppxPackageHelper.AppxFactory();
     }
 
     private void InitializeWin32()
@@ -81,6 +75,8 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
             var ext = Path.GetExtension(target.FileName);
             if (!string.Equals(ext, ".exe", StringComparison.OrdinalIgnoreCase))
                 continue;
+            if (!File.Exists(target.FileName))
+                continue;
 
             var name = Path.GetFileNameWithoutExtension(shortcut);
 
@@ -89,6 +85,10 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
                 Name = name,
                 FilePath = target.FileName,
                 Arguments = target.Arguments,
+                WorkingDirectory = target.WorkingDirectory,
+                IconPath = target.IconPath,
+                IconIndex = target.IconIndex,
+                IsUAC = target.RequiresAdmin
             };
         }
     }
@@ -97,6 +97,12 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
     {
         if (_apps == null)
             return;
+
+        if (!IndexLocations.HasFlag(IndexLocations.UWP))
+            return;
+
+        string resourcePrefix = "ms-resource:";
+        char[] displayNameBuffer = new char[260];
 
         var repositoryKey = Registry.CurrentUser.OpenSubKey(
             @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages");
@@ -115,15 +121,13 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
 
             UwpAppInfo info = new();
 
-            if (subKey.GetValue("DisplayName") is not string displayName)
-                continue;
-
-            info.Name = displayName;
-
             if (subKey.GetValue("PackageID") is not string packageId)
                 continue;
 
-            info.PackageID = Regex.Replace(packageId, "_.*__", "_");
+            string packageFamilyId = Regex.Replace(packageId, "_.*__", "_");
+
+            info.PackageId = packageId;
+            info.FamilyID = packageFamilyId;
 
             if (subKey.GetValue("PackageRootFolder") is not string packageRootFolder)
                 continue;
@@ -142,6 +146,7 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
             nsManager.AddNamespace("ns", "http://schemas.microsoft.com/appx/manifest/foundation/windows10");
             nsManager.AddNamespace("uap", "http://schemas.microsoft.com/appx/manifest/uap/windows10");
 
+            var idNode = xml.SelectSingleNode("/ns:Package/ns:Identity", nsManager);
             var appNode = xml.SelectSingleNode("/ns:Package/ns:Applications/ns:Application", nsManager);
             var logoNode = xml.SelectSingleNode("/ns:Package/ns:Properties/ns:Logo", nsManager);
 
@@ -149,7 +154,42 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
                 appNode.Attributes?["Id"]?.Value is not string appId)
                 continue;
 
+            //if (appId != "App")
+            //    continue;
+
             info.ApplicationId = appId;
+
+            if (subKey.GetValue("DisplayName") is not string displayName)
+                continue;
+
+            if (displayName.StartsWith(resourcePrefix))
+            {
+                string resourcePath = displayName.Substring(resourcePrefix.Length);
+
+                if (!resourcePath.Contains('/') && !resourcePath.Contains('\\') && idNode?.Attributes?["Name"]?.Value is string id)
+                {
+                    resourcePath = $"//{id}/Resources/{resourcePath}";
+                }
+
+                uint errCode;
+                string resourceStr = $"@{{{packageId}?ms-resource:{resourcePath}}}";
+                do
+                {
+                    errCode = SHLoadIndirectString(resourceStr, ref displayNameBuffer[0], displayNameBuffer.Length, 0);
+                }
+                while (errCode == 1 || errCode == 0x8007007a);
+
+                int endIndex = Array.IndexOf(displayNameBuffer, '\0');
+                displayName = new string(displayNameBuffer, 0, endIndex);
+
+                if (errCode != 0)
+                    continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(displayName))
+                continue;
+
+            info.Name = displayName;
 
             string? logoPath = logoNode?.InnerText;
 
@@ -162,11 +202,27 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
                 var logoFilesDir = Path.GetDirectoryName(logoFullPath) ?? ".";
                 var logoFilesPattern = $"{logoFileName}*{logoExtension}";
 
-                var regex = new Regex($@"{Regex.Escape(logoFileName)}\.scale-(?<scale>\d+){Regex.Escape(logoExtension)}");
-
-                foreach (var logoFile in Directory.EnumerateFiles(logoFilesDir, logoFilesPattern))
+                if (Directory.Exists(logoFilesDir))
                 {
+                    var regex = new Regex($@"{Regex.Escape(logoFileName)}(\.scale-(?<scale>\d+))?{Regex.Escape(logoExtension)}");
 
+                    List<UwpAppInfo.UwpAppLogo> logos = new();
+                    foreach (var searchedLogoFile in Directory.EnumerateFiles(logoFilesDir, logoFilesPattern))
+                    {
+                        var searchedLogoFileName = Path.GetFileName(searchedLogoFile);
+                        var match = regex.Match(searchedLogoFileName);
+
+                        if (!match.Success)
+                            continue;
+
+                        int scale = 1; 
+                        if (int.TryParse(match.Groups["scale"].Value, out var parsedScale))
+                            scale = parsedScale;
+
+                        logos.Add(new UwpAppInfo.UwpAppLogo(44 * scale, searchedLogoFile));
+                    }
+
+                    info.AppLogos = logos.ToArray();
                 }
             }
 
@@ -200,4 +256,17 @@ public class RunApplicationPlugin : CurvaLauncherSyncPlugin
                 yield return new RunUwpApplicationQueryResult(HostContext, uwpAppInfo, result.Weight);
         }
     }
+
+    public override IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries()
+    {
+        yield return I18nResourceDictionary.Create(new CultureInfo("en-US"), "I18n/EnUs.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hans"), "I18n/ZhHans.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hant"), "I18n/ZhHant.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("ja-JP"), "I18n/JaJp.xaml");
+    }
+
+
+
+    [DllImport("shlwapi.dll", BestFitMapping = false, CharSet = CharSet.Unicode, ExactSpelling = true, ThrowOnUnmappableChar = true)]
+    static extern unsafe uint SHLoadIndirectString(string pszSource, ref char pszOutBuf, int cchOutBuf, IntPtr ppvReserved);
 }

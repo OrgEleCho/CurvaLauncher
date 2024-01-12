@@ -108,7 +108,7 @@ public partial class PluginService
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
             return false;
         }

@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 
 namespace CurvaLauncher.Plugins;
 
@@ -15,10 +16,9 @@ public abstract class CommandSyncI18nPlugin : CommandSyncPlugin, II18nPlugin
     protected CommandSyncI18nPlugin(CurvaLauncherContext context) : base(context)
     {
         _pluginType = GetType();
-        Assembly assembly = _pluginType.Assembly;
 
         foreach (var i18nResourceDictionary in GetI18nResourceDictionaries())
-            context.AddI18nResourceDictionary(assembly, i18nResourceDictionary.CultureInfo, i18nResourceDictionary.ResourceDictionary);
+            context.AddI18nResourceDictionary(i18nResourceDictionary.Assembly, i18nResourceDictionary.CultureInfo, i18nResourceDictionary.ResourceDictionary);
 
         context.AppLanguageChanged += (s, e) =>
         {
@@ -27,5 +27,11 @@ public abstract class CommandSyncI18nPlugin : CommandSyncPlugin, II18nPlugin
         };
     }
 
-    public abstract IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries();
+    public virtual IEnumerable<I18nResourceDictionary> GetI18nResourceDictionaries()
+    {
+        yield return I18nResourceDictionary.Create(new CultureInfo("en-US"), "I18n/EnUs.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hans"), "I18n/ZhHans.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hant"), "I18n/ZhHant.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("ja-JP"), "I18n/JaJp.xaml");
+    }
 }

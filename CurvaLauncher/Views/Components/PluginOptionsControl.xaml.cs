@@ -34,7 +34,7 @@ public partial class PluginOptionsControl : UserControl
             }
             else
             {
-                return new PluginSelectOption(PluginInstance.Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name,  Enum.GetValues(property.PropertyType));
+                return new PluginSelectOption(PluginInstance.Plugin, attribute.Name ?? property.Name, attribute.Description, property.Name, Enum.GetValues(property.PropertyType));
             }
         }
         else if (typeof(IConvertible).IsAssignableFrom(property.PropertyType))
@@ -47,18 +47,55 @@ public partial class PluginOptionsControl : UserControl
         }
     }
 
+    private PluginOption? CreateI18nOption(PluginI18nOptionAttribute attribute, PropertyInfo property)
+    {
+        Assembly resourceAssembly = property.DeclaringType!.Assembly;
+
+        if (typeof(bool) == property.PropertyType)
+        {
+            return new PluginSwitchOption(resourceAssembly, PluginInstance.Plugin, attribute.NameKey, attribute.DescriptionKey, property.Name);
+        }
+        else if (property.PropertyType.IsEnum)
+        {
+            if (property.PropertyType.GetCustomAttribute<FlagsAttribute>() is FlagsAttribute)
+            {
+                return new PluginFlagsOption(resourceAssembly, PluginInstance.Plugin, attribute.NameKey, attribute.DescriptionKey, property, property.PropertyType);
+            }
+            else
+            {
+                return new PluginSelectOption(resourceAssembly, PluginInstance.Plugin, attribute.NameKey, attribute.DescriptionKey, property.Name, Enum.GetValues(property.PropertyType));
+            }
+        }
+        else if (typeof(IConvertible).IsAssignableFrom(property.PropertyType))
+        {
+            return new PluginTextOption(resourceAssembly, PluginInstance.Plugin, attribute.NameKey, attribute.DescriptionKey, property.Name, attribute.AllowTextMultiline);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     private void BuildOptions()
     {
-        var props = PluginInstance.Plugin.GetType().GetProperties()
-            .Select(p => (Attribute: p.GetCustomAttribute<PluginOptionAttribute>(), Property: p))
-            .Where(v => v.Attribute is not null);
-
-        foreach (var item in props)
+        foreach (var prop in PluginInstance.Plugin.GetType().GetProperties())
         {
-            if (CreateOption(item.Attribute!, item.Property) is PluginOption pluginOption)
+            if (PluginInstance.Plugin is II18nPlugin && 
+                prop.GetCustomAttribute<PluginI18nOptionAttribute>() is { } i18nAttr)
             {
-                pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 15);
-                optionsPanel.Children.Add(pluginOption);
+                if (CreateI18nOption(i18nAttr, prop) is PluginOption pluginOption)
+                {
+                    pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 15);
+                    optionsPanel.Children.Add(pluginOption);
+                }
+            }
+            else if (prop.GetCustomAttribute<PluginOptionAttribute>() is { } attr)
+            {
+                if (CreateOption(attr, prop) is PluginOption pluginOption)
+                {
+                    pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 15);
+                    optionsPanel.Children.Add(pluginOption);
+                }
             }
         }
     }

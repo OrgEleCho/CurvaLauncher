@@ -4,11 +4,11 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj" />
-    <ProjectReference Include="..\CurvaLauncher.Plugin\CurvaLauncher.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>

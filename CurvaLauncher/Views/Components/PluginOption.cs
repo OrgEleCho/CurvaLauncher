@@ -1,4 +1,8 @@
 ﻿using CurvaLauncher.Plugins;
+using CurvaLauncher.Services;
+using CurvaLauncher.Utilities.Resources;
+using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,6 +21,15 @@ public class PluginOption : UserControl
         OptionName = optionName;
         OptionDescription = optionDescription;
         OptionPropertyName = optionPropertyName;
+    }
+
+    public PluginOption(Assembly resourceAssembly, IPlugin plugin, object optionNameKey, object? optionDescriptionKey, string optionPropertyName)
+    {
+        Plugin = plugin;
+        OptionPropertyName = optionPropertyName;
+
+        SetResourceReference(OptionNameProperty, new AssemblyResourceKey(resourceAssembly, optionNameKey));
+        SetResourceReference(OptionDescriptionProperty, new AssemblyResourceKey(resourceAssembly, optionDescriptionKey));
     }
 
     public IPlugin Plugin { get; }
@@ -38,5 +51,5 @@ public class PluginOption : UserControl
     public static readonly DependencyProperty OptionNameProperty =
         DependencyProperty.Register(nameof(OptionName), typeof(string), typeof(PluginOption), new PropertyMetadata("Option"));
     public static readonly DependencyProperty OptionDescriptionProperty =
-        DependencyProperty.Register("OptionDescription", typeof(string), typeof(PluginOption), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(OptionDescription), typeof(string), typeof(PluginOption), new PropertyMetadata(null));
 }

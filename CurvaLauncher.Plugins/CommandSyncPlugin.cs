@@ -2,7 +2,7 @@
 
 namespace CurvaLauncher.Plugins;
 
-public abstract class CommandSyncPlugin : CommandPlugin
+public abstract class CommandSyncPlugin : CommandPlugin, ISyncPlugin
 {
     protected CommandSyncPlugin(CurvaLauncherContext context) : base(context)
     {
@@ -11,9 +11,9 @@ public abstract class CommandSyncPlugin : CommandPlugin
     public virtual void Initialize() { }
     public virtual void Finish() { }
 
-    public abstract IEnumerable<IQueryResult> ExecuteCommand(CurvaLauncherContext context, string commandName, CommandLineSegment[] arguments);
+    public abstract IEnumerable<IQueryResult> ExecuteCommand(string commandName, CommandLineSegment[] arguments);
 
-    public IEnumerable<IQueryResult> Query(CurvaLauncherContext context, string query)
+    public IEnumerable<IQueryResult> Query(string query)
     {
         if (string.IsNullOrWhiteSpace(query))
             yield break;
@@ -40,7 +40,7 @@ public abstract class CommandSyncPlugin : CommandPlugin
         {
             if (commandName.Equals(commandNameSegment.Value, IgnoreCases ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCultureIgnoreCase))
             {
-                foreach (var result in ExecuteCommand(context, commandName, argumentSegments))
+                foreach (var result in ExecuteCommand(commandName, argumentSegments))
                     yield return result;
 
                 yield break;

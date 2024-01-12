@@ -5,6 +5,7 @@ namespace CurvaLauncher.Plugins.QuickWebSearch
 {
     public class QuickWebSearchQueryResult : ISyncQueryResult
     {
+        private readonly CurvaLauncherContext _context;
         private readonly ImageSource? _icon;
 
         public string Title => $"Web search for {Keyword}";
@@ -21,11 +22,12 @@ namespace CurvaLauncher.Plugins.QuickWebSearch
 
         public void Invoke()
         {
-            ShellUtils.Start(Url);
+            _context.Api.Open(Url);
         }
 
-        public QuickWebSearchQueryResult(string engine, string kwd, string url, ImageSource? icon)
+        public QuickWebSearchQueryResult(CurvaLauncherContext context, string engine, string kwd, string url, ImageSource? icon)
         {
+            _context = context;
             Engine = engine;
             Keyword = kwd;
             Url = url;

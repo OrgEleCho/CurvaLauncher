@@ -38,7 +38,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CurvaLauncher.Common\CurvaLauncher.Common.csproj" />
     <ProjectReference Include="..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj" />
-    <ProjectReference Include="..\CurvaLauncher.Plugin\CurvaLauncher.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>
