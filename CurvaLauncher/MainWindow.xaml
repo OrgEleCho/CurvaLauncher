@@ -53,7 +53,8 @@
                                 FontSize="{DynamicResource QueryBoxTextSize}"
                                 FocusVisualStyle="{x:Null}"
                                 ClearButtonEnabled="True"
-                                PlaceholderText="Hello CurvaLauncher">
+                                PlaceholderText="Hello CurvaLauncher"
+                                PreviewKeyDown="QueryBox_PreviewKeyDown">
                         <ui:TextBox.InputBindings>
                             <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
                             <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>

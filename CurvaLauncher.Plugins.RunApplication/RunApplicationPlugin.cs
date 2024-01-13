@@ -510,10 +510,15 @@ public class RunApplicationPlugin : SyncI18nPlugin
         if (_apps == null)
             yield break;
 
-        var results = _apps
-            .Select(app => (App: app, Weight: HostContext.StringApi.Match(app.Name.ToLower(), query.ToLower())))
-            .OrderByDescending(kvw => kvw.Weight)
-            .Take(ResultCount);
+        IEnumerable<(AppInfo App, float Weight)> results;
+
+        lock (_apps)
+        {
+            results = _apps
+                .Select(app => (App: app, Weight: HostContext.StringApi.Match(app.Name.ToLower(), query.ToLower())))
+                .OrderByDescending(kvw => kvw.Weight)
+                .Take(ResultCount);
+        }
 
         foreach (var result in results)
         {

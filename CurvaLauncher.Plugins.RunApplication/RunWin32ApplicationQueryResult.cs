@@ -47,7 +47,9 @@ public class RunWin32ApplicationQueryResult : ISyncQueryResult
 
     public void Invoke()
     {
-        var process = Process.Start(
+        try
+        {
+            var process = Process.Start(
             new ProcessStartInfo()
             {
                 FileName = AppInfo.FilePath,
@@ -56,5 +58,10 @@ public class RunWin32ApplicationQueryResult : ISyncQueryResult
                 Verb = AppInfo.IsUAC ? "runas" : null,
                 UseShellExecute = true,
             });
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 }

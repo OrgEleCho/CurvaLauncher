@@ -5,24 +5,32 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CurvaLauncher.Messages;
 using CurvaLauncher.Models;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities;
 
 namespace CurvaLauncher.ViewModels;
 
-public partial class MainViewModel : ObservableObject
+public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessage>
 {
     private readonly PluginService _pluginService;
     private readonly ConfigService _configService;
 
     public MainViewModel(
         PluginService pluginService,
-        ConfigService configService)
+        ConfigService configService,
+        IMessenger messenger)
     {
         _pluginService = pluginService;
         _configService = configService;
+
+        messenger.Register(this);
     }
+
+    [ObservableProperty]
+    string? _lastInvokedQueryText;
 
     [ObservableProperty]
     private string queryText = string.Empty;
@@ -140,12 +148,22 @@ public partial class MainViewModel : ObservableObject
     public void SelectPrev()
     {
         if (QueryResults.Count == 0)
+        {
+            if (_lastInvokedQueryText != null && string.IsNullOrWhiteSpace(QueryText))
+                QueryText = _lastInvokedQueryText;
+
             return;
+        }
 
         int newIndex = (SelectedQueryResultIndex - 1) % QueryResults.Count;
         if (newIndex == -1)
             newIndex = QueryResults.Count - 1;
 
         SelectedQueryResultIndex = newIndex;
+    }
+
+    void IRecipient<SaveQueryMessage>.Receive(SaveQueryMessage message)
+    {
+        LastInvokedQueryText = QueryText;
     }
 }

@@ -5,6 +5,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using CurvaLauncher.Messages;
+using CurvaLauncher.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CurvaLauncher.Models;
 
@@ -76,7 +80,10 @@ public partial class QueryResultModel : ObservableObject
             }
         }
 
-        //MainWindow mainWindow = App.ServiceProvider.GetRequiredService<MainWindow>();
+        App.ServiceProvider
+            .GetRequiredService<IMessenger>()
+            .Send(SaveQueryMessage.Instance);
+
         App.CloseLauncher();
     }
 

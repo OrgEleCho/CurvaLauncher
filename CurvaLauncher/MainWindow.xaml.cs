@@ -49,6 +49,18 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
         Wpf.Ui.Appearance.Watcher.Watch(this, BackgroundType.Mica, true);
     }
 
+
+    private void QueryBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Up && 
+            string.IsNullOrWhiteSpace(ViewModel.QueryText) && 
+            ViewModel.LastInvokedQueryText is string lastInvokedQueryText)
+        {
+            SetQueryText(lastInvokedQueryText);
+            e.Handled = true;
+        }
+    }
+
     [RelayCommand]
     public void ScrollToSelectedQueryResult()
     {
@@ -57,7 +69,7 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
 
     public void SetQueryText(string text)
     {
-        ViewModel.QueryText = text;
+        QueryBox.Text = text;
         QueryBox.SelectionStart = text.Length;
         QueryBox.SelectionLength = 0;
     }

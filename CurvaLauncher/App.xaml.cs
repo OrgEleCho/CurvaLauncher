@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using CurvaLauncher.Apis;
 using CurvaLauncher.Services;
 using CurvaLauncher.Utilities;
@@ -52,6 +53,8 @@ namespace CurvaLauncher
             services.AddSingleton<ThemeService>();
             services.AddSingleton<I18nService>();
             services.AddTransient<PageService>();
+
+            services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
             return services.BuildServiceProvider();
         }
