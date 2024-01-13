@@ -46,57 +46,57 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
         /// <summary>
         /// CONSOLE_PROPS: A ConsoleDataBlock structure
         /// </summary>
-        public ConsoleDataBlock ConsoleDataBlock { get; set; }
+        public ConsoleDataBlock? ConsoleDataBlock { get; set; }
 
         /// <summary>
         /// CONSOLE_FE_PROPS: A ConsoleFEDataBlock structure
         /// </summary>
-        public ConsoleFEDataBlock ConsoleFEDataBlock { get; set; }
+        public ConsoleFEDataBlock? ConsoleFEDataBlock { get; set; }
 
         /// <summary>
         /// DARWIN_PROPS: A DarwinDataBlock structure
         /// </summary>
-        public DarwinDataBlock DarwinDataBlock { get; set; }
+        public DarwinDataBlock? DarwinDataBlock { get; set; }
 
         /// <summary>
         /// ENVIRONMENT_PROPS:An EnvironmentVariableDataBlock structure
         /// </summary>
-        public EnvironmentVariableDataBlock EnvironmentVariableDataBlock { get; set; }
+        public EnvironmentVariableDataBlock? EnvironmentVariableDataBlock { get; set; }
 
         /// <summary>
         /// ICON_ENVIRONMENT_PROPS: An IconEnvironmentDataBlock structure
         /// </summary>
-        public IconEnvironmentDataBlock IconEnvironmentDataBlock { get; set; }
+        public IconEnvironmentDataBlock? IconEnvironmentDataBlock { get; set; }
 
         /// <summary>
         /// KNOWN_FOLDER_PROPS: A KnownFolderDataBlock structure
         /// </summary>
-        public KnownFolderDataBlock KnownFolderDataBlock { get; set; }
+        public KnownFolderDataBlock? KnownFolderDataBlock { get; set; }
 
         /// <summary>
         /// PROPERTY_STORE_PROPS: A PropertyStoreDataBlock structure
         /// </summary>
-        public PropertyStoreDataBlock PropertyStoreDataBlock { get; set; }
+        public PropertyStoreDataBlock? PropertyStoreDataBlock { get; set; }
 
         /// <summary>
         /// SHIM_PROPS: A ShimDataBlock structure
         /// </summary>
-        public ShimDataBlock ShimDataBlock { get; set; }
+        public ShimDataBlock? ShimDataBlock { get; set; }
 
         /// <summary>
         /// SPECIAL_FOLDER_PROPS: A SpecialFolderDataBlock structure
         /// </summary>
-        public SpecialFolderDataBlock SpecialFolderDataBlock { get; set; }
+        public SpecialFolderDataBlock? SpecialFolderDataBlock { get; set; }
 
         /// <summary>
         /// TRACKER_PROPS: A TrackerDataBlock structure
         /// </summary>
-        public TrackerDataBlock TrackerDataBlock { get; set; }
+        public TrackerDataBlock? TrackerDataBlock { get; set; }
 
         /// <summary>
         /// VISTA_AND_ABOVE_IDLIST_PROPS: A VistaAndAboveIDListDataBlock structure
         /// </summary>
-        public VistaAndAboveIDListDataBlock VistaAndAboveIDListDataBlock { get; set; }
+        public VistaAndAboveIDListDataBlock? VistaAndAboveIDListDataBlock { get; set; }
 
         /// <summary>
         /// TERMINAL_BLOCK: A structure that indicates the end of the extra data section.

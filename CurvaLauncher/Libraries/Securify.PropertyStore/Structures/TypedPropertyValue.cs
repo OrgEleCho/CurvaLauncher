@@ -17,10 +17,12 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
         /// <summary>
         /// Constructor
         /// </summary>
-        public TypedPropertyValue(PropertyType Type, byte[] Value) : base()
+        public TypedPropertyValue(PropertyType type, byte[] value) : base()
         {
-            _Type = Type;
-            _Value = Value;
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
+
+            _Type = type;
+            _Value = value;
             // TODO validate Type against Value
         }
         #endregion // Constructor
@@ -45,10 +47,6 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
         {
             get
             {
-                if (_Value == null)
-                {
-                    return null;
-                }
                 // TODO Array / Vector
                 switch (Type)
                 {

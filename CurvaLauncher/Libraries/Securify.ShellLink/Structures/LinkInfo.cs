@@ -36,7 +36,9 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
             {
                 uint Size = LinkInfoHeaderSize;
 
-                if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0)
+                if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0 &&
+                    VolumeID != null &&
+                    LocalBasePath != null)
                 {
                     Size += VolumeID.VolumeIDSize;
                     Size += (uint)LocalBasePath.Length + 1;
@@ -46,7 +48,8 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
                     }
                 }
 
-                if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0)
+                if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0 &&
+                    CommonNetworkRelativeLink != null)
                 {
                     Size += CommonNetworkRelativeLink.CommonNetworkRelativeLinkSize;
                     Size += (uint)CommonPathSuffix.Length + 1;
@@ -120,7 +123,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
                 {
                     if (VolumeID != null)
                     {
-                        return LocalBasePathOffset + (uint)LocalBasePath.Length + 1;
+                        return LocalBasePathOffset + (uint)(LocalBasePath?.Length ?? 0) + 1;
                     }
                     return LinkInfoHeaderSize;
                 }
@@ -155,7 +158,10 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
                             return CommonPathSuffixOffset + (uint)CommonPathSuffix.Length + 2;
                         }
 
-                        return LocalBasePathOffset + (uint)LocalBasePath.Length + 1;
+                        if (LocalBasePath != null)
+                        {
+                            return LocalBasePathOffset + (uint)LocalBasePath.Length + 1;
+                        }
                     }
                 }
 
@@ -195,20 +201,20 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
         /// VolumeID (variable): An optional VolumeID structure (section 2.3.1) that specifies information about the volume that 
         /// the link target was on when the link was created. This field is present if the VolumeIDAndLocalBasePath flag is set.
         /// </summary>
-        public VolumeID VolumeID { get; set; }
+        public VolumeID? VolumeID { get; set; }
 
         /// <summary>
         /// LocalBasePath (variable): An optional, NULL–terminated string, defined by the system default code page, which is 
         /// used to construct the full path to the link item or link target by appending the string in the CommonPathSuffix 
         /// field. This field is present if the VolumeIDAndLocalBasePath flag is set.
         /// </summary>
-        public string LocalBasePath { get; set; }
+        public string? LocalBasePath { get; set; }
 
         /// <summary>
         /// CommonNetworkRelativeLink (variable): An optional CommonNetworkRelativeLink structure that specifies information 
         /// about the network location where the link target is stored.
         /// </summary>
-        public CommonNetworkRelativeLink CommonNetworkRelativeLink { get; set; }
+        public CommonNetworkRelativeLink? CommonNetworkRelativeLink { get; set; }
 
         /// <summary>
         /// CommonPathSuffix (variable): A NULL–terminated string, defined by the system default code page, which is used to 
@@ -222,14 +228,14 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
         /// be present only if the VolumeIDAndLocalBasePath flag is set and the value of the LinkInfoHeaderSize field is greater 
         /// than or equal to 0x00000024.
         /// </summary>
-        public string LocalBasePathUnicode { get; set; }
+        public string? LocalBasePathUnicode { get; set; }
 
         /// <summary>
         /// CommonPathSuffixUnicode (variable): An optional, NULL–terminated, Unicode string that is used to construct the
         /// full path to the link item or link target by being appended to the string in the LocalBasePathUnicode field. This
         /// field can be present only if the value of the LinkInfoHeaderSize field is greater than or equal to 0x00000024.
         /// </summary>
-        public string CommonPathSuffixUnicode { get; set; }
+        public string? CommonPathSuffixUnicode { get; set; }
 
         #region GetBytes
         /// <inheritdoc />
@@ -246,26 +252,26 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
 
             if (LinkInfoHeaderSize > 0x1C)
             {
-                if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0)
+                if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0 && LocalBasePathUnicode != null)
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(LocalBasePathOffsetUnicode), 0, LinkInfo, 28, 4);
                     Buffer.BlockCopy(Encoding.Unicode.GetBytes(LocalBasePathUnicode), 0, LinkInfo, (int)LocalBasePathOffsetUnicode, LocalBasePathUnicode.Length * 2);
                 }
 
-                if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0)
+                if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0 && CommonPathSuffixUnicode != null)
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(CommonPathSuffixOffsetUnicode), 0, LinkInfo, 32, 4);
                     Buffer.BlockCopy(Encoding.Unicode.GetBytes(CommonPathSuffixUnicode), 0, LinkInfo, (int)CommonPathSuffixOffsetUnicode, CommonPathSuffixUnicode.Length * 2);
                 }
             }
 
-            if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0)
+            if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0 && LocalBasePath != null && VolumeID != null)
             {
                 Buffer.BlockCopy(VolumeID.GetBytes(), 0, LinkInfo, (int)VolumeIDOffset, (int)VolumeID.VolumeIDSize);
                 Buffer.BlockCopy(Encoding.Default.GetBytes(LocalBasePath), 0, LinkInfo, (int)LocalBasePathOffset, LocalBasePath.Length);
             }
 
-            if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0)
+            if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0 && CommonNetworkRelativeLink != null)
             {
                 Buffer.BlockCopy(CommonNetworkRelativeLink.GetBytes(), 0, LinkInfo, (int)CommonNetworkRelativeLinkOffset, (int)CommonNetworkRelativeLink.CommonNetworkRelativeLinkSize);
                 Buffer.BlockCopy(Encoding.Default.GetBytes(CommonPathSuffix), 0, LinkInfo, (int)CommonPathSuffixOffset, CommonPathSuffix.Length);
@@ -307,13 +313,13 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
                     builder.AppendLine();
                 }
             }
-            if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0)
+            if ((LinkInfoFlags & LinkInfoFlags.VolumeIDAndLocalBasePath) != 0 && VolumeID != null)
             {
                 builder.Append(VolumeID.ToString());
                 builder.AppendFormat("LocalBasePath: {0}", LocalBasePath);
                 builder.AppendLine();
             }
-            if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0)
+            if ((LinkInfoFlags & LinkInfoFlags.CommonNetworkRelativeLinkAndPathSuffix) != 0 && CommonNetworkRelativeLink != null)
             {
                 builder.Append(CommonNetworkRelativeLink.ToString());
             }

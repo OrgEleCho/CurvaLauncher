@@ -12,10 +12,15 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
     public class CommonNetworkRelativeLink : Structure
     {
         #region Constructor
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public CommonNetworkRelativeLink() : base() { NetName = ""; }
+
+        public CommonNetworkRelativeLink(NetworkProviderType networkProviderType, string netName, string deviceName, string netNameUnicode, string deviceNameUnicode) : base()
+        {
+            NetworkProviderType = networkProviderType;
+            NetName = netName;
+            DeviceName = deviceName;
+            NetNameUnicode = netNameUnicode;
+            DeviceNameUnicode = deviceNameUnicode;
+        }
         #endregion // Constructor
 
         /// <summary>
@@ -238,7 +243,12 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
 
         public static CommonNetworkRelativeLink FromByteArray(byte[] ba)
         {
-            CommonNetworkRelativeLink CommonNetworkRelativeLink = new CommonNetworkRelativeLink();
+            NetworkProviderType networkProviderType = default;
+            string netName = string.Empty;
+            string deviceName = string.Empty;
+            string netNameUnicode = string.Empty;
+            string deviceNameUnicode = string.Empty;
+
             if (ba.Length < 0x14)
             {
                 throw new ArgumentException(string.Format("Size of the CommonNetworkRelativeLink Structure is less than 20 ({0})", ba.Length));
@@ -247,7 +257,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
             uint CommonNetworkRelativeLinkSize = BitConverter.ToUInt32(ba, 0);
             if (CommonNetworkRelativeLinkSize > ba.Length)
             {
-                throw new ArgumentException(string.Format("The CommonNetworkRelativeLinkSize is {0} is incorrect (expected {1})", CommonNetworkRelativeLink, ba.Length));
+                throw new ArgumentException(string.Format("The CommonNetworkRelativeLinkSize is incorrect (expected {0})", ba.Length));
             }
 
             CommonNetworkRelativeLinkFlags CommonNetworkRelativeLinkFlags = (CommonNetworkRelativeLinkFlags)BitConverter.ToUInt32(ba, 4);
@@ -255,7 +265,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
             uint DeviceNameOffset = BitConverter.ToUInt32(ba, 12);
             uint NetNameOffsetUnicode = 0;
             uint DeviceNameOffsetUnicode = 0;
-            CommonNetworkRelativeLink.NetworkProviderType = (NetworkProviderType)BitConverter.ToUInt32(ba, 16);
+            networkProviderType = (NetworkProviderType)BitConverter.ToUInt32(ba, 16);
 
             if (NetNameOffset > 0x14)
             {
@@ -264,12 +274,12 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
             }
 
             byte[] tmp = ba.Skip((int)NetNameOffset).ToArray();
-            CommonNetworkRelativeLink.NetName = Encoding.Default.GetString(tmp.Take(Array.IndexOf(tmp, (byte)0x00) + 1).ToArray()).TrimEnd(new char[] { (char)0 });
+            netName = Encoding.Default.GetString(tmp.Take(Array.IndexOf(tmp, (byte)0x00) + 1).ToArray()).TrimEnd(new char[] { (char)0 });
 
             if ((CommonNetworkRelativeLinkFlags & CommonNetworkRelativeLinkFlags.ValidDevice) != 0)
             {
                 tmp = ba.Skip((int)DeviceNameOffset).ToArray();
-                CommonNetworkRelativeLink.DeviceName = Encoding.Default.GetString(tmp.Take(Array.IndexOf(tmp, (byte)0x00) + 1).ToArray()).TrimEnd(new char[] { (char)0 });
+                deviceName = Encoding.Default.GetString(tmp.Take(Array.IndexOf(tmp, (byte)0x00) + 1).ToArray()).TrimEnd(new char[] { (char)0 });
             }
 
             if (NetNameOffset > 0x14)
@@ -284,7 +294,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
                         break;
                     }
                 }
-                CommonNetworkRelativeLink.NetNameUnicode = Encoding.Unicode.GetString(tmp.Take(Index + 1).ToArray()).TrimEnd(new char[] { (char)0 });
+                netNameUnicode = Encoding.Unicode.GetString(tmp.Take(Index + 1).ToArray()).TrimEnd(new char[] { (char)0 });
 
                 if ((CommonNetworkRelativeLinkFlags & CommonNetworkRelativeLinkFlags.ValidDevice) != 0)
                 {
@@ -297,11 +307,11 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
                             break;
                         }
                     }
-                    CommonNetworkRelativeLink.DeviceNameUnicode = Encoding.Unicode.GetString(tmp.Take(Index + 1).ToArray()).TrimEnd(new char[] { (char)0 });
+                    deviceNameUnicode = Encoding.Unicode.GetString(tmp.Take(Index + 1).ToArray()).TrimEnd(new char[] { (char)0 });
                 }
             }
 
-            return CommonNetworkRelativeLink;
+            return new CommonNetworkRelativeLink(networkProviderType, netName, deviceName, netNameUnicode, deviceNameUnicode);
         }
         #endregion // FromByteArray
     }

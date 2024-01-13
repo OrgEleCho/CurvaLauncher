@@ -145,21 +145,21 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink
         /// the link. The presence of this structure is specified by the HasLinkTargetIDList bit in the 
         /// ShellLinkHeader.
         /// </summary>
-        public LinkTargetIDList LinkTargetIDList { get; set; }
+        public LinkTargetIDList? LinkTargetIDList { get; set; }
 
         /// <summary>
         /// LINKINFO: An optional LinkInfo structure, which specifies information necessary to resolve
         /// the link target. The presence of this structure is specified by the HasLinkInfo bit in the 
         /// ShellLinkHeader.
         /// </summary>
-        public LinkInfo LinkInfo { get; set; }
+        public LinkInfo? LinkInfo { get; set; }
 
         /// <summary>
         /// STRING_DATA: Zero or more optional StringData structures, which are used to convey user 
         /// interface and path identification information. The presence of these structures is specified
         /// by bits in the ShellLinkHeader.
         /// </summary>
-        public StringData StringData { get; set; }
+        public StringData? StringData { get; set; }
 
         /// <summary>
         /// EXTRA_DATA: Zero or more ExtraData structures.
@@ -239,7 +239,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink
         {
             Shortcut lnk = CreateShortcut(path, args);
             lnk.IconIndex = iconindex;
-            lnk.StringData.IconLocation = iconpath;
+            lnk.StringData!.IconLocation = iconpath;
             lnk.ExtraData.IconEnvironmentDataBlock = new IconEnvironmentDataBlock(iconpath);
             return lnk;
         }
@@ -254,7 +254,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink
         public static Shortcut CreateShortcut(string path, string args, string workdir)
         {
             Shortcut lnk = CreateShortcut(path, args);
-            lnk.StringData.WorkingDir = workdir;
+            lnk.StringData!.WorkingDir = workdir;
             return lnk;
         }
 
@@ -270,7 +270,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink
         public static Shortcut CreateShortcut(string path, string args, string workdir, string iconpath, int iconindex)
         {
             Shortcut lnk = CreateShortcut(path, args, iconpath, iconindex);
-            lnk.StringData.WorkingDir = workdir;
+            lnk.StringData!.WorkingDir = workdir;
             return lnk;
         }
         #endregion // CreateShortcut
@@ -296,12 +296,12 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink
             {
                 int size = (int)HeaderSize + ExtraData.ExtraDataSize;
 
-                if ((LinkFlags & LinkFlags.HasLinkTargetIDList) != 0)
+                if ((LinkFlags & LinkFlags.HasLinkTargetIDList) != 0 && LinkTargetIDList != null)
                 {
                     size += LinkTargetIDList.IDListSize + 2;
                 }
 
-                if ((LinkFlags & LinkFlags.HasLinkInfo) != 0)
+                if ((LinkFlags & LinkFlags.HasLinkInfo) != 0 && LinkInfo != null)
                 {
                     size += (int)LinkInfo.LinkInfoSize;
                 }
@@ -325,13 +325,13 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink
             Buffer.BlockCopy(base.GetBytes(), 0, lnk, 0, (int)HeaderSize);
             Offset += (int)HeaderSize;
 
-            if ((LinkFlags & LinkFlags.HasLinkTargetIDList) != 0)
+            if ((LinkFlags & LinkFlags.HasLinkTargetIDList) != 0 && LinkTargetIDList != null)
             {
                 Buffer.BlockCopy(LinkTargetIDList.GetBytes(), 0, lnk, Offset, LinkTargetIDList.IDListSize + 2);
                 Offset += LinkTargetIDList.IDListSize + 2;
             }
 
-            if ((LinkFlags & LinkFlags.HasLinkInfo) != 0)
+            if ((LinkFlags & LinkFlags.HasLinkInfo) != 0 && LinkInfo != null)
             {
                 Buffer.BlockCopy(LinkInfo.GetBytes(), 0, lnk, Offset, (int)LinkInfo.LinkInfoSize);
                 Offset += (int)LinkInfo.LinkInfoSize;
@@ -355,11 +355,11 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink
             StringBuilder builder = new StringBuilder();
             builder.Append(base.ToString());
 
-            if ((LinkFlags & LinkFlags.HasLinkTargetIDList) != 0)
+            if ((LinkFlags & LinkFlags.HasLinkTargetIDList) != 0 && LinkTargetIDList != null)
             {
                 builder.Append(LinkTargetIDList.ToString());
             }
-            if ((LinkFlags & LinkFlags.HasLinkInfo) != 0)
+            if ((LinkFlags & LinkFlags.HasLinkInfo) != 0 && LinkInfo != null)
             {
                 builder.Append(LinkInfo.ToString());
             }

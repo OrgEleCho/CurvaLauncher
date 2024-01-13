@@ -511,7 +511,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Const
                     .GetFields(BindingFlags.Public | BindingFlags.Static)
                     .Where(f => f.FieldType == typeof(Guid))
                     .ToDictionary(f => f.Name,
-                        f => (Guid)f.GetValue(null));
+                        f => (Guid)f.GetValue(null)!);
             }
         }
         #endregion // All
@@ -532,7 +532,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Const
                     {
                         try
                         {
-                            return Marshal.PtrToStringAuto(pszName);
+                            return Marshal.PtrToStringAuto(pszName)!;
                         }
                         catch (Exception)
                         {

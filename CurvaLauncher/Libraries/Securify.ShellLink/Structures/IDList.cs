@@ -133,7 +133,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
                 {
                     try
                     {
-                        return Marshal.PtrToStringAuto(pszName);
+                        return Marshal.PtrToStringAuto(pszName)!;
                     }
                     catch (Exception)
                     {

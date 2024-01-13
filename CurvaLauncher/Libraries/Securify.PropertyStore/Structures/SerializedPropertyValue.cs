@@ -17,6 +17,6 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
         /// <summary>
         /// Value (variable): A TypedPropertyValue structure, as specified in [MS-OLEPS] section 2.15
         /// </summary>
-        public TypedPropertyValue TypedPropertyValue { get; set; }
+        public TypedPropertyValue? TypedPropertyValue { get; set; }
     }
 }

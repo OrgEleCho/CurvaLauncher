@@ -16,11 +16,6 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
         /// <summary>
         /// Constructor
         /// </summary>
-        public StringName() : base() { }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="Name">A null-terminated Unicode string that specifies the identity of the property</param>
         /// <param name="TypedPropertyValue">A TypedPropertyValue structure</param>
         public StringName(string Name, TypedPropertyValue TypedPropertyValue) : base()
@@ -36,7 +31,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
         /// Value in the enclosing Serialized Property Storage structure.
         /// </summary>
         /// <returns></returns>
-        public override uint ValueSize => 9 + NameSize + (uint)TypedPropertyValue.GetBytes().Length;
+        public override uint ValueSize => 9 + NameSize + (uint)(TypedPropertyValue?.GetBytes()?.Length ?? 0);
 
         /// <summary>
         /// Name Size (4 bytes): An unsigned integer that specifies the size, in bytes, 
@@ -64,7 +59,9 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
             Buffer.BlockCopy(BitConverter.GetBytes(ValueSize), 0, PropertyValue, 0, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(NameSize), 0, PropertyValue, 4, 4);
             Buffer.BlockCopy(Encoding.Unicode.GetBytes(Name), 0, PropertyValue, 9, 4);
-            Buffer.BlockCopy(TypedPropertyValue.GetBytes(), 0, PropertyValue, 9 + (int)NameSize, TypedPropertyValue.GetBytes().Length);
+
+            if (TypedPropertyValue != null)
+                Buffer.BlockCopy(TypedPropertyValue.GetBytes(), 0, PropertyValue, 9 + (int)NameSize, TypedPropertyValue.GetBytes().Length);
             return PropertyValue;
         }
         #endregion // GetBytes
@@ -80,8 +77,13 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
             builder.AppendFormat("NameSize: {0} (0x{0:X})", NameSize);
             builder.AppendLine();
             builder.AppendFormat("Name: {0}", Name);
-            builder.AppendLine();
-            builder.Append(TypedPropertyValue.ToString());
+
+            if (TypedPropertyValue != null)
+            {
+                builder.AppendLine();
+                builder.Append(TypedPropertyValue.ToString());
+            }
+
             return builder.ToString();
         }
         #endregion // ToString
@@ -94,8 +96,6 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
         /// <returns>An SerializedPropertyValue object</returns>
         public static SerializedPropertyValue FromByteArray(byte[] ba)
         {
-            StringName StringName = new StringName();
-
             if (ba.Length < 9)
             {
                 throw new ArgumentException(string.Format("Size of the StringName is less than 9 ({0})", ba.Length));
@@ -114,13 +114,13 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
             }
 
             byte[] Name = ba.Skip(9).Take((int)NameSize).ToArray();
-            StringName.Name = Encoding.Unicode.GetString(Name).TrimEnd(new char[] { (char)0 });
+            var paramValue_Name = Encoding.Unicode.GetString(Name).TrimEnd(new char[] { (char)0 });
 
             PropertyType Type = (PropertyType)BitConverter.ToUInt16(ba, 9);
             byte[] Value = ba.Skip(9 + (int)NameSize).Take((int)(ValueSize - 9 - (int)NameSize)).ToArray();
-            StringName.TypedPropertyValue = new TypedPropertyValue(Type, Value);
+            var paramValue_PropertyValue = new TypedPropertyValue(Type, Value);
 
-            return StringName;
+            return new StringName(paramValue_Name, paramValue_PropertyValue);
         }
         #endregion // FromByteArray
     }

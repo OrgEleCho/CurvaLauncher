@@ -32,32 +32,32 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Structures
         /// end users to identify the purpose of the shell link. This structure MUST be present if the HasName 
         /// flag is set.
         /// </summary>
-        public string NameString { get; set; }
+        public string? NameString { get; set; }
 
         /// <summary>
         /// RELATIVE_PATH: An optional structure that specifies the location of the link target relative to the 
         /// file that contains the shell link. When specified, this string SHOULD be used when resolving the link. 
         /// This structure MUST be present if the HasRelativePath flag is set.
         /// </summary>
-        public string RelativePath { get; set; }
+        public string? RelativePath { get; set; }
 
         /// <summary>
         /// WORKING_DIR: An optional structure that specifies the file system path of the working directory to be 
         /// used when activating the link target. This structure MUST be present if the HasWorkingDir flag is set.
         /// </summary>
-        public string WorkingDir { get; set; }
+        public string? WorkingDir { get; set; }
 
         /// <summary>
         /// COMMAND_LINE_ARGUMENTS: An optional structure that stores the command-line arguments that are specified 
         /// when activating the link target. This structure MUST be present if the HasArguments flag is set.
         /// </summary>
-        public string CommandLineArguments { get; set; }
+        public string? CommandLineArguments { get; set; }
 
         /// <summary>
         /// ICON_LOCATION: An optional structure that specifies the location of the icon to be used when displaying a 
         /// shell link item in an icon view.This structure MUST be present if the HasIconLocation flag is set.
         /// </summary>
-        public string IconLocation { get; set; }
+        public string? IconLocation { get; set; }
 
         #region StringDataSize
         /// <summary>

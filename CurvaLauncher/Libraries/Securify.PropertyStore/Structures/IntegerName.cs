@@ -38,7 +38,7 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
         /// Value in the enclosing Serialized Property Storage structure.
         /// </summary>
         /// <returns></returns>
-        public override uint ValueSize => 9 + (uint)TypedPropertyValue.GetBytes().Length;
+        public override uint ValueSize => 9 + (uint)(TypedPropertyValue?.GetBytes()?.Length ?? 0);
 
         /// <summary>
         /// Id (4 bytes): An unsigned integer that specifies the identity of the property. 
@@ -58,7 +58,9 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
             byte[] PropertyValue = new byte[ValueSize];
             Buffer.BlockCopy(BitConverter.GetBytes(ValueSize), 0, PropertyValue, 0, 4);
             Buffer.BlockCopy(BitConverter.GetBytes(ID), 0, PropertyValue, 4, 4);
-            Buffer.BlockCopy(TypedPropertyValue.GetBytes(), 0, PropertyValue, 9, TypedPropertyValue.GetBytes().Length);
+
+            if (TypedPropertyValue != null)
+                Buffer.BlockCopy(TypedPropertyValue.GetBytes(), 0, PropertyValue, 9, TypedPropertyValue.GetBytes().Length);
             return PropertyValue;
         }
         #endregion // GetBytes
@@ -72,8 +74,13 @@ namespace CurvaLauncher.Libraries.Securify.ShellLink.Securify.PropertyStore.Stru
             builder.AppendFormat("ValueSize: {0} (0x{0:X})", ValueSize);
             builder.AppendLine();
             builder.AppendFormat("ID: 0x{0:X}", ID);
-            builder.AppendLine();
-            builder.Append(TypedPropertyValue.ToString());
+
+            if (TypedPropertyValue != null)
+            {
+                builder.AppendLine();
+                builder.Append(TypedPropertyValue.ToString());
+            }
+
             return builder.ToString();
         }
         #endregion // ToString
