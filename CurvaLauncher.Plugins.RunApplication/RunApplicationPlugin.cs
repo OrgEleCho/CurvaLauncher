@@ -119,25 +119,20 @@ public class RunApplicationPlugin : SyncI18nPlugin
             if (subKey is null)
                 continue;
 
-            UwpAppInfo info = new();
-
             if (subKey.GetValue("PackageID") is not string packageId)
                 continue;
 
             string packageFamilyId = Regex.Replace(packageId, "_.*__", "_");
 
-            info.PackageId = packageId;
-            info.FamilyID = packageFamilyId;
-
             if (subKey.GetValue("PackageRootFolder") is not string packageRootFolder)
                 continue;
 
-            info.PackageRootFolder = packageRootFolder;
+            string packageManifestPath = Path.Combine(packageRootFolder, "AppxManifest.xml");
 
-            if (!System.IO.File.Exists(info.AppxManifestPath))
+            if (!System.IO.File.Exists(packageManifestPath))
                 continue;
 
-            var appxManifestContent = File.ReadAllText(info.AppxManifestPath);
+            var appxManifestContent = File.ReadAllText(packageManifestPath);
 
             XmlDocument xml = new();
             xml.LoadXml(appxManifestContent);
@@ -147,86 +142,112 @@ public class RunApplicationPlugin : SyncI18nPlugin
             nsManager.AddNamespace("uap", "http://schemas.microsoft.com/appx/manifest/uap/windows10");
 
             var idNode = xml.SelectSingleNode("/ns:Package/ns:Identity", nsManager);
-            var appNode = xml.SelectSingleNode("/ns:Package/ns:Applications/ns:Application", nsManager);
-            var logoNode = xml.SelectSingleNode("/ns:Package/ns:Properties/ns:Logo", nsManager);
+            var appNodes = xml.SelectNodes("/ns:Package/ns:Applications/ns:Application", nsManager);
 
-            if (appNode == null || 
-                appNode.Attributes?["Id"]?.Value is not string appId)
+            if (appNodes == null)
                 continue;
 
-            //if (appId != "App")
-            //    continue;
-
-            info.ApplicationId = appId;
-
-            if (subKey.GetValue("DisplayName") is not string displayName)
-                continue;
-
-            if (displayName.StartsWith(resourcePrefix))
+            foreach (XmlNode appNode in appNodes)
             {
-                string resourcePath = displayName.Substring(resourcePrefix.Length);
+                var visualElementsNode = appNode.SelectSingleNode("uap:VisualElements", nsManager);
 
-                if (!resourcePath.Contains('/') && !resourcePath.Contains('\\') && idNode?.Attributes?["Name"]?.Value is string id)
-                {
-                    resourcePath = $"//{id}/Resources/{resourcePath}";
-                }
-
-                uint errCode;
-                string resourceStr = $"@{{{packageId}?ms-resource:{resourcePath}}}";
-                do
-                {
-                    errCode = SHLoadIndirectString(resourceStr, ref displayNameBuffer[0], displayNameBuffer.Length, 0);
-                }
-                while (errCode == 1 || errCode == 0x8007007a);
-
-                int endIndex = Array.IndexOf(displayNameBuffer, '\0');
-                displayName = new string(displayNameBuffer, 0, endIndex);
-
-                if (errCode != 0)
+                if (visualElementsNode == null)
                     continue;
-            }
 
-            if (string.IsNullOrWhiteSpace(displayName))
-                continue;
+                if (visualElementsNode?.Attributes?["AppListEntry"]?.Value is string appListEntry &&
+                    appListEntry.Equals("none", StringComparison.OrdinalIgnoreCase))
+                    continue;
 
-            info.Name = displayName;
+                if (visualElementsNode?.Attributes?["DisplayName"]?.Value is not string displayName)
+                    continue;
 
-            string? logoPath = logoNode?.InnerText;
+                UwpAppInfo info = new();
 
-            if (logoPath is not null)
-            {
-                var logoFullPath = Path.Combine(info.PackageRootFolder, logoPath);
+                info.PackageId = packageId;
+                info.FamilyID = packageFamilyId;
+                info.PackageRootFolder = packageRootFolder;
 
-                var logoFileName = Path.GetFileNameWithoutExtension(logoPath);
-                var logoExtension = Path.GetExtension(logoPath);
-                var logoFilesDir = Path.GetDirectoryName(logoFullPath) ?? ".";
-                var logoFilesPattern = $"{logoFileName}*{logoExtension}";
+                var logoNode = xml.SelectSingleNode("/ns:Package/ns:Properties/ns:Logo", nsManager);
 
-                if (Directory.Exists(logoFilesDir))
+                if (appNode == null ||
+                    appNode.Attributes?["Id"]?.Value is not string appId)
+                    continue;
+
+                info.ApplicationId = appId;
+
+                if (displayName.StartsWith(resourcePrefix))
                 {
-                    var regex = new Regex($@"{Regex.Escape(logoFileName)}(\.scale-(?<scale>\d+))?{Regex.Escape(logoExtension)}");
+                    string resourcePath = displayName.Substring(resourcePrefix.Length);
 
-                    List<UwpAppInfo.UwpAppLogo> logos = new();
-                    foreach (var searchedLogoFile in Directory.EnumerateFiles(logoFilesDir, logoFilesPattern))
+                    // 非绝对路径, 且能够找到 Identity 节点
+                    if (!resourcePath.StartsWith("//") &&
+                        idNode?.Attributes?["Name"]?.Value is string id)
                     {
-                        var searchedLogoFileName = Path.GetFileName(searchedLogoFile);
-                        var match = regex.Match(searchedLogoFileName);
+                        // 不是引用其他资源, 则添加 'Resource' 前缀
+                        if (!resourcePath.Contains("Resources"))
+                            resourcePath = $"Resources/{resourcePath}";
 
-                        if (!match.Success)
-                            continue;
-
-                        int scale = 1; 
-                        if (int.TryParse(match.Groups["scale"].Value, out var parsedScale))
-                            scale = parsedScale;
-
-                        logos.Add(new UwpAppInfo.UwpAppLogo(44 * scale, searchedLogoFile));
+                        // 转为绝对资源
+                        resourcePath = $"//{id}/{resourcePath}";
                     }
 
-                    info.AppLogos = logos.ToArray();
-                }
-            }
+                    uint errCode;
+                    string resourceStr = $"@{{{packageId}?ms-resource:{resourcePath}}}";
+                    do
+                    {
+                        errCode = SHLoadIndirectString(resourceStr, ref displayNameBuffer[0], displayNameBuffer.Length, 0);
+                    }
+                    while (errCode == 1 || errCode == 0x8007007a);
 
-            _apps[info.Name] = info;
+                    int endIndex = Array.IndexOf(displayNameBuffer, '\0');
+                    displayName = new string(displayNameBuffer, 0, endIndex);
+
+                    if (errCode != 0)
+                        continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(displayName))
+                    continue;
+
+                info.Name = displayName;
+
+                string? logoPath = logoNode?.InnerText;
+
+                if (logoPath is not null)
+                {
+                    var logoFullPath = Path.Combine(info.PackageRootFolder, logoPath);
+
+                    var logoFileName = Path.GetFileNameWithoutExtension(logoPath);
+                    var logoExtension = Path.GetExtension(logoPath);
+                    var logoFilesDir = Path.GetDirectoryName(logoFullPath) ?? ".";
+                    var logoFilesPattern = $"{logoFileName}*{logoExtension}";
+
+                    if (Directory.Exists(logoFilesDir))
+                    {
+                        var regex = new Regex($@"{Regex.Escape(logoFileName)}(\.scale-(?<scale>\d+))?{Regex.Escape(logoExtension)}");
+
+                        List<UwpAppInfo.UwpAppLogo> logos = new();
+                        foreach (var searchedLogoFile in Directory.EnumerateFiles(logoFilesDir, logoFilesPattern))
+                        {
+                            var searchedLogoFileName = Path.GetFileName(searchedLogoFile);
+                            var match = regex.Match(searchedLogoFileName);
+
+                            if (!match.Success)
+                                continue;
+
+                            int scale = 1;
+                            if (int.TryParse(match.Groups["scale"].Value, out var parsedScale))
+                                scale = parsedScale;
+
+                            logos.Add(new UwpAppInfo.UwpAppLogo(44 * scale, searchedLogoFile));
+                        }
+
+                        info.AppLogos = logos.ToArray();
+                    }
+                }
+
+                _apps[info.Name] = info;
+            }
         }
 
     }

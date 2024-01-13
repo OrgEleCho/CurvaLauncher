@@ -83,7 +83,7 @@ namespace CurvaLauncher.Plugins.QuickWebSearch
             var searchEngine = GetSearchEngineFromCommand(commandName);
             var icon = GetSearchEngineIcon(searchEngine);
 
-            if (Enum.IsDefined(searchEngine))
+            if (!Enum.IsDefined(searchEngine))
                 yield break;
 
             if (arguments.Length == 0)
