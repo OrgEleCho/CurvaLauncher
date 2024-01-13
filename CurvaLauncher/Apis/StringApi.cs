@@ -55,14 +55,18 @@ public class StringApi : IStringApi
         return 1 - (float)d[length1, length2] / Math.Max(length1, length2);
     }
 
+
+
+    readonly List<int> cosineSimilarity_arrA = new();
+    readonly List<int> cosineSimilarity_arrB = new();
     public float CosineSimilarity<T>(IEnumerable<T> value1, IEnumerable<T> value2) where T : IEquatable<T>
     {
         //去重
         T[] sl = value1.Union(value2).ToArray();
 
         //获取重复次数
-        List<int> arrA = new();
-        List<int> arrB = new();
+        List<int> arrA = cosineSimilarity_arrA;
+        List<int> arrB = cosineSimilarity_arrB;
         foreach (var c in sl)
         {
             arrA.Add(value1.Where(x => x.Equals(c)).Count());
@@ -98,7 +102,21 @@ public class StringApi : IStringApi
 
     public float MatchWords(string tocheck, string input)
     {
-        return LevenShtein(SplitToWords(tocheck), SplitToWords(input));
+        var tocheckWords = SplitToWords(tocheck);
+        var inputWords = SplitToWords(input);
+
+        var weight1 = LevenShtein(tocheckWords, inputWords);
+        var weight2 = 0f;
+
+        foreach (var tocheckWord in tocheckWords)
+        {
+            if (tocheckWord.StartsWith(input))
+            {
+                weight2 += (float)input.Length / tocheckWord.Length / tocheckWord.Length;
+            }
+        }
+
+        return (weight1 + weight2) / 2;
     }
 
     public float MatchLength(string tocheck, string input)

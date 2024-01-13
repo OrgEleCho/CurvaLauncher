@@ -4,5 +4,6 @@
     <sys:String x:Key="StrPluginName">運行應用程式</sys:String>
     <sys:String x:Key="StrPluginDescription">運行安裝在您的電腦上的應用程式</sys:String>
     <sys:String x:Key="StrResultCount">結果數量</sys:String>
-    <sys:String x:Key="StrStrIndexLocations">索引位置</sys:String>
+    <sys:String x:Key="StrIndexLocations">索引位置</sys:String>
+    <sys:String x:Key="StrWin32AppDistinctMode">Win32 應用區分模式</sys:String>
 </ResourceDictionary>

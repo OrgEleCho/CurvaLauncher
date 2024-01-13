@@ -1,12 +1,8 @@
-﻿using CurvaLauncher.Utilities;
+﻿using CurvaLauncher.Apis;
+using CurvaLauncher.Utilities;
 
-SortedCollection<int, int> qwq = new();
+var weight1 = StringApi.Instance.Match("Microsoft Edge", "Edge");
+var weight2 = StringApi.Instance.Match("Get Help", "Edge");
 
-qwq.SortingRoot = v => v;
-
-for (int i = 0; i < 10; i++)
-{
-    qwq.Add(Random.Shared.Next(10));
-}
-
-Console.WriteLine($"[{string.Join(", ", qwq)}]");
+Console.WriteLine($"Weight1: {weight1}");
+Console.WriteLine($"Weight2: {weight2}");

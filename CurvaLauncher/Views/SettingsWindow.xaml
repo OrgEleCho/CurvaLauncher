@@ -14,23 +14,24 @@
              Title="CurvaLauncher Settings" Height="600" Width="800"
              ExtendsContentIntoTitleBar="True"
              WindowBackdropType="Mica"
-             Closing="WindowClosing">
+             Closing="Window_Closing">
 
     <Window.InputBindings>
         <KeyBinding Key="Esc"
                     Command="{Binding CloseSettingsCommand}"/>
     </Window.InputBindings>
 
-    <Grid>
-        <DockPanel>
+    <Grid Focusable="False">
+        <DockPanel FocusVisualStyle="{x:Null}">
             <ui:TitleBar DockPanel.Dock="Top"
                      Icon="/Assets/Icon32.ico"
                      Title="CurvaLauncher Settings"/>
 
-            <Border DockPanel.Dock="Bottom" >
+            <Border DockPanel.Dock="Bottom" 
+                    Focusable="False">
                 <StackPanel HorizontalAlignment="Right"
-                        Orientation="Horizontal"
-                        Margin="15">
+                            Orientation="Horizontal"
+                            Margin="15">
                     <StackPanel.Resources>
                         <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
                             <Setter Property="Margin" Value="10 0 0 0"/>
@@ -41,7 +42,7 @@
                 </StackPanel>
             </Border>
 
-            <Grid Margin="3 0">
+            <Grid Margin="3 0" Focusable="False">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
@@ -50,6 +51,12 @@
                 <ui:NavigationStore Name="navigationStore" 
                                     Frame="{Binding ElementName=frame}"
                                     Loaded="NavigationStoreLoaded">
+                    <ui:NavigationStore.Resources>
+                        <Style TargetType="ui:DynamicScrollViewer" 
+                               BasedOn="{StaticResource UiDynamicScrollViewer}">
+                            <Setter Property="Focusable" Value="False"/>
+                        </Style>
+                    </ui:NavigationStore.Resources>
                     <ui:NavigationStore.Items>
                         <ui:NavigationItem Icon="AppGeneric20" Content="{DynamicResource StrGeneral}" 
                                            PageType="pages:SettingsGeneralPage" PageTag="General"/>

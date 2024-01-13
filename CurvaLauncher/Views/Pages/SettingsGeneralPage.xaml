@@ -32,7 +32,7 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <ScrollViewer>
+        <ScrollViewer Focusable="False">
             <StackPanel Margin="15">
                 <StackPanel Margin="0 0 0 10">
                     <StackPanel Orientation="Horizontal">

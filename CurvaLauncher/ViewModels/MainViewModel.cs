@@ -58,6 +58,8 @@ public partial class MainViewModel : ObservableObject
             {
                 foreach (var pluginInstance in _pluginService.PluginInstances)
                 {
+                    if (cancellationToken.IsCancellationRequested)
+                        return;
                     if (!pluginInstance.IsEnabled)
                         continue;
 

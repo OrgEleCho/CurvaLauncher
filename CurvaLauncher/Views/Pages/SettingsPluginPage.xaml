@@ -24,7 +24,14 @@
                   ItemsSource="{Binding PluginService.PluginInstances}" d:ItemsSource="{d:SampleData ItemCount=5}"
                   SelectedItem="{Binding ViewModel.SelectedPluginInstance}"
                   SelectedIndex="0"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  Focusable="False">
+
+            <ListView.Resources>
+                <Style TargetType="ScrollViewer" BasedOn="{StaticResource {x:Type ScrollViewer}}">
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                </Style>
+            </ListView.Resources>
             
             <behaviors:Interaction.Triggers>
                 <behaviors:EventTrigger EventName="SelectionChanged">
@@ -61,7 +68,8 @@
 
             <ScrollViewer Padding="0 10 0 0"
                           HorizontalScrollBarVisibility="Disabled"
-                          VerticalScrollBarVisibility="Auto">
+                          VerticalScrollBarVisibility="Auto"
+                          Focusable="False">
                 <ContentControl Name="pluginOptionContainer" Margin="10 5" />
             </ScrollViewer>
 

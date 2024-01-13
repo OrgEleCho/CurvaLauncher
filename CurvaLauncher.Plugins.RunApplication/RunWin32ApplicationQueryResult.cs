@@ -26,6 +26,7 @@ public class RunWin32ApplicationQueryResult : ISyncQueryResult
     public RunWin32ApplicationQueryResult(CurvaLauncherContext context, Win32AppInfo appInfo, float weight)
     {
         AppInfo = appInfo;
+        Weight = weight;
 
         context.Dispatcher.Invoke(() =>
         {

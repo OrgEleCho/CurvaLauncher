@@ -13,6 +13,7 @@ using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Models;
 using CurvaLauncher.Plugins;
 using CurvaLauncher.PluginInteraction;
+using System.Diagnostics;
 
 namespace CurvaLauncher.Services;
 
@@ -110,6 +111,7 @@ public partial class PluginService
         }
         catch (Exception ex)
         {
+            Debug.WriteLine($"Plugin load failed, {ex}");
             return false;
         }
     }

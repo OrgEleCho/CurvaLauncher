@@ -28,19 +28,19 @@ namespace CurvaLauncher
 
             // view
             services.AddSingleton<MainWindow>();
-            services.AddSingleton<SettingsWindow>();
-            services.AddSingleton<SettingsGeneralPage>();
-            services.AddSingleton<SettingsPluginPage>();
-            services.AddSingleton<SettingsHotkeyPage>();
-            services.AddSingleton<SettingsAboutPage>();
+            services.AddTransient<SettingsWindow>();
+            services.AddScoped<SettingsGeneralPage>();
+            services.AddScoped<SettingsPluginPage>();
+            services.AddScoped<SettingsHotkeyPage>();
+            services.AddScoped<SettingsAboutPage>();
 
             // view model
             services.AddSingleton<MainViewModel>();
-            services.AddSingleton<SettingsViewModel>();
-            services.AddSingleton<SettingsGeneralViewModel>();
-            services.AddSingleton<SettingsPluginViewModel>();
-            services.AddSingleton<SettingsHotkeyViewModel>();
-            services.AddSingleton<SettingsAboutViewModel>();
+            services.AddTransient<SettingsViewModel>();
+            services.AddTransient<SettingsGeneralViewModel>();
+            services.AddTransient<SettingsPluginViewModel>();
+            services.AddTransient<SettingsHotkeyViewModel>();
+            services.AddTransient<SettingsAboutViewModel>();
 
             // services
             services.AddSingleton<PathService>();
@@ -51,7 +51,7 @@ namespace CurvaLauncher
             services.AddSingleton<LibraryService>();
             services.AddSingleton<ThemeService>();
             services.AddSingleton<I18nService>();
-            services.AddSingleton<PageService>();
+            services.AddTransient<PageService>();
 
             return services.BuildServiceProvider();
         }
@@ -213,7 +213,7 @@ namespace CurvaLauncher
 
         public static void ShowLauncherSettings()
         {
-            SettingsWindow settingsWindow = 
+            SettingsWindow settingsWindow = SettingsWindow.Existed ??
                 ServiceProvider.GetRequiredService<SettingsWindow>();
 
             settingsWindow.WindowState = WindowState.Normal;

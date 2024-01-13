@@ -30,7 +30,7 @@
         </Grid.RowDefinitions>
 
         <Grid Margin="15 15 0 0">
-            <ScrollViewer>
+            <ScrollViewer Focusable="False">
                 <StackPanel>
                     <ui:Card>
                         <ItemsControl ItemsSource="{Binding ConfigService.Config.CustomQueryHotkeys}"

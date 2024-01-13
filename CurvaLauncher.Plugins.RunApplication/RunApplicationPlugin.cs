@@ -6,13 +6,20 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using CurvaLauncher.Apis;
 using System.Globalization;
-using CurvaLauncher.Plugins.RunApplication.UWP;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
+using CurvaLauncher.Plugins.RunApplication.RegistryHelper;
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
 public class RunApplicationPlugin : SyncI18nPlugin
 {
+    char[] displayNameBuffer = new char[260];
+
+    readonly string resourcePrefix = "ms-resource:";
+    readonly string uwpPackageRepositoryRegistry =
+        @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages";
+
     [PluginI18nOption("StrResultCount")]
     public int ResultCount { get; set; } = 5;
 
@@ -23,13 +30,20 @@ public class RunApplicationPlugin : SyncI18nPlugin
         IndexLocations.Programs |
         IndexLocations.Desktop;
 
+    [PluginI18nOption("StrWin32AppDistinctMode")]
+    public Win32AppDistinctMode Win32AppDistinctMode { get; set; } = Win32AppDistinctMode.FilePath;
+
     public override ImageSource Icon { get; }
 
     public override object NameKey => "StrPluginName";
     public override object DescriptionKey => "StrPluginDescription";
 
 
-    private Dictionary<string, AppInfo>? _apps;
+    private List<AppInfo>? _apps;
+    private List<FileSystemWatcher>? _win32FileSystemWatchers;
+    private RegistryMonitor? _uwpRegistryMonitor;
+
+    private HashSet<string>? _uwpRepositorySubKeyNames = null;
 
 
     public RunApplicationPlugin(CurvaLauncherContext context) : base(context)
@@ -43,6 +57,36 @@ public class RunApplicationPlugin : SyncI18nPlugin
 
         InitializeWin32();
         InitializeUwp();
+
+        InitializeWin32Watch();
+        InitializeUwpWatch();
+    }
+
+    private Win32AppInfo? GetWin32App(string shortcut)
+    {
+        if (HostContext.FileApi.GetShortcutTarget(shortcut) is not ShortcutTarget target)
+            return null;
+
+        var ext = Path.GetExtension(target.FileName);
+        if (!string.Equals(ext, ".exe", StringComparison.OrdinalIgnoreCase))
+            return null;
+        if (!File.Exists(target.FileName))
+            return null;
+
+        var name = Path.GetFileNameWithoutExtension(shortcut);
+
+        return new Win32AppInfo()
+        {
+            Name = name,
+            FilePath = target.FileName,
+            Arguments = target.Arguments,
+            WorkingDirectory = target.WorkingDirectory,
+            IconPath = target.IconPath,
+            IconIndex = target.IconIndex,
+            IsUAC = target.RequiresAdmin,
+
+            OriginShortcutPath = shortcut
+        };
     }
 
     private void InitializeWin32()
@@ -69,27 +113,280 @@ public class RunApplicationPlugin : SyncI18nPlugin
 
         foreach (var shortcut in allShotcutsInStartMenu)
         {
-            if (HostContext.FileApi.GetShortcutTarget(shortcut) is not ShortcutTarget target)
-                continue;
-
-            var ext = Path.GetExtension(target.FileName);
-            if (!string.Equals(ext, ".exe", StringComparison.OrdinalIgnoreCase))
-                continue;
-            if (!File.Exists(target.FileName))
-                continue;
-
-            var name = Path.GetFileNameWithoutExtension(shortcut);
-
-            _apps[name] = new Win32AppInfo()
+            if (GetWin32App(shortcut) is Win32AppInfo newApp &&
+                !_apps.OfType<Win32AppInfo>().Any(app => app.IsSame(newApp, Win32AppDistinctMode)))
             {
-                Name = name,
-                FilePath = target.FileName,
-                Arguments = target.Arguments,
-                WorkingDirectory = target.WorkingDirectory,
-                IconPath = target.IconPath,
-                IconIndex = target.IconIndex,
-                IsUAC = target.RequiresAdmin
+                _apps.Add(newApp);
+            }
+        }
+    }
+
+    private void InitializeWin32Watch()
+    {
+        _win32FileSystemWatchers = new();
+
+        List<string> folders = new(3);
+
+        if (IndexLocations.HasFlag(IndexLocations.CommonPrograms))
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms);
+            var watcher = new FileSystemWatcher(path)
+            {
+                IncludeSubdirectories = true,
+                EnableRaisingEvents = true,
             };
+
+            watcher.Created += Win32AppWatcher_Created;
+            watcher.Deleted += Win32AppWatcher_Deleted;
+            _win32FileSystemWatchers.Add(watcher);
+        }
+
+        if (IndexLocations.HasFlag(IndexLocations.Programs))
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Programs);
+            var watcher = new FileSystemWatcher(path)
+            {
+                IncludeSubdirectories = true,
+                EnableRaisingEvents = true,
+            };
+
+            watcher.Created += Win32AppWatcher_Created;
+            watcher.Deleted += Win32AppWatcher_Deleted;
+            _win32FileSystemWatchers.Add(watcher);
+        }
+
+        if (IndexLocations.HasFlag(IndexLocations.Desktop))
+        {
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            var watcher = new FileSystemWatcher(path)
+            {
+                EnableRaisingEvents = true,
+            };
+
+            watcher.Created += Win32AppWatcher_Created;
+            watcher.Deleted += Win32AppWatcher_Deleted;
+            watcher.Renamed += Win32AppWatcher_Renamed;
+            watcher.Changed += Win32AppWatcher_Changed;
+            _win32FileSystemWatchers.Add(watcher);
+        }
+    }
+
+    private void Win32AppWatcher_Created(object sender, FileSystemEventArgs e)
+    {
+        if (_apps == null)
+            return;
+
+        lock (_apps)
+        {
+            if (e.FullPath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase) &&
+                GetWin32App(e.FullPath) is Win32AppInfo win32AppInfo)
+            {
+                _apps.Add(win32AppInfo);
+
+                Debug.WriteLine("Win32 app added");
+            }
+        }
+    }
+
+    private void Win32AppWatcher_Deleted(object sender, FileSystemEventArgs e)
+    {
+        if (_apps == null)
+            return;
+
+        lock (_apps)
+        {
+            var appIndex = _apps
+            .FindIndex(app => app is Win32AppInfo win32App && win32App.OriginShortcutPath == e.FullPath);
+
+            if (appIndex is not -1)
+            {
+                _apps.RemoveAt(appIndex);
+
+                Debug.WriteLine("Win32 app deleted");
+            }
+        }
+    }
+
+    private void Win32AppWatcher_Renamed(object sender, RenamedEventArgs e)
+    {
+        if (_apps == null)
+            return;
+
+        lock (_apps)
+        {
+            var app = _apps
+                .OfType<Win32AppInfo>()
+                .FirstOrDefault(app => app.OriginShortcutPath == e.OldFullPath);
+
+            if (app is not null)
+            {
+                app.Name = Path.GetFileNameWithoutExtension(e.FullPath);
+                app.OriginShortcutPath = e.FullPath;
+
+                Debug.WriteLine("Win32 app renamed");
+            }
+        }
+    }
+
+    private void Win32AppWatcher_Changed(object sender, FileSystemEventArgs e)
+    {
+        if (_apps == null)
+            return;
+
+        lock (_apps)
+        {
+            var app = _apps
+                .OfType<Win32AppInfo>()
+                .FirstOrDefault(app => app.OriginShortcutPath == e.FullPath);
+
+            if (app is not null)
+            {
+                if (GetWin32App(e.FullPath) is Win32AppInfo newInfo)
+                    app.Populate(newInfo);
+                else
+                    _apps.Remove(app);
+            }
+            else
+            {
+                if (GetWin32App(e.FullPath) is Win32AppInfo newInfo)
+                    _apps.Add(newInfo);
+            }
+        }
+    }
+
+    private IEnumerable<UwpAppInfo> GetUwpApps(RegistryKey subKey)
+    {
+        if (subKey.GetValue("PackageID") is not string packageId)
+            yield break;
+
+        string packageFamilyId = Regex.Replace(packageId, "_.*__", "_");
+
+        if (subKey.GetValue("PackageRootFolder") is not string packageRootFolder)
+            yield break;
+
+        string packageManifestPath = Path.Combine(packageRootFolder, "AppxManifest.xml");
+
+        if (!System.IO.File.Exists(packageManifestPath))
+            yield break;
+
+        var appxManifestContent = File.ReadAllText(packageManifestPath);
+
+        XmlDocument xml = new();
+        xml.LoadXml(appxManifestContent);
+
+        XmlNamespaceManager nsManager = new XmlNamespaceManager(xml.NameTable);//这一步实例化一个xml命名空间管理器
+        nsManager.AddNamespace("ns", "http://schemas.microsoft.com/appx/manifest/foundation/windows10");
+        nsManager.AddNamespace("uap", "http://schemas.microsoft.com/appx/manifest/uap/windows10");
+
+        var idNode = xml.SelectSingleNode("/ns:Package/ns:Identity", nsManager);
+        var appNodes = xml.SelectNodes("/ns:Package/ns:Applications/ns:Application", nsManager);
+
+        if (appNodes == null)
+            yield break;
+
+        foreach (XmlNode appNode in appNodes)
+        {
+            var visualElementsNode = appNode.SelectSingleNode("uap:VisualElements", nsManager);
+
+            if (visualElementsNode == null)
+                continue;
+
+            if (visualElementsNode?.Attributes?["AppListEntry"]?.Value is string appListEntry &&
+                appListEntry.Equals("none", StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (visualElementsNode?.Attributes?["DisplayName"]?.Value is not string displayName)
+                continue;
+
+            UwpAppInfo info = new()
+            {
+                OriginRegistryKeyName = Path.GetFileName(subKey.Name)
+            };
+
+            info.PackageId = packageId;
+            info.FamilyID = packageFamilyId;
+            info.PackageRootFolder = packageRootFolder;
+
+            var logoNode = xml.SelectSingleNode("/ns:Package/ns:Properties/ns:Logo", nsManager);
+
+            if (appNode == null ||
+                appNode.Attributes?["Id"]?.Value is not string appId)
+                continue;
+
+            info.ApplicationId = appId;
+
+            if (displayName.StartsWith(resourcePrefix))
+            {
+                string resourcePath = displayName.Substring(resourcePrefix.Length);
+
+                // 非绝对路径, 且能够找到 Identity 节点
+                if (!resourcePath.StartsWith("//") &&
+                    idNode?.Attributes?["Name"]?.Value is string id)
+                {
+                    // 不是引用其他资源, 则添加 'Resource' 前缀
+                    if (!resourcePath.Contains("Resources"))
+                        resourcePath = $"Resources/{resourcePath}";
+
+                    // 转为绝对资源
+                    resourcePath = $"//{id}/{resourcePath}";
+                }
+
+                uint errCode;
+                string resourceStr = $"@{{{packageId}?ms-resource:{resourcePath}}}";
+                do
+                {
+                    errCode = SHLoadIndirectString(resourceStr, ref displayNameBuffer[0], displayNameBuffer.Length, 0);
+                }
+                while (errCode == 1 || errCode == 0x8007007a);
+
+                int endIndex = Array.IndexOf(displayNameBuffer, '\0');
+                displayName = new string(displayNameBuffer, 0, endIndex);
+
+                if (errCode != 0)
+                    continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(displayName))
+                continue;
+
+            info.Name = displayName;
+
+            string? logoPath = logoNode?.InnerText;
+
+            if (logoPath is not null)
+            {
+                var logoFullPath = Path.Combine(info.PackageRootFolder, logoPath);
+
+                var logoFileName = Path.GetFileNameWithoutExtension(logoPath);
+                var logoExtension = Path.GetExtension(logoPath);
+                var logoFilesDir = Path.GetDirectoryName(logoFullPath) ?? ".";
+                var logoFilesPattern = $"{logoFileName}*{logoExtension}";
+
+                if (Directory.Exists(logoFilesDir))
+                {
+                    var regex = new Regex($@"{Regex.Escape(logoFileName)}(\.scale-(?<scale>\d+))?{Regex.Escape(logoExtension)}");
+
+                    List<UwpAppInfo.UwpAppLogo> logos = new();
+                    foreach (var searchedLogoFile in Directory.EnumerateFiles(logoFilesDir, logoFilesPattern))
+                    {
+                        var searchedLogoFileName = Path.GetFileName(searchedLogoFile);
+                        var match = regex.Match(searchedLogoFileName);
+
+                        if (!match.Success)
+                            continue;
+
+                        int scale = 1;
+                        if (int.TryParse(match.Groups["scale"].Value, out var parsedScale))
+                            scale = parsedScale;
+
+                        logos.Add(new UwpAppInfo.UwpAppLogo(44 * scale, searchedLogoFile));
+                    }
+
+                    info.AppLogos = logos.ToArray();
+                }
+            }
+
+            yield return info;
         }
     }
 
@@ -101,160 +398,109 @@ public class RunApplicationPlugin : SyncI18nPlugin
         if (!IndexLocations.HasFlag(IndexLocations.UWP))
             return;
 
-        string resourcePrefix = "ms-resource:";
-        char[] displayNameBuffer = new char[260];
-
-        var repositoryKey = Registry.CurrentUser.OpenSubKey(
-            @"Software\Classes\Local Settings\Software\Microsoft\Windows\CurrentVersion\AppModel\Repository\Packages");
+        using var repositoryKey = Registry.CurrentUser.OpenSubKey(uwpPackageRepositoryRegistry);
 
         if (repositoryKey is null)
             return;
 
-        var subKeyNames = repositoryKey.GetSubKeyNames();
+        _uwpRepositorySubKeyNames = repositoryKey
+            .GetSubKeyNames()
+            .ToHashSet();
 
-        foreach (var item in subKeyNames)
+        foreach (var item in _uwpRepositorySubKeyNames)
         {
-            var subKey = repositoryKey.OpenSubKey(item);
+            using var subKey = repositoryKey.OpenSubKey(item);
 
             if (subKey is null)
                 continue;
 
-            if (subKey.GetValue("PackageID") is not string packageId)
-                continue;
-
-            string packageFamilyId = Regex.Replace(packageId, "_.*__", "_");
-
-            if (subKey.GetValue("PackageRootFolder") is not string packageRootFolder)
-                continue;
-
-            string packageManifestPath = Path.Combine(packageRootFolder, "AppxManifest.xml");
-
-            if (!System.IO.File.Exists(packageManifestPath))
-                continue;
-
-            var appxManifestContent = File.ReadAllText(packageManifestPath);
-
-            XmlDocument xml = new();
-            xml.LoadXml(appxManifestContent);
-
-            XmlNamespaceManager nsManager = new XmlNamespaceManager(xml.NameTable);//这一步实例化一个xml命名空间管理器
-            nsManager.AddNamespace("ns", "http://schemas.microsoft.com/appx/manifest/foundation/windows10");
-            nsManager.AddNamespace("uap", "http://schemas.microsoft.com/appx/manifest/uap/windows10");
-
-            var idNode = xml.SelectSingleNode("/ns:Package/ns:Identity", nsManager);
-            var appNodes = xml.SelectNodes("/ns:Package/ns:Applications/ns:Application", nsManager);
-
-            if (appNodes == null)
-                continue;
-
-            foreach (XmlNode appNode in appNodes)
-            {
-                var visualElementsNode = appNode.SelectSingleNode("uap:VisualElements", nsManager);
-
-                if (visualElementsNode == null)
-                    continue;
-
-                if (visualElementsNode?.Attributes?["AppListEntry"]?.Value is string appListEntry &&
-                    appListEntry.Equals("none", StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                if (visualElementsNode?.Attributes?["DisplayName"]?.Value is not string displayName)
-                    continue;
-
-                UwpAppInfo info = new();
-
-                info.PackageId = packageId;
-                info.FamilyID = packageFamilyId;
-                info.PackageRootFolder = packageRootFolder;
-
-                var logoNode = xml.SelectSingleNode("/ns:Package/ns:Properties/ns:Logo", nsManager);
-
-                if (appNode == null ||
-                    appNode.Attributes?["Id"]?.Value is not string appId)
-                    continue;
-
-                info.ApplicationId = appId;
-
-                if (displayName.StartsWith(resourcePrefix))
-                {
-                    string resourcePath = displayName.Substring(resourcePrefix.Length);
-
-                    // 非绝对路径, 且能够找到 Identity 节点
-                    if (!resourcePath.StartsWith("//") &&
-                        idNode?.Attributes?["Name"]?.Value is string id)
-                    {
-                        // 不是引用其他资源, 则添加 'Resource' 前缀
-                        if (!resourcePath.Contains("Resources"))
-                            resourcePath = $"Resources/{resourcePath}";
-
-                        // 转为绝对资源
-                        resourcePath = $"//{id}/{resourcePath}";
-                    }
-
-                    uint errCode;
-                    string resourceStr = $"@{{{packageId}?ms-resource:{resourcePath}}}";
-                    do
-                    {
-                        errCode = SHLoadIndirectString(resourceStr, ref displayNameBuffer[0], displayNameBuffer.Length, 0);
-                    }
-                    while (errCode == 1 || errCode == 0x8007007a);
-
-                    int endIndex = Array.IndexOf(displayNameBuffer, '\0');
-                    displayName = new string(displayNameBuffer, 0, endIndex);
-
-                    if (errCode != 0)
-                        continue;
-                }
-
-                if (string.IsNullOrWhiteSpace(displayName))
-                    continue;
-
-                info.Name = displayName;
-
-                string? logoPath = logoNode?.InnerText;
-
-                if (logoPath is not null)
-                {
-                    var logoFullPath = Path.Combine(info.PackageRootFolder, logoPath);
-
-                    var logoFileName = Path.GetFileNameWithoutExtension(logoPath);
-                    var logoExtension = Path.GetExtension(logoPath);
-                    var logoFilesDir = Path.GetDirectoryName(logoFullPath) ?? ".";
-                    var logoFilesPattern = $"{logoFileName}*{logoExtension}";
-
-                    if (Directory.Exists(logoFilesDir))
-                    {
-                        var regex = new Regex($@"{Regex.Escape(logoFileName)}(\.scale-(?<scale>\d+))?{Regex.Escape(logoExtension)}");
-
-                        List<UwpAppInfo.UwpAppLogo> logos = new();
-                        foreach (var searchedLogoFile in Directory.EnumerateFiles(logoFilesDir, logoFilesPattern))
-                        {
-                            var searchedLogoFileName = Path.GetFileName(searchedLogoFile);
-                            var match = regex.Match(searchedLogoFileName);
-
-                            if (!match.Success)
-                                continue;
-
-                            int scale = 1;
-                            if (int.TryParse(match.Groups["scale"].Value, out var parsedScale))
-                                scale = parsedScale;
-
-                            logos.Add(new UwpAppInfo.UwpAppLogo(44 * scale, searchedLogoFile));
-                        }
-
-                        info.AppLogos = logos.ToArray();
-                    }
-                }
-
-                _apps[info.Name] = info;
-            }
+            foreach (var app in GetUwpApps(subKey))
+                _apps.Add(app);
         }
 
     }
 
+    private void InitializeUwpWatch()
+    {
+        if (_apps == null)
+            return;
+
+        if (!IndexLocations.HasFlag(IndexLocations.UWP))
+            return;
+
+        using var repositoryKey = Registry.CurrentUser.OpenSubKey(uwpPackageRepositoryRegistry);
+
+        if (repositoryKey is null)
+            return;
+
+        _uwpRegistryMonitor = new RegistryMonitor(repositoryKey);
+        _uwpRegistryMonitor.RegChangeNotifyFilter = RegChangeNotifyFilter.Key;
+        _uwpRegistryMonitor.RegChanged += UwpRegistryMonitor_RegChanged;
+        _uwpRegistryMonitor.Start();
+    }
+
+    private void UwpRegistryMonitor_RegChanged(object? sender, EventArgs e)
+    {
+        if (_apps == null || _uwpRepositorySubKeyNames == null)
+            return;
+
+        using var repositoryKey = Registry.CurrentUser.OpenSubKey(uwpPackageRepositoryRegistry);
+
+        if (repositoryKey is null)
+            return;
+
+        var newUwpRepositorySubKeyNames = repositoryKey
+            .GetSubKeyNames()
+            .ToHashSet();
+
+        if (_uwpRepositorySubKeyNames.Count < newUwpRepositorySubKeyNames.Count)
+        {
+            foreach (var subKeyOfNew in newUwpRepositorySubKeyNames)
+            {
+                if (!_uwpRepositorySubKeyNames.Contains(subKeyOfNew))
+                {
+                    using var subKey = repositoryKey.OpenSubKey(subKeyOfNew);
+
+                    if (subKey is null)
+                        continue;
+
+                    lock (_apps)
+                    {
+                        foreach (var app in GetUwpApps(subKey))
+                            _apps.Add(app);
+                    }
+                }
+            }
+        }
+        else
+        {
+            foreach (var subKeyOfOld in _uwpRepositorySubKeyNames)
+            {
+                if (!newUwpRepositorySubKeyNames.Contains(subKeyOfOld))
+                {
+                    lock (_apps)
+                    {
+                        int appIndex = _apps
+                            .FindIndex(app => app is UwpAppInfo uwpApp && uwpApp.OriginRegistryKeyName == subKeyOfOld);
+
+                        if (appIndex != -1)
+                            _apps.RemoveAt(appIndex);
+                    }
+                }
+            }
+        }
+
+        _uwpRepositorySubKeyNames = newUwpRepositorySubKeyNames;
+    }
+
     public override void Finish()
     {
+        if (_win32FileSystemWatchers != null)
+            foreach (var watcher in _win32FileSystemWatchers)
+                watcher.Dispose();
+
         _apps = null;
+        _win32FileSystemWatchers = null;
     }
 
     public override IEnumerable<IQueryResult> Query(string query)
@@ -265,15 +511,15 @@ public class RunApplicationPlugin : SyncI18nPlugin
             yield break;
 
         var results = _apps
-            .Select(kv => (kv.Key, kv.Value, Weight: HostContext.StringApi.Match(kv.Key.ToLower(), query.ToLower())))
+            .Select(app => (App: app, Weight: HostContext.StringApi.Match(app.Name.ToLower(), query.ToLower())))
             .OrderByDescending(kvw => kvw.Weight)
             .Take(ResultCount);
 
         foreach (var result in results)
         {
-            if (result.Value is Win32AppInfo win32AppInfo)
+            if (result.App is Win32AppInfo win32AppInfo)
                 yield return new RunWin32ApplicationQueryResult(HostContext, win32AppInfo, result.Weight);
-            else if (result.Value is UwpAppInfo uwpAppInfo)
+            else if (result.App is UwpAppInfo uwpAppInfo)
                 yield return new RunUwpApplicationQueryResult(HostContext, uwpAppInfo, result.Weight);
         }
     }

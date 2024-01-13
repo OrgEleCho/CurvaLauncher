@@ -32,6 +32,8 @@ namespace CurvaLauncher.Views;
 [ObservableObject]
 public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
 {
+    public static SettingsWindow? Existed { get; private set; }
+
     public SettingsWindow(
         SettingsViewModel viewModel,
         ConfigService configService,
@@ -44,6 +46,13 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
         InitializeComponent();
 
         navigationStore.PageService = pageService;
+
+        Existed = this;
+    }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+        Existed = null;
     }
 
     public SettingsViewModel ViewModel { get; }
@@ -53,12 +62,6 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
     private void NavigationStoreLoaded(object sender, RoutedEventArgs e)
     {
         bool ok = navigationStore.Navigate("General");
-    }
-
-    private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
-    {
-        e.Cancel = true;
-        Hide();
     }
 
     [RelayCommand]

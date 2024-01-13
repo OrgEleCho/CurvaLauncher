@@ -11,15 +11,15 @@ namespace CurvaLauncher.Services
 {
     public class PageService : IPageService
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScope _serviceScope;
 
         public PageService(
             IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;
+            _serviceScope = serviceProvider.CreateScope();
         }
 
-        public T? GetPage<T>() where T : class => _serviceProvider.GetRequiredService<T>();
-        public FrameworkElement? GetPage(Type pageType) => _serviceProvider.GetRequiredService(pageType) as FrameworkElement;
+        public T? GetPage<T>() where T : class => _serviceScope.ServiceProvider.GetRequiredService<T>();
+        public FrameworkElement? GetPage(Type pageType) => _serviceScope.ServiceProvider.GetRequiredService(pageType) as FrameworkElement;
     }
 }

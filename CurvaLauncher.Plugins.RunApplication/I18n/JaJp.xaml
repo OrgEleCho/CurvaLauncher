@@ -4,5 +4,6 @@
     <sys:String x:Key="StrPluginName">アプリケーションの実行</sys:String>
     <sys:String x:Key="StrPluginDescription">PCにインストールされたアプリケーションを実行します</sys:String>
     <sys:String x:Key="StrResultCount">結果の数</sys:String>
-    <sys:String x:Key="StrStrIndexLocations">インデックスの位置</sys:String>
+    <sys:String x:Key="StrIndexLocations">インデックスの位置</sys:String>
+    <sys:String x:Key="StrWin32AppDistinctMode">Win32 アプリケーションの区分モード</sys:String>
 </ResourceDictionary>

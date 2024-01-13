@@ -1,0 +1,1 @@
+﻿Code source: https://www.codeproject.com/Articles/30624/Asynchronous-Registry-Notification-Using-Strongly

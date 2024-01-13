@@ -81,7 +81,7 @@ namespace CurvaLauncher.Views.Pages
                     var rawBytes = File.ReadAllBytes(path);
                     var shortcut = Shortcut.FromByteArray(rawBytes);
 
-                    if (shortcut.ExtraData.EnvironmentVariableDataBlock.TargetUnicode.Equals(selfPath, StringComparison.OrdinalIgnoreCase))
+                    if (shortcut?.ExtraData?.EnvironmentVariableDataBlock?.TargetUnicode?.Equals(selfPath, StringComparison.OrdinalIgnoreCase) ?? false)
                         ConfigService.Config.StartsWithWindows = true;
                     else
                         ConfigService.Config.StartsWithWindows = false;

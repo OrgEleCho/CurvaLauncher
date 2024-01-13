@@ -4,5 +4,6 @@
     <sys:String x:Key="StrPluginName">Run Application</sys:String>
     <sys:String x:Key="StrPluginDescription">Run Applications installed on your PC</sys:String>
     <sys:String x:Key="StrResultCount">Result count</sys:String>
-    <sys:String x:Key="StrStrIndexLocations">Index locations</sys:String>
+    <sys:String x:Key="StrIndexLocations">Index locations</sys:String>
+    <sys:String x:Key="StrWin32AppDistinctMode">Win32 application distinct mode</sys:String>
 </ResourceDictionary>
