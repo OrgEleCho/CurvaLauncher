@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,5 +19,5 @@
   <Target Name="CopyOutputPdb" AfterTargets="Build" Condition="'$(Configuration)'=='Debug'">
     <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).pdb" DestinationFiles="..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).pdb"></Copy>
   </Target>
-  
+
 </Project>
