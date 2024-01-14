@@ -9,7 +9,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon128.ico</ApplicationIcon>
 
-    <Version>0.5.1-beta</Version>
+    <Version>0.5.2-beta</Version>
 
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
