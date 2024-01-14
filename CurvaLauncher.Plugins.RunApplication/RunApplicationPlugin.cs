@@ -94,21 +94,21 @@ public class RunApplicationPlugin : SyncI18nPlugin
         if (_apps == null)
             return;
 
-        var allShotcutsInStartMenu = new List<string>();
+        var allShotcutsInStartMenu = Enumerable.Empty<string>();
 
         if (IndexLocations.HasFlag(IndexLocations.CommonPrograms))
-            allShotcutsInStartMenu.AddRange(
-            Directory.GetFiles(
-                Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms), "*.lnk", SearchOption.AllDirectories));
+            allShotcutsInStartMenu = allShotcutsInStartMenu.Concat(
+                Directory.EnumerateFiles(
+                    Environment.GetFolderPath(Environment.SpecialFolder.CommonPrograms), "*.lnk", SearchOption.AllDirectories));
 
         if (IndexLocations.HasFlag(IndexLocations.Programs))
-            allShotcutsInStartMenu.AddRange(
-                Directory.GetFiles(
+            allShotcutsInStartMenu = allShotcutsInStartMenu.Concat(
+                Directory.EnumerateFiles(
                     Environment.GetFolderPath(Environment.SpecialFolder.Programs), "*.lnk", SearchOption.AllDirectories));
 
         if (IndexLocations.HasFlag(IndexLocations.Desktop))
-            allShotcutsInStartMenu.AddRange(
-                Directory.GetFiles(
+            allShotcutsInStartMenu = allShotcutsInStartMenu.Concat(
+                Directory.EnumerateFiles(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "*.lnk", SearchOption.TopDirectoryOnly));
 
         foreach (var shortcut in allShotcutsInStartMenu)
