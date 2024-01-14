@@ -66,7 +66,7 @@ namespace CurvaLauncher.Apis
                 }
             }
 
-            if (temp.Length > 0)
+            if (rstBuilder.Count == 0 || temp.Length > 0)
                 rstBuilder.Add(new CommandLineSegment(temp.ToString(), quote));
 
             segments = rstBuilder;
