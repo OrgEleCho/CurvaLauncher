@@ -17,7 +17,6 @@ static class GithubUtils
         {
             Headers =
             {
-                { "Host", "api.github.com" },
                 { "User-Agent", $"CurvaLauncher/{App.Version}" }
             }
         };
@@ -28,17 +27,21 @@ static class GithubUtils
         if (response.StatusCode != System.Net.HttpStatusCode.OK)
             throw new HttpRequestException();
 
-        var release = await response.Content.ReadFromJsonAsync<GithubRelease>();
+        var release = await response.Content.ReadFromJsonAsync<GithubRelease>(cancellationToken).ConfigureAwait(false);
 
         if (release == null)
             return null;
 
         var tag = release.TagName;
         var versionStr = tag.TrimStart('v');
+        if (versionStr.IndexOf('-') is int suffix && suffix != -1)
+        {
+            versionStr = versionStr[0..suffix];
+        }
 
         if (!Version.TryParse(versionStr, out var version))
             return null;
 
-        return (version, release.AssetsUrl.ToString());
+        return (version, release.HtmlUrl.ToString());
     }
 }
