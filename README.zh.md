@@ -1,6 +1,6 @@
 <div align="center">
 
-![图标](/Assets/Icon128.png)
+![图标](/assets/Icon128.png)
 
 # CurvaLauncher
 
