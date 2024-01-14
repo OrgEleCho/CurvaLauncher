@@ -97,9 +97,9 @@ CurvaLauncher 的大多功能都以插件形式提供
 
 预览
 
-![](/Assets/preview2.png)
+![](/assets/preview2.png)
 
 
-![](/Assets/preview4.png)
+![](/assets/preview4.png)
 
 </div>

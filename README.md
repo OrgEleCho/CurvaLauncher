@@ -96,8 +96,8 @@ Most of CurvaLauncher's features are available in the form of plugins
 
 Preview
 
-![](/Assets/preview2.png)
+![](/assets/preview2.png)
 
-![](/Assets/preview4.png)
+![](/assets/preview4.png)
 
 </div>
