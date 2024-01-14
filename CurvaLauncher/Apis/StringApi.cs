@@ -55,18 +55,15 @@ public class StringApi : IStringApi
         return 1 - (float)d[length1, length2] / Math.Max(length1, length2);
     }
 
-
-
-    readonly List<int> cosineSimilarity_arrA = new();
-    readonly List<int> cosineSimilarity_arrB = new();
     public float CosineSimilarity<T>(IEnumerable<T> value1, IEnumerable<T> value2) where T : IEquatable<T>
     {
         //去重
         T[] sl = value1.Union(value2).ToArray();
 
         //获取重复次数
-        List<int> arrA = cosineSimilarity_arrA;
-        List<int> arrB = cosineSimilarity_arrB;
+        List<int> arrA = new();
+        List<int> arrB = new();
+
         foreach (var c in sl)
         {
             arrA.Add(value1.Where(x => x.Equals(c)).Count());
