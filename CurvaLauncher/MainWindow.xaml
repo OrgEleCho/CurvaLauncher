@@ -62,7 +62,7 @@
                         </ui:TextBox.InputBindings>
                         <ui:TextBox.ContextMenu>
                             <ContextMenu FontSize="14" HasDropShadow="True"
-                                         BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}">
+                                         BorderBrush="#80777777">
                                 <ui:MenuItem Header="{DynamicResource StrCut}" Command="ApplicationCommands.Cut"/>
                                 <ui:MenuItem Header="{DynamicResource StrCopy}" Command="ApplicationCommands.Copy"/>
                                 <ui:MenuItem Header="{DynamicResource StrPaste}" Command="ApplicationCommands.Paste"/>
@@ -176,24 +176,21 @@
             </StackPanel>
         </Border>
 
-        <tb:TaskbarIcon Visibility="Visible"
-                        ToolTipText="CurvaLauncher"
-                        ToolTip="CurvaLauncher"
-                        IconSource="/Assets/Icon32.ico"
-                        LeftClickCommand="{x:Static local:App.ShowLauncherCommand}">
-            <tb:TaskbarIcon.ContextMenu>
+        <ui:NotifyIcon Name="notifyIcon"
+                       Visibility="Visible"
+                       TooltipText="CurvaLauncher"
+                       ToolTip="CurvaLauncher"
+                       Icon="/Assets/Icon32.ico">
+            <ui:NotifyIcon.Menu>
                 <ContextMenu HasDropShadow="True" StaysOpen="True"
-                             Background="{DynamicResource ApplicationBackgroundBrush}"
-                             Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                             BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}">
-
+                             BorderBrush="#80777777">
                     <ui:MenuItem Header="Show Launcher" Command="{x:Static local:App.ShowLauncherCommand}"/>
                     <Separator/>
                     <ui:MenuItem Header="Settings" Command="{x:Static local:App.ShowLauncherSettingsCommand}" />
                     <ui:MenuItem Header="Exit" Command="{x:Static local:App.ShutdownCommand}" />
                 </ContextMenu>
-            </tb:TaskbarIcon.ContextMenu>
-        </tb:TaskbarIcon>
+            </ui:NotifyIcon.Menu>
+        </ui:NotifyIcon>
 
     </Grid>
 </ui:UiWindow>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -52,8 +51,8 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
 
     private void QueryBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Up && 
-            string.IsNullOrWhiteSpace(ViewModel.QueryText) && 
+        if (e.Key == Key.Up &&
+            string.IsNullOrWhiteSpace(ViewModel.QueryText) &&
             ViewModel.LastInvokedQueryText is string lastInvokedQueryText)
         {
             SetQueryText(lastInvokedQueryText);

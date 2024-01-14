@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -13,6 +15,7 @@ using CurvaLauncher.ViewModels;
 using CurvaLauncher.Views;
 using CurvaLauncher.Views.Pages;
 using Microsoft.Extensions.DependencyInjection;
+using Wpf.Ui.Controls;
 
 namespace CurvaLauncher
 {
@@ -106,6 +109,9 @@ namespace CurvaLauncher
 
             // 初始化主题
             themeService.ApplyTheme();
+
+            // 初始化托盘图标
+            InitializeNotifyIcon(mainWindow);
 
             if (!hotkeyService.IsLauncherHotkeyRegistered)
             {
@@ -222,6 +228,30 @@ namespace CurvaLauncher
             settingsWindow.WindowState = WindowState.Normal;
             settingsWindow.Show();
             settingsWindow.Activate();
+        }
+
+        public static void InitializeNotifyIcon(MainWindow window)
+        {
+            var hwnd = new WindowInteropHelper(window)
+                .EnsureHandle();
+
+            var wpfuiAssembly = typeof(NotifyIcon).Assembly;
+            var trayManagerType = wpfuiAssembly.GetType("Wpf.Ui.Tray.TrayManager")!;
+            var iNotifyIconType = wpfuiAssembly.GetType("Wpf.Ui.Tray.INotifyIcon")!;
+            var notifyIconType = window.notifyIcon.GetType();
+
+            var registerMethod = trayManagerType.GetMethod("Register", (BindingFlags)(-1), [iNotifyIconType, typeof(HwndSource)])!;
+            var notifyIconServiceField = notifyIconType.GetField("_notifyIconService", (BindingFlags)(-1))!;
+
+            var notifyIconService = notifyIconServiceField.GetValue(window.notifyIcon);
+            var hwndSource = HwndSource.FromHwnd(hwnd);
+
+            NotifyIconInitializeIcon(window.notifyIcon);
+
+            registerMethod.Invoke(null, [notifyIconService, hwndSource]);
+
+            [UnsafeAccessor(UnsafeAccessorKind.Method, Name = "InitializeIcon")]
+            static extern void NotifyIconInitializeIcon(NotifyIcon notifyIcon);
         }
 
         public static string Version { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "[ Unknown Version ]";
