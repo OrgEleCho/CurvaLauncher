@@ -149,8 +149,8 @@ public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessa
     {
         if (QueryResults.Count == 0)
         {
-            if (_lastInvokedQueryText != null && string.IsNullOrWhiteSpace(QueryText))
-                QueryText = _lastInvokedQueryText;
+            if (LastInvokedQueryText != null && string.IsNullOrWhiteSpace(QueryText))
+                QueryText = LastInvokedQueryText;
 
             return;
         }
