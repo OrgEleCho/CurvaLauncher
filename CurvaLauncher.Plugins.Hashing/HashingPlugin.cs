@@ -17,7 +17,7 @@ public class HashingPlugin : CommandSyncI18nPlugin
     public override object DescriptionKey => "StrPluginDescription";
 
 
-    static Dictionary<string, HashAlgorithm> _hashAlgorithmMap = new()
+    static readonly Dictionary<string, HashAlgorithm> _hashAlgorithmMap = new()
     {
         ["MD5"] = MD5.Create(),
         ["SHA1"] = SHA1.Create(),
@@ -47,13 +47,13 @@ public class HashingPlugin : CommandSyncI18nPlugin
             string title = $"Get summary with {algorithmName}";
 
             var textFactories = arguments
-                    .Select(arg => (Func<Stream>)(() => new MemoryStream(Encoding.UTF8.GetBytes(arg.Value))));
+                .Select(arg => (Func<Stream>)(() => new MemoryStream(Encoding.UTF8.GetBytes(arg.Value))));
 
             if (anyFileExist)
             {
                 var fileFactories = arguments
-                        .Where(arg => File.Exists(arg.Value))
-                        .Select(arg => (Func<Stream>)(() => File.OpenRead(arg.Value)));
+                    .Where(arg => File.Exists(arg.Value))
+                    .Select(arg => (Func<Stream>)(() => File.OpenRead(arg.Value)));
 
                 yield return new HashingQueryResult(fileFactories,
                                                     hashAlgorithm,
