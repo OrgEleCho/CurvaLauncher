@@ -1,0 +1,196 @@
+﻿<ui:UiWindow x:Class="CurvaLauncher.MainWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:CurvaLauncher"
+             xmlns:hotkey="https://wpf.elecho.org/globalhotkey"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:utils="clr-namespace:CurvaLauncher.Utilities"
+             xmlns:models="clr-namespace:CurvaLauncher.Models"
+             xmlns:wpfproxy="clr-namespace:EleCho.WpfUtilities;assembly=EleCho.WpfUtilities.BindingProxy"
+             xmlns:condition="clr-namespace:EleCho.WpfUtilities.ConditionControls;assembly=EleCho.WpfUtilities.ConditionControls"
+             xmlns:tb="http://www.hardcodet.net/taskbar"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=local:MainWindow}"
+             Title="CurvaLauncher" d:Width="800"
+             Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}"
+             Height="Auto" MinHeight="0"
+             ResizeMode="NoResize"
+             ShowInTaskbar="False"
+             Topmost="True"
+             SizeToContent="Height"
+             ExtendsContentIntoTitleBar="True"
+             WindowBackdropType="Mica"
+             FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
+             TextOptions.TextRenderingMode="ClearType"
+             Closing="WindowClosing"
+             Deactivated="WindowDeactivated">
+
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{x:Static local:App.CloseLauncherCommand}"/>
+        <KeyBinding Key="Return" Command="{Binding ViewModel.InvokeSelectedCommand}"/>
+        <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
+        <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="bool2visibility"/>
+    </Window.Resources>
+
+    <Grid>
+        <Border Padding="{DynamicResource LauncherPaddingThickness}">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ui:TextBox Name="QueryBox"
+                                Text="{Binding ViewModel.QueryText,UpdateSourceTrigger=PropertyChanged}"
+                                FontSize="{DynamicResource QueryBoxTextSize}"
+                                FocusVisualStyle="{x:Null}"
+                                ClearButtonEnabled="True"
+                                PlaceholderText="Hello CurvaLauncher"
+                                PreviewKeyDown="QueryBox_PreviewKeyDown">
+                        <ui:TextBox.InputBindings>
+                            <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
+                            <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
+                            <KeyBinding Key="Return" Command="{Binding ViewModel.InvokeSelectedCommand}"/>
+                        </ui:TextBox.InputBindings>
+                        <ui:TextBox.ContextMenu>
+                            <ContextMenu FontSize="14" HasDropShadow="True"
+                                         BorderBrush="#80777777">
+                                <ui:MenuItem Header="{DynamicResource StrCut}" Command="ApplicationCommands.Cut"/>
+                                <ui:MenuItem Header="{DynamicResource StrCopy}" Command="ApplicationCommands.Copy"/>
+                                <ui:MenuItem Header="{DynamicResource StrPaste}" Command="ApplicationCommands.Paste"/>
+                                <Separator/>
+                                <ui:MenuItem Header="{DynamicResource StrSettings}" Command="{x:Static local:App.ShowLauncherSettingsCommand}"/>
+                                <ui:MenuItem Header="{DynamicResource StrExit}" Command="{x:Static local:App.ShutdownCommand}"/>
+                            </ContextMenu>
+                        </ui:TextBox.ContextMenu>
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="TextChanged">
+                                <behaviors:InvokeCommandAction Command="{Binding ViewModel.QueryCommand}"/>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </ui:TextBox>
+
+                    <ui:ProgressRing Grid.Column="1" Margin="7 0 0 0" IsIndeterminate="True">
+                        <ui:ProgressRing.Style>
+                            <Style TargetType="ui:ProgressRing" BasedOn="{StaticResource {x:Type ui:ProgressRing}}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding ViewModel.HasQueryResult}" Value="True"/>
+                                            <Condition Binding="{Binding ViewModel.SelectedQueryResult.InvokeCommand.IsRunning}" Value="True"/>
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ui:ProgressRing.Style>
+                        <ui:ProgressRing.LayoutTransform>
+                            <ScaleTransform ScaleX=".7" ScaleY=".7"/>
+                        </ui:ProgressRing.LayoutTransform>
+                    </ui:ProgressRing>
+                </Grid>
+                <condition:IfControl Condition="{Binding ViewModel.HasQueryResult}">
+                    <condition:IfControl.Then>
+                        <ListView Name="resultBox" Margin="0 5 0 0"  MinHeight="0"
+                                  Height="Auto"
+                                  MaxHeight="{Binding AppConfig.LauncherResultViewHeight}"
+                                  BorderThickness="0"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
+                                  SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
+                                  SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="SelectionChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding ScrollToSelectedQueryResultCommand}"/>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="models:QueryResultModel">
+                                    <Border Padding="{DynamicResource QueryResultPaddingThickness}">
+                                        <Border.Resources>
+                                            <wpfproxy:BindingProxy x:Key="Proxy" Data="{Binding}"/>
+                                        </Border.Resources>
+                                        <Button Command="{Binding InvokeCommand}">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+
+                                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="8"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Width="{DynamicResource QueryResultIconSize}"
+                                                        Height="{DynamicResource QueryResultIconSize}"
+                                                        CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
+                                                    <Border.Background>
+                                                        <ImageBrush Stretch="Uniform"
+                                                                    ImageSource="{Binding Source={StaticResource Proxy}, Path=Data.Icon}"/>
+                                                    </Border.Background>
+                                                </Border>
+
+                                                <Grid Grid.Column="2">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition/>
+                                                        <RowDefinition/>
+                                                    </Grid.RowDefinitions>
+                                                    <TextBlock Text="{Binding Title}"
+                                                               FontSize="{DynamicResource QueryResultTitleTextSize}"
+                                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                    <TextBlock Grid.Row="1"
+                                                               TextTrimming="WordEllipsis"
+                                                               Text="{Binding Description}"
+                                                               FontSize="{DynamicResource QueryResultDescriptionTextSize}"
+                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                </Grid>
+                                            </Grid>
+                                        </Button>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </condition:IfControl.Then>
+                </condition:IfControl>
+            </StackPanel>
+        </Border>
+
+        <ui:NotifyIcon Name="notifyIcon"
+                       Visibility="Visible"
+                       TooltipText="CurvaLauncher"
+                       ToolTip="CurvaLauncher"
+                       Icon="/Assets/Icon32.ico">
+            <ui:NotifyIcon.Menu>
+                <ContextMenu HasDropShadow="True" StaysOpen="True"
+                             BorderBrush="#80777777">
+                    <ui:MenuItem Header="Show Launcher" Command="{x:Static local:App.ShowLauncherCommand}"/>
+                    <Separator/>
+                    <ui:MenuItem Header="Settings" Command="{x:Static local:App.ShowLauncherSettingsCommand}" />
+                    <ui:MenuItem Header="Exit" Command="{x:Static local:App.ShutdownCommand}" />
+                </ContextMenu>
+            </ui:NotifyIcon.Menu>
+        </ui:NotifyIcon>
+
+    </Grid>
+</ui:UiWindow>
