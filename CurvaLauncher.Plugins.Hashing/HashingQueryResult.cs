@@ -14,7 +14,7 @@ public class HashingQueryResult : IAsyncQueryResult
     private readonly string title;
     private readonly string description;
 
-    public float Weight => 1;
+    public float Weight => weight;
     public string Title => title;
     public string Description => description;
     public ImageSource? Icon => null;
