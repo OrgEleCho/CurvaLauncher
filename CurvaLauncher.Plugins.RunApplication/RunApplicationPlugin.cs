@@ -332,13 +332,8 @@ public class RunApplicationPlugin : SyncI18nPlugin
                     resourcePath = $"//{id}/{resourcePath}";
                 }
 
-                uint errCode;
                 string resourceStr = $"@{{{packageId}?ms-resource:{resourcePath}}}";
-                do
-                {
-                    errCode = SHLoadIndirectString(resourceStr, ref displayNameBuffer[0], displayNameBuffer.Length, 0);
-                }
-                while (errCode == 1 || errCode == 0x8007007a);
+                uint errCode =SHLoadIndirectString(resourceStr, ref displayNameBuffer[0], displayNameBuffer.Length, 0);
 
                 int endIndex = Array.IndexOf(displayNameBuffer, '\0');
                 displayName = new string(displayNameBuffer, 0, endIndex);
