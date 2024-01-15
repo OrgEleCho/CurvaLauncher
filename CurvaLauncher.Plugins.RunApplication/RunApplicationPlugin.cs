@@ -248,7 +248,8 @@ public class RunApplicationPlugin : SyncI18nPlugin
             }
             else
             {
-                if (GetWin32App(e.FullPath) is Win32AppInfo newInfo)
+                if (e.FullPath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase) && 
+                    GetWin32App(e.FullPath) is Win32AppInfo newInfo)
                     _apps.Add(newInfo);
             }
         }
