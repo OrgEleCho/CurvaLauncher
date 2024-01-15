@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Trans
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.QuickWebSearch", "CurvaLauncher.Plugins.QuickWebSearch\CurvaLauncher.Plugins.QuickWebSearch.csproj", "{2782D69A-3CE8-4222-83BE-50C6DBC4571F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurvaLauncher.Plugins.Encoding", "CurvaLauncher.Plugins.Encoding\CurvaLauncher.Plugins.Encoding.csproj", "{A69A84DC-CAD8-4DF1-A355-8E7892742808}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{2782D69A-3CE8-4222-83BE-50C6DBC4571F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2782D69A-3CE8-4222-83BE-50C6DBC4571F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2782D69A-3CE8-4222-83BE-50C6DBC4571F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A69A84DC-CAD8-4DF1-A355-8E7892742808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A69A84DC-CAD8-4DF1-A355-8E7892742808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A69A84DC-CAD8-4DF1-A355-8E7892742808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A69A84DC-CAD8-4DF1-A355-8E7892742808}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -96,6 +102,7 @@ Global
 		{CF1ADC3E-EC03-462B-ADAC-2E2830D1ACB1} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{3B3D63F7-C121-42B4-9A32-A15C86EABA15} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{2782D69A-3CE8-4222-83BE-50C6DBC4571F} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
+		{A69A84DC-CAD8-4DF1-A355-8E7892742808} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3FC4E11A-3D67-43DE-84D8-DCA1841F0D71}
