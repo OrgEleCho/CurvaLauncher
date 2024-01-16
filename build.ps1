@@ -1,10 +1,8 @@
 Write-Output "CurvaLauncher AutoBuild Script"
 
-{
-    New-Item -ItemType Directory -Force "build" 
-    New-Item -ItemType Directory -Force "build/tmp" 
-    New-Item -ItemType Directory -Force "build/Plugins" 
-} > $null
+New-Item -ItemType Directory -Force "build" > $null
+New-Item -ItemType Directory -Force "build/tmp" > $null
+New-Item -ItemType Directory -Force "build/Plugins" > $null
 
 Write-Output "Building app"
 
