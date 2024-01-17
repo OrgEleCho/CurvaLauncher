@@ -41,7 +41,7 @@ namespace CurvaLauncher.Plugins.Encoding
             _codecs = new()
             {
                 [CmdBase64Enc] = _encoders.Base64,
-                [CmdBase64Dec] = null!,
+                [CmdBase64Dec] = _decoders.Base64,
                 [CmdHtmlEnc] = null!,
                 [CmdHtmlDec] = null!,
                 [CmdUriEnc] = null!,
