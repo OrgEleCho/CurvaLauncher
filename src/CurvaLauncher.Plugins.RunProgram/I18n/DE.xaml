@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">Programm ausführen</sys:String>
+    <sys:String x:Key="StrPluginDescription">Programme über PATH-Variable und registrierte Apps ausführen</sys:String>
+
+    <sys:String x:Key="StrIncludeDirectories">Verzeichnisse einschließen</sys:String>
+    <sys:String x:Key="StrExcludeDirectories">Verzeichnisse ausschließen</sys:String>
+    <sys:String x:Key="StrEnableAppsIndexing">App-Indizierung aktivieren</sys:String>
+</ResourceDictionary>
