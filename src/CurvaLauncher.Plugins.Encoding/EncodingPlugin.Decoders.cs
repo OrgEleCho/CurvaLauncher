@@ -23,7 +23,7 @@ namespace CurvaLauncher.Plugins.Encoding
 
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    int readCount = await sourceStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken);
+                    int readCount = await sourceStream.ReadAsync(buffer, cancellationToken);
                     totalRead += readCount;
 
                     bool finalBlock = readCount < bufferSize || totalRead == sourceStream.Length;
@@ -72,7 +72,7 @@ namespace CurvaLauncher.Plugins.Encoding
                         break;
                 }
 
-                int GetHexValue(byte b)
+                static int GetHexValue(byte b)
                 {
                     if (b >= '0' && b <= '9')
                         return b - '0';
