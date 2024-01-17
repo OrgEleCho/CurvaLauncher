@@ -8,7 +8,7 @@
 
 [![License](https://img.shields.io/github/license/OrgEleCho/CurvaLauncher
 )](LICENSE.txt) [![Version](https://img.shields.io/github/v/release/OrgEleCho/CurvaLauncher?include_prereleases
-)](https://github.com/OrgEleCho/CurvaLauncher/releases) / [![EN-US](https://img.shields.io/badge/EN-US-blue)](README.md) [![ZH-Hans](https://img.shields.io/badge/中文-简体-red)](README.zh.md)
+)](https://github.com/OrgEleCho/CurvaLauncher/releases) / [![EN-US](https://img.shields.io/badge/EN-US-blue)](README.md) [![ZH-Hans](https://img.shields.io/badge/中文-简体-red)](README.zh.md) [![DE](https://img.shields.io/badge/DE-de)](README.de.md)
 
 </div>
 
