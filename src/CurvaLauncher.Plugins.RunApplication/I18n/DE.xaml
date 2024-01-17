@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">Anwendung ausführen</sys:String>
+    <sys:String x:Key="StrPluginDescription">Auf dem Computer installierte Anwendungen ausführen</sys:String>
+    <sys:String x:Key="StrResultCount">Ergebnisanzahl</sys:String>
+    <sys:String x:Key="StrIndexLocations">Einbezogene Orte</sys:String>
+    <sys:String x:Key="StrWin32AppDistinctMode">Eindeutiger Modus für Win32-Anwendungen</sys:String>
+</ResourceDictionary>
