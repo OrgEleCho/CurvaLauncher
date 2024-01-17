@@ -1,0 +1,54 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--Common-->
+    <sys:String x:Key="StrCut">Ausschneiden</sys:String>
+    <sys:String x:Key="StrCopy">Kopieren</sys:String>
+    <sys:String x:Key="StrPaste">Einfügen</sys:String>
+    <sys:String x:Key="StrSettings">Einstellungen</sys:String>
+    <sys:String x:Key="StrExit">Beenden</sys:String>
+    <sys:String x:Key="StrAdd">Hinzufügen</sys:String>
+    <sys:String x:Key="StrDelete">Löschen</sys:String>
+    <sys:String x:Key="StrCheck">Überprüfen</sys:String>
+    <sys:String x:Key="StrTips">Tipps</sys:String>
+    <sys:String x:Key="StrApply">Übernehmen</sys:String>
+    <sys:String x:Key="StrSave">Speichern</sys:String>
+    <sys:String x:Key="StrGeneral">Allgemein</sys:String>
+    <sys:String x:Key="StrPlugin">Plugin</sys:String>
+    <sys:String x:Key="StrHotkey">Hotkey</sys:String>
+    <sys:String x:Key="StrAbout">Über</sys:String>
+    <sys:String x:Key="StrTheme">Thema</sys:String>
+    <sys:String x:Key="StrLanguage">Sprache</sys:String>
+    <sys:String x:Key="StrVersion">Version</sys:String>
+    <sys:String x:Key="StrRepository">Repository</sys:String>
+
+    <!--LauncherWindow-->
+
+    <!--SettingsWindow-->
+    <sys:String x:Key="StrExitLauncher">Launcher beenden</sys:String>
+
+    <!--SettingsGeneralPage-->
+    <sys:String x:Key="StrLauncherHotkey">Tastenkombination für Launcher</sys:String>
+    <sys:String x:Key="StrNotRegistered">Nicht registriert</sys:String>
+    <sys:String x:Key="StrInvalidHotkey">Ungültige Tastenkombination</sys:String>
+    <sys:String x:Key="StrLauncherWidth">Breite des Launchers</sys:String>
+    <sys:String x:Key="StrQueryResultViewCount">Anzahl der Aufrufe des Abfrageergebnis</sys:String>
+    <sys:String x:Key="StrQueryResultIconSize">Symbolgröße des Abfrageergebnis</sys:String>
+    <sys:String x:Key="StrStartsWithWindows">Mit Windows starten</sys:String>
+    <sys:String x:Key="StrKeepLauncherWhenFocusIsLost">Launcher bei Verlust des Fokus behalten</sys:String>
+
+    <!--SettingsPluginPage-->
+    <sys:String x:Key="StrReloadAllPlugins">Alle Plugins neu laden</sys:String>
+    <sys:String x:Key="StrPluginWeight">Plugin Weight</sys:String>
+
+    <!--SettingsHotkeyPage-->
+    <sys:String x:Key="StrErrorHotkeys">Fehlerhafte Tastenkombinationen</sys:String>
+    <sys:String x:Key="StrCustomHotkeyTips">
+        Hier können Sie die Tastenkombinationen anpassen. Wenn die Tastenkombination ausgelöst wird, öffnet sich der Launcher und gibt den angegebenen Inhalt ein.
+    </sys:String>
+
+    <!--SettingsAboutPage-->
+    <sys:String x:Key="AppDescription">Einfacher, leichter und schneller Desktop-Launcher</sys:String>
+
+</ResourceDictionary>
