@@ -33,38 +33,43 @@ namespace CurvaLauncher.Plugins.Encoding
 
         public async Task InvokeAsync(CancellationToken cancellationToken)
         {
-            if (_destStreamFactories != null)
+            try
             {
-                var sourceStreamEnumerator = _sourceStreamFactories.GetEnumerator();
-                var destStreamEnumerator = _destStreamFactories.GetEnumerator();
-
-                while (sourceStreamEnumerator.MoveNext() && destStreamEnumerator.MoveNext())
+                if (_destStreamFactories != null)
                 {
-                    using var sourceStream = sourceStreamEnumerator.Current.Invoke();
-                    using var destStream = destStreamEnumerator.Current.Invoke();
+                    var sourceStreamEnumerator = _sourceStreamFactories.GetEnumerator();
+                    var destStreamEnumerator = _destStreamFactories.GetEnumerator();
 
-                    await _asyncEncoder.Invoke(sourceStream, destStream, cancellationToken);
+                    while (sourceStreamEnumerator.MoveNext() && destStreamEnumerator.MoveNext())
+                    {
+                        using var sourceStream = sourceStreamEnumerator.Current.Invoke();
+                        using var destStream = destStreamEnumerator.Current.Invoke();
+
+                        await _asyncEncoder.Invoke(sourceStream, destStream, cancellationToken);
+                    }
+                }
+                else
+                {
+                    List<string> results = new();
+                    MemoryStream ms = new();
+
+                    foreach (var sourceStreamFactory in _sourceStreamFactories)
+                    {
+                        using var sourceStream = sourceStreamFactory.Invoke();
+
+                        ms.SetLength(0);
+                        await _asyncEncoder.Invoke(sourceStream, ms, cancellationToken);
+
+                        byte[] msBuffer = ms.GetBuffer();
+                        string str = _plugin.Encoding.GetString(msBuffer, 0, (int)ms.Length);
+                        results.Add(str);
+                    }
+
+                    _plugin.HostContext.Api.SetClipboardText(string.Join(Environment.NewLine, results));
                 }
             }
-            else
-            {
-                List<string> results = new();
-                MemoryStream ms = new();
-
-                foreach (var sourceStreamFactory in _sourceStreamFactories)
-                {
-                    using var sourceStream = sourceStreamFactory.Invoke();
-
-                    ms.SetLength(0);
-                    await _asyncEncoder.Invoke(sourceStream, ms, cancellationToken);
-
-                    byte[] msBuffer = ms.GetBuffer();
-                    string str = System.Text.Encoding.UTF8.GetString(msBuffer, 0, (int)ms.Length);
-                    results.Add(str);
-                }
-
-                _plugin.HostContext.Api.SetClipboardText(string.Join(Environment.NewLine, results));
-            }
+            catch (OperationCanceledException)
+            { }
         }
     }
 }

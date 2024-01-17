@@ -59,14 +59,12 @@ namespace CurvaLauncher.Plugins.Encoding.Properties {
                 resourceCulture = value;
             }
         }
-
+        
         /// <summary>
-        ///   Looks up a localized string similar to &lt;?xml 
+        ///   Looks up a localized string similar to &lt;svg t=&quot;1705317969604&quot; class=&quot;icon&quot; viewBox=&quot;0 0 1024 1024&quot; version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; p-id=&quot;12164&quot; width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;path d=&quot;M0 0h1024v1024H0z&quot; fill=&quot;#FFFFFF&quot; fill-opacity=&quot;.01&quot; p-id=&quot;12165&quot;&gt;&lt;/path&gt;&lt;path d=&quot;M921.6 435.2v460.8H102.4V435.2h819.2zM307.2 691.2H204.8v51.2h102.4v-51.2z m153.6 0h-102.4v51.2h102.4v-51.2z m153.6 0h-102.4v51.2h102.4v-51.2z m153.6-101.6064c-14.3872 0-26.3936 4.8128-35.9936 14.4128-9.6 9.6-14.4128 21.6064-14.4128 35.9936 0 14.4128 4.8128 26.3936 14.4128 3 [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string IconSvg
-        {
-            get
-            {
+        internal static string IconSvg {
+            get {
                 return ResourceManager.GetString("IconSvg", resourceCulture);
             }
         }

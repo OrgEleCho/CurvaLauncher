@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows.Media;
 using CurvaLauncher.Apis;
 using CurvaLauncher.Plugins.Encoding.Properties;
@@ -30,6 +31,7 @@ namespace CurvaLauncher.Plugins.Encoding
         readonly Encoders _encoders;
         readonly Decoders _decoders;
         readonly Dictionary<string, AsyncCodec> _codecs;
+        public UTF8Encoding Encoding { get; } = new UTF8Encoding(false, false);
 
         public EncodingPlugin(CurvaLauncherContext context) : base(context)
         {
@@ -46,8 +48,8 @@ namespace CurvaLauncher.Plugins.Encoding
                 [CmdHtmlDec] = null!,
                 [CmdUriEnc] = null!,
                 [CmdUriDec] = null!,
-                [CmdHexEnc] = null!,
-                [CmdHexDec] = null!,
+                [CmdHexEnc] = _encoders.Hex,
+                [CmdHexDec] = _decoders.Hex,
                 [CmdRegEnc] = null!,
                 [CmdRegDec] = null!,
             };
@@ -88,7 +90,7 @@ namespace CurvaLauncher.Plugins.Encoding
                 string title = $"Codec {codecName}";
 
                 var textFactories = arguments
-                    .Select(arg => (Func<Stream>)(() => new MemoryStream(System.Text.Encoding.UTF8.GetBytes(arg.Value))));
+                    .Select(arg => (Func<Stream>)(() => new MemoryStream(Encoding.GetBytes(arg.Value))));
 
                 if (anyFileExist)
                 {
