@@ -44,7 +44,7 @@ public partial class EncodingPlugin : CommandSyncI18nPlugin
         {
             [CmdBase64Enc] = _encoders.Base64,
             [CmdBase64Dec] = _decoders.Base64,
-            [CmdHtmlEnc] = null!,
+            [CmdHtmlEnc] = _encoders.Html!,
             [CmdHtmlDec] = null!,
             [CmdUriEnc] = null!,
             [CmdUriDec] = null!,

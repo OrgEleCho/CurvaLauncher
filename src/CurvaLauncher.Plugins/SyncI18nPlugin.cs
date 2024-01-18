@@ -1,8 +1,4 @@
-﻿using System.Reflection;
-using System.Windows;
-using CurvaLauncher.Apis;
-
-namespace CurvaLauncher.Plugins;
+﻿namespace CurvaLauncher.Plugins;
 
 public abstract class SyncI18nPlugin : SyncPlugin, II18nPlugin
 {

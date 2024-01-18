@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Net;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using Text = System.Buffers.Text;
 
 namespace CurvaLauncher.Plugins.Encoding;
@@ -56,6 +58,36 @@ public partial class EncodingPlugin
                 }
 
                 await destStream.WriteAsync(outputBuffer.AsMemory(0, len * 2), cancellationToken);
+            }
+        }
+
+        public async Task Html(Stream sourceStream, Stream destStream, CancellationToken cancellationToken)
+        {
+            var originLength = _plugin.BufferSize;
+            string buffer = new('\0', originLength);
+            static void SetLength(string str, int len) => Unsafe.Add(ref Unsafe.As<char, int>(ref Unsafe.AsRef(in str.GetPinnableReference())), -1) = len;
+
+            StreamReader sr = new(sourceStream);
+            StreamWriter sw = new(destStream);
+
+            try
+            {
+                while (true)
+                {
+                    SetLength(buffer, originLength);
+                    var inMemory = buffer.AsMemory();
+                    int readlen = await sr.ReadBlockAsync(Unsafe.As<ReadOnlyMemory<char>, Memory<char>>(ref inMemory), cancellationToken); // ReadOnlyMemory和Memory的内部结构相同
+                    if (readlen == 0)
+                        break;
+
+                    SetLength(buffer, readlen);
+                    WebUtility.HtmlEncode(buffer, sw);
+                }
+            }
+            finally
+            {
+                sw.Flush();
+                SetLength(buffer, originLength);
             }
         }
     }
