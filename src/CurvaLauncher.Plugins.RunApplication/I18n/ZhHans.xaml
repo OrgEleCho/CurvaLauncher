@@ -6,4 +6,6 @@
     <sys:String x:Key="StrResultCount">结果数量</sys:String>
     <sys:String x:Key="StrIndexLocations">索引位置</sys:String>
     <sys:String x:Key="StrWin32AppDistinctMode">Win32 应用区分模式</sys:String>
+    <sys:String x:Key="StrCustomIndexFolders">自定义索引文件夹</sys:String>
+    <sys:String x:Key="StrRegexsForExcludingApps">排除应用程序的正则表达式</sys:String>
 </ResourceDictionary>

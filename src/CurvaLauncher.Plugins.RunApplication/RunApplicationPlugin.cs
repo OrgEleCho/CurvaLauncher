@@ -33,6 +33,12 @@ public class RunApplicationPlugin : SyncI18nPlugin
     [PluginI18nOption("StrWin32AppDistinctMode")]
     public Win32AppDistinctMode Win32AppDistinctMode { get; set; } = Win32AppDistinctMode.FilePath;
 
+    [PluginI18nOption("StrCustomIndexFolders", AllowTextMultiline = true)]
+    public string CustomFolders { get; set; } = string.Empty;
+
+    [PluginI18nOption("StrRegexsForExcludingApps")]
+    public string RegexsForExcludingApps { get; set; } = "^[Uu]ninstall";
+
     public override ImageSource Icon { get; }
 
     public override object NameKey => "StrPluginName";
@@ -111,11 +117,40 @@ public class RunApplicationPlugin : SyncI18nPlugin
                 Directory.EnumerateFiles(
                     Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "*.lnk", SearchOption.TopDirectoryOnly));
 
+        if (!string.IsNullOrWhiteSpace(CustomFolders))
+        {
+            foreach (string customFolder in CustomFolders.Split('\r', '\n', StringSplitOptions.RemoveEmptyEntries))
+            {
+                if (!Directory.Exists(customFolder))
+                    continue;
+
+                allShotcutsInStartMenu = allShotcutsInStartMenu.Concat(
+                    Directory.EnumerateFiles(customFolder, "*.lnk", SearchOption.TopDirectoryOnly));
+            }
+        }
+
+        List<Regex>? regexsForExcludingApps = null;
+        if (!string.IsNullOrWhiteSpace(RegexsForExcludingApps))
+        {
+            regexsForExcludingApps = new();
+            foreach (string regexStr in RegexsForExcludingApps.Split('\r', '\n', StringSplitOptions.RemoveEmptyEntries))
+            {
+                try
+                {
+                    regexsForExcludingApps.Add(new Regex(regexStr));
+                }
+                catch { }
+            }
+        }
+
         foreach (var shortcut in allShotcutsInStartMenu)
         {
             if (GetWin32App(shortcut) is Win32AppInfo newApp &&
                 !_apps.OfType<Win32AppInfo>().Any(app => app.IsSame(newApp, Win32AppDistinctMode)))
             {
+                if (regexsForExcludingApps != null && regexsForExcludingApps.Any(r => r.IsMatch(newApp.Name)))
+                    continue;
+
                 _apps.Add(newApp);
             }
         }
@@ -248,7 +283,7 @@ public class RunApplicationPlugin : SyncI18nPlugin
             }
             else
             {
-                if (e.FullPath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase) && 
+                if (e.FullPath.EndsWith(".lnk", StringComparison.OrdinalIgnoreCase) &&
                     GetWin32App(e.FullPath) is Win32AppInfo newInfo)
                     _apps.Add(newInfo);
             }
