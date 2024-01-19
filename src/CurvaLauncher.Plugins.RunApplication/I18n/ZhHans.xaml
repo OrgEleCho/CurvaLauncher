@@ -8,4 +8,6 @@
     <sys:String x:Key="StrWin32AppDistinctMode">Win32 应用区分模式</sys:String>
     <sys:String x:Key="StrCustomIndexFolders">自定义索引文件夹</sys:String>
     <sys:String x:Key="StrRegexsForExcludingApps">排除应用程序的正则表达式</sys:String>
+    <sys:String x:Key="StrIgnoreCases">忽略大小写</sys:String>
+    <sys:String x:Key="StrEnablePinyinSearch">启用拼音搜索</sys:String>
 </ResourceDictionary>

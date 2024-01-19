@@ -9,10 +9,11 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using CurvaLauncher.Plugins.RunApplication.RegistryHelper;
+using CurvaLauncher.Plugins.RunApplication.Pinyin;
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
-public class RunApplicationPlugin : SyncI18nPlugin
+public class RunApplicationPlugin : AsyncI18nPlugin
 {
     char[] displayNameBuffer = new char[260];
 
@@ -22,6 +23,9 @@ public class RunApplicationPlugin : SyncI18nPlugin
 
     [PluginI18nOption("StrResultCount")]
     public int ResultCount { get; set; } = 5;
+    
+    [PluginI18nOption("StrIgnoreCases")]
+    public bool IgnoreCases { get; set; } = true;
     
     [PluginI18nOption("StrEnablePinyinSearch")]
     public bool EnablePinyinSearch { get; set; } = false;
@@ -54,21 +58,33 @@ public class RunApplicationPlugin : SyncI18nPlugin
 
     private HashSet<string>? _uwpRepositorySubKeyNames = null;
 
+    private PinyinDictionary? _pinyinDictionary = null;
+
 
     public RunApplicationPlugin(CurvaLauncherContext context) : base(context)
     {
         Icon = HostContext.ImageApi.CreateFromSvg(Resources.IconSvg)!;
     }
 
-    public override void Initialize()
+    public override Task InitializeAsync()
     {
-        _apps = new();
+        return Task.Run(() =>
+        {
+            _apps = new();
 
-        InitializeWin32();
-        InitializeUwp();
+            if (EnablePinyinSearch)
+            {
+                _pinyinDictionary = new();
+            }
 
-        InitializeWin32Watch();
-        InitializeUwpWatch();
+            InitializeWin32();
+            InitializeUwp();
+
+            InitializeWin32Watch();
+            InitializeUwpWatch();
+
+            _pinyinDictionary = null;
+        });
     }
 
     private Win32AppInfo? GetWin32App(string shortcut)
@@ -146,6 +162,7 @@ public class RunApplicationPlugin : SyncI18nPlugin
             }
         }
 
+
         foreach (var shortcut in allShotcutsInStartMenu)
         {
             if (GetWin32App(shortcut) is Win32AppInfo newApp &&
@@ -155,6 +172,18 @@ public class RunApplicationPlugin : SyncI18nPlugin
                     continue;
 
                 _apps.Add(newApp);
+
+                if (EnablePinyinSearch)
+                {
+                    newApp.AlterQueryRoots = _pinyinDictionary!.GetAllPinyins(newApp.Name)
+                        .Select(pinyin => string.Concat(pinyin))
+                        .ToArray();
+                }
+
+                if (IgnoreCases)
+                {
+                    newApp.QueryRoot = newApp.Name.ToLower();
+                }
             }
         }
     }
@@ -449,7 +478,22 @@ public class RunApplicationPlugin : SyncI18nPlugin
                 continue;
 
             foreach (var app in GetUwpApps(subKey))
+            {
                 _apps.Add(app);
+
+                if (EnablePinyinSearch)
+                {
+                    app.AlterQueryRoots = _pinyinDictionary!.GetAllPinyins(app.Name)
+                        .Select(pinyin => string.Concat(pinyin))
+                        .ToArray();
+                }
+
+                if (IgnoreCases)
+                {
+                    app.QueryRoot = app.Name.ToLower();
+                }
+            }
+          
         }
 
     }
@@ -527,7 +571,7 @@ public class RunApplicationPlugin : SyncI18nPlugin
         _uwpRepositorySubKeyNames = newUwpRepositorySubKeyNames;
     }
 
-    public override void Finish()
+    public override Task FinishAsync()
     {
         if (_win32FileSystemWatchers != null)
             foreach (var watcher in _win32FileSystemWatchers)
@@ -535,9 +579,11 @@ public class RunApplicationPlugin : SyncI18nPlugin
 
         _apps = null;
         _win32FileSystemWatchers = null;
+
+        return Task.CompletedTask;
     }
 
-    public override IEnumerable<IQueryResult> Query(string query)
+    public override async IAsyncEnumerable<IQueryResult> QueryAsync(string query)
     {
         if (string.IsNullOrWhiteSpace(query))
             yield break;
@@ -545,21 +591,29 @@ public class RunApplicationPlugin : SyncI18nPlugin
             yield break;
 
         IEnumerable<(AppInfo App, float Weight)> results;
+        var realQuery = IgnoreCases ? query.ToLower() : query;
 
         lock (_apps)
         {
             results = _apps
-                .Select(app => (App: app, Weight: HostContext.StringApi.Match(app.Name.ToLower(), query.ToLower())))
+                .Select(app => (App: app, Weight: GetAppWeight(app, realQuery)))
                 .OrderByDescending(kvw => kvw.Weight)
                 .Take(ResultCount);
+
+            foreach (var result in results)
+            {
+                if (result.App is Win32AppInfo win32AppInfo)
+                    yield return new RunWin32ApplicationQueryResult(HostContext, win32AppInfo, result.Weight);
+                else if (result.App is UwpAppInfo uwpAppInfo)
+                    yield return new RunUwpApplicationQueryResult(HostContext, uwpAppInfo, result.Weight);
+            }
         }
 
-        foreach (var result in results)
+        float GetAppWeight(AppInfo appInfo, string realQuery)
         {
-            if (result.App is Win32AppInfo win32AppInfo)
-                yield return new RunWin32ApplicationQueryResult(HostContext, win32AppInfo, result.Weight);
-            else if (result.App is UwpAppInfo uwpAppInfo)
-                yield return new RunUwpApplicationQueryResult(HostContext, uwpAppInfo, result.Weight);
+            return Math.Max(
+                HostContext.StringApi.Match(appInfo.QueryRoot, realQuery),
+                appInfo.AlterQueryRoots?.Max(altName => HostContext.StringApi.Match(altName, realQuery)) ?? 0);
         }
     }
 

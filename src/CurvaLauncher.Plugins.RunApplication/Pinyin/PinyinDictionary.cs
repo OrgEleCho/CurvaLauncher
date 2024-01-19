@@ -4,7 +4,7 @@ namespace CurvaLauncher.Plugins.RunApplication.Pinyin;
 
 public class PinyinDictionary
 {
-    private readonly FrozenDictionary<char, IReadOnlyList<string>> _charsPinyin = new Dictionary<char, IReadOnlyList<string>>(21000)
+    private readonly Dictionary<char, IReadOnlyList<string>> _charsPinyin = new Dictionary<char, IReadOnlyList<string>>(21000)
     {
         ['○'] = ["ling"],
         ['一'] = ["yi"],
@@ -20783,9 +20783,9 @@ public class PinyinDictionary
         ['龢'] = ["he"],
         ['龣'] = ["jiao"],
         ['龤'] = ["xie"],
-    }.ToFrozenDictionary();
+    };
 
-    public FrozenDictionary<char, IReadOnlyList<string>> Storage => _charsPinyin;
+    public Dictionary<char, IReadOnlyList<string>> Storage => _charsPinyin;
 
     public IEnumerable<IEnumerable<string>> GetAllPinyins(string str)
     {
