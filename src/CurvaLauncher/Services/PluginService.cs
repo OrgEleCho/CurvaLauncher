@@ -83,11 +83,9 @@ public partial class PluginService
 
             if (config.Plugins.TryGetValue(typeName, out var pluginConfig))
             {
-                pluginInstance.IsEnabled = pluginConfig.IsEnabled;
-                pluginInstance.Weight = pluginConfig.Weight;
-
                 var props = pluginInstance.Plugin.GetType().GetProperties()
-                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null);
+                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null 
+                            || p.GetCustomAttribute<PluginI18nOptionAttribute>() is not null);
 
                 if (pluginConfig.Options != null)
                 {
@@ -101,6 +99,9 @@ public partial class PluginService
                         }
                     }
                 }
+
+                pluginInstance.IsEnabled = pluginConfig.IsEnabled;
+                pluginInstance.Weight = pluginConfig.Weight;
             }
             else
             {
