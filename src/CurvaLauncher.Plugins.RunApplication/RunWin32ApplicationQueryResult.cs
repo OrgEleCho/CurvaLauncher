@@ -32,16 +32,20 @@ public class RunWin32ApplicationQueryResult : ISyncQueryResult
         {
             var iconPath = appInfo.IconPath ?? appInfo.FilePath;
 
-            if (!iconPath.EndsWith(".ico"))
+            try
             {
-                var iconIndex = appInfo.IconIndex;
-                icon = context.ImageApi.GetEmbededIconImage(iconPath, context.RequiredIconSize, iconIndex);
+                if (!iconPath.EndsWith(".ico"))
+                {
+                    var iconIndex = appInfo.IconIndex;
+                    icon = context.ImageApi.GetEmbededIconImage(iconPath, context.RequiredIconSize, iconIndex);
+                }
+                else
+                {
+                    if (File.Exists(iconPath))
+                        icon = new BitmapImage(new Uri(iconPath));
+                }
             }
-            else
-            {
-                if (File.Exists(iconPath))
-                    icon = new BitmapImage(new Uri(iconPath));
-            }
+            catch { }
         });
     }
 

@@ -2,7 +2,7 @@
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
-public class UwpAppInfo : AppInfo
+public record class UwpAppInfo : AppInfo
 {
     public string PackageId { get; set; } = string.Empty;
     public string FamilyID { get; set; } = string.Empty;

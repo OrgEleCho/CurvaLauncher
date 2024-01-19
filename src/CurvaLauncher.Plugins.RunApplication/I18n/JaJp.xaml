@@ -8,4 +8,6 @@
     <sys:String x:Key="StrWin32AppDistinctMode">Win32 アプリケーションの区分モード</sys:String>
     <sys:String x:Key="StrCustomIndexFolders">カスタムインデックスフォルダ</sys:String>
     <sys:String x:Key="StrRegexsForExcludingApps">アプリを除外するための正規表現</sys:String>
+    <sys:String x:Key="StrIgnoreCases">大文字小文字を無視</sys:String>
+    <sys:String x:Key="StrEnablePinyinSearch">拼音検索を有効にする</sys:String>
 </ResourceDictionary>

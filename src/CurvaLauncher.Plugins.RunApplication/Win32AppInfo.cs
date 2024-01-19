@@ -1,7 +1,7 @@
 ﻿
 namespace CurvaLauncher.Plugins.RunApplication;
 
-public class Win32AppInfo : AppInfo, IEquatable<Win32AppInfo?>
+public record class Win32AppInfo : AppInfo, IEquatable<Win32AppInfo?>
 {
     public string FilePath { get; set; } = string.Empty;
     public string? Arguments { get; set; }
@@ -11,20 +11,6 @@ public class Win32AppInfo : AppInfo, IEquatable<Win32AppInfo?>
     public bool IsUAC { get; set; }
 
     public required string OriginShortcutPath { get; set; } = string.Empty;
-
-    public override bool Equals(object? obj) => Equals(obj as Win32AppInfo);
-    public bool Equals(Win32AppInfo? other)
-    {
-        return other is not null &&
-            Name == other.Name &&
-            FilePath == other.FilePath &&
-            Arguments == other.Arguments &&
-            WorkingDirectory == other.WorkingDirectory &&
-            IconPath == other.IconPath &&
-            IconIndex == other.IconIndex &&
-            IsUAC == other.IsUAC &&
-            OriginShortcutPath == other.OriginShortcutPath;
-    }
 
     public override int GetHashCode()
         => HashCode.Combine(Name, FilePath, Arguments, WorkingDirectory, IconPath, IconIndex, IsUAC, OriginShortcutPath);
@@ -53,6 +39,4 @@ public class Win32AppInfo : AppInfo, IEquatable<Win32AppInfo?>
         };
     }
 
-    public static bool operator ==(Win32AppInfo? left, Win32AppInfo? right) => EqualityComparer<Win32AppInfo>.Default.Equals(left, right);
-    public static bool operator !=(Win32AppInfo? left, Win32AppInfo? right) => !(left == right);
 }
