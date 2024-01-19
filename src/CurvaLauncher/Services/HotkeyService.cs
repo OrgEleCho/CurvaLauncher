@@ -61,7 +61,7 @@ public class HotkeyService
                 _registeredLauncherHotkey.Key == key)
                 return;
 
-            _globalHotkeyManager.Unregister(modifiers, key);
+            _globalHotkeyManager.Unregister(_registeredLauncherHotkey);
         }
 
         try
