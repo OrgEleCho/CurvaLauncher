@@ -6,4 +6,6 @@
     <sys:String x:Key="StrResultCount">Ergebnisanzahl</sys:String>
     <sys:String x:Key="StrIndexLocations">Einbezogene Orte</sys:String>
     <sys:String x:Key="StrWin32AppDistinctMode">Eindeutiger Modus für Win32-Anwendungen</sys:String>
+    <sys:String x:Key="StrCustomIndexFolders">Benutzerdefinierte Indexordner</sys:String>
+    <sys:String x:Key="StrRegexsForExcludingApps">Regexs zum Ausschließen von Apps</sys:String>
 </ResourceDictionary>

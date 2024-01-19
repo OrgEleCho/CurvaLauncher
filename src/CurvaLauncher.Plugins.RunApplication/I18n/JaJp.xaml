@@ -6,4 +6,6 @@
     <sys:String x:Key="StrResultCount">結果の数</sys:String>
     <sys:String x:Key="StrIndexLocations">インデックスの位置</sys:String>
     <sys:String x:Key="StrWin32AppDistinctMode">Win32 アプリケーションの区分モード</sys:String>
+    <sys:String x:Key="StrCustomIndexFolders">カスタムインデックスフォルダ</sys:String>
+    <sys:String x:Key="StrRegexsForExcludingApps">アプリを除外するための正規表現</sys:String>
 </ResourceDictionary>

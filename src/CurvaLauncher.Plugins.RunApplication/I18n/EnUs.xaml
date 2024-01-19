@@ -6,4 +6,6 @@
     <sys:String x:Key="StrResultCount">Result count</sys:String>
     <sys:String x:Key="StrIndexLocations">Index locations</sys:String>
     <sys:String x:Key="StrWin32AppDistinctMode">Win32 application distinct mode</sys:String>
+    <sys:String x:Key="StrCustomIndexFolders">Custom index folders</sys:String>
+    <sys:String x:Key="StrRegexsForExcludingApps">Regexs for excluding apps</sys:String>
 </ResourceDictionary>
