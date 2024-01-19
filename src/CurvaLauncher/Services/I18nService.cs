@@ -27,6 +27,7 @@ namespace CurvaLauncher.Services
             [new CultureInfo("zh-Hans")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("ZhHans.xaml") },
             [new CultureInfo("zh-Hant")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("ZhHant.xaml") },
             [new CultureInfo("ja-JP")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("JaJp.xaml") },
+            [new CultureInfo("de")] = new ResourceDictionary() { Source = GetResourceDictionaryPath("De.xaml") },
         };
 
         readonly Dictionary<Assembly, I18nResourceDictionaries> _assemblyResourceDictionaries = new();
@@ -84,6 +85,7 @@ namespace CurvaLauncher.Services
                 AppLanguage.ChineseSimplified => new CultureInfo("zh-Hans"),
                 AppLanguage.ChineseTraditional => new CultureInfo("zh-Hant"),
                 AppLanguage.Japanese => new CultureInfo("ja-JP"),
+                AppLanguage.German => new CultureInfo("de"),
                 _ => CultureInfo.CurrentCulture
             };
 

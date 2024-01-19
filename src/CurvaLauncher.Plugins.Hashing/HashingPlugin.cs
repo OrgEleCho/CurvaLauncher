@@ -87,5 +87,6 @@ public class HashingPlugin : CommandSyncI18nPlugin
         yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hans"), "I18n/ZhHans.xaml");
         yield return I18nResourceDictionary.Create(new CultureInfo("zh-Hant"), "I18n/ZhHant.xaml");
         yield return I18nResourceDictionary.Create(new CultureInfo("ja-JP"), "I18n/JaJp.xaml");
+        yield return I18nResourceDictionary.Create(new CultureInfo("de"), "I18n/De.xaml");
     }
 }

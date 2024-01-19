@@ -14,5 +14,8 @@ public enum AppLanguage
     ChineseTraditional,
 
     [Description("日本語")]
-    Japanese
+    Japanese,
+
+    [Description("Deutsch")]
+    German
 }
