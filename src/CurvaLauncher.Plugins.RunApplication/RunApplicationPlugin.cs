@@ -22,6 +22,9 @@ public class RunApplicationPlugin : SyncI18nPlugin
 
     [PluginI18nOption("StrResultCount")]
     public int ResultCount { get; set; } = 5;
+    
+    [PluginI18nOption("StrEnablePinyinSearch")]
+    public bool EnablePinyinSearch { get; set; } = false;
 
     [PluginI18nOption("StrIndexLocations")]
     public IndexLocations IndexLocations { get; set; } =
