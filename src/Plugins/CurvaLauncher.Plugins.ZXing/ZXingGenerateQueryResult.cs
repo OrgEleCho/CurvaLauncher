@@ -48,7 +48,8 @@ namespace CurvaLauncher.Plugins.ZXing
                         Width = Width,
                         Height = Height,
                         Margin = Margin,
-                    }
+                        Hints = { { EncodeHintType.CHARACTER_SET, "UTF-8" } }
+                    },
                 };
 
                 using var image = writer.Write(Content);

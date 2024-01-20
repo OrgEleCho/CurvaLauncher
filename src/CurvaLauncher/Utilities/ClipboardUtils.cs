@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Media;
@@ -11,22 +12,41 @@ namespace CurvaLauncher.Utilities;
 static class ClipboardUtils
 {
     [DllImport("User32")]
-    static extern bool OpenClipboard(IntPtr hWndNewOwner);
+    private static extern bool OpenClipboard(IntPtr hWndNewOwner);
 
     [DllImport("User32")]
-    static extern bool CloseClipboard();
+    private static extern bool CloseClipboard();
 
     [DllImport("User32")]
-    static extern bool EmptyClipboard();
+    private static extern bool EmptyClipboard();
 
     [DllImport("User32")]
-    static extern bool IsClipboardFormatAvailable(int format);
+    private static extern bool IsClipboardFormatAvailable(int format);
 
     [DllImport("User32")]
-    static extern IntPtr GetClipboardData(int uFormat);
+    private static extern IntPtr GetClipboardData(int uFormat);
 
     [DllImport("User32", CharSet = CharSet.Unicode)]
-    static extern IntPtr SetClipboardData(int uFormat, IntPtr hMem);
+    private static extern IntPtr SetClipboardData(int uFormat, IntPtr hMem);
+
+    [DllImport("gdi32.dll")]
+    private static extern int GetObject(nint hObject, int c, out nint resultPtr);
+
+    [DllImport("gdi32.dll")]
+    private static extern bool DeleteObject(nint hObject);
+
+    [DllImport("gdi32.dll")]
+    private static extern nint CreateDIBitmap(nint hdc, in BITMAPINFOHEADER pbmih, uint flInit, nint pjBits, in byte pbmi, uint iUsage);
+
+    [DllImport("user32.dll")]
+    private static extern nint GetDC(nint hwnd);
+
+    [DllImport("user32.dll")]
+    private static extern int ReleaseDC(nint hwnd, nint hdc);
+
+
+
+
 
     static void CoreSetText(string text, int remainCount)
     {
@@ -123,15 +143,80 @@ static class ClipboardUtils
     {
         var hBitmap = bitmap.GetHbitmap();
 
-        CoreSetBitmap(hBitmap, 3);
+        SetBitmap(hBitmap);
+        DeleteObject(hBitmap);
     }
 
     /// <summary>
     /// 向剪切板中添加图片
     /// </summary>
     /// <param name="hBitmap">位图句柄</param>
-    public static void SetBitmap(nint hBitmap)
+    private static unsafe void SetBitmap(nint hBitmap)
     {
-        CoreSetBitmap(hBitmap, 3);
+        DIBSECTION ds;
+        GetObject(hBitmap, sizeof(DIBSECTION), out *(nint*)&ds);
+
+        ds.dsBmih.biCompression = 0;
+        var hdc = GetDC(0);
+        nint hbitmap_ddb = CreateDIBitmap(hdc, in ds.dsBmih, 0x4/*CBM_INIT*/, ds.dsBm.bmBits, Unsafe.As<BITMAPINFOHEADER, byte>(ref ds.dsBmih), /*DIB_RGB_COLORS*/ 0);
+        ReleaseDC(0, hdc);
+
+        CoreSetBitmap(hbitmap_ddb, 3);
+        DeleteObject(hbitmap_ddb);
+    }
+
+
+
+
+
+    private struct BITMAP
+    {
+        public int bmType;
+        public int bmWidth;
+        public int bmHeight;
+        public int bmWidthBytes;
+        public ushort bmPlanes;
+        public ushort bmBitsPixel;
+        public nint bmBits;
+    }
+
+    private struct DIBSECTION
+    {
+        public BITMAP dsBm;
+        public BITMAPINFOHEADER dsBmih;
+        public uint dsBitfields1;
+        public uint dsBitfields2;
+        public uint dsBitfields3;
+        public nint dshSection;
+        public uint dsOffset;
+    }
+
+    private struct BITMAPINFOHEADER
+    {
+        public uint biSize;
+        public int biWidth;
+        public int biHeight;
+        public ushort biPlanes;
+        public ushort biBitCount;
+        public uint biCompression;
+        public uint biSizeImage;
+        public int biXPelsPerMeter;
+        public int biYPelsPerMeter;
+        public uint biClrUsed;
+        public uint biClrImportant;
+    }
+
+    private struct BITMAPINFO
+    {
+        public BITMAPINFOHEADER bmiHeader;
+        public RGBQUAD bmiColors;
+    }
+
+    private struct RGBQUAD
+    {
+        public byte rgbBlue;
+        public byte rgbGreen;
+        public byte rgbRed;
+        public byte rgbReserved;
     }
 }
