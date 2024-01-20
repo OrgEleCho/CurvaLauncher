@@ -16,7 +16,6 @@ namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
     public class EdgeTranslationQueryResult : IAsyncQueryResult
     {
         public string Title => "Translate text";
-
         public string Description => "Translate specified text with 'MicrosoftEdge'";
 
         public float Weight => 1;
@@ -25,8 +24,9 @@ namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
 
         public string Text { get; }
 
-        public EdgeTranslationQueryResult(HttpClient httpClient, string? sourceLanguage, string? targetLanguage, string text)
+        public EdgeTranslationQueryResult(CurvaLauncherContext hostContext, HttpClient httpClient, string? sourceLanguage, string? targetLanguage, string text)
         {
+            _hostContext = hostContext;
             _httpClient = httpClient;
             _sourceLanguage = sourceLanguage;
             _targetLanguage = targetLanguage;
@@ -35,6 +35,7 @@ namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
 
 
         static string? s_currentJwt;
+        private readonly CurvaLauncherContext _hostContext;
         private readonly HttpClient _httpClient;
         private readonly string? _sourceLanguage;
         private readonly string? _targetLanguage;
@@ -146,7 +147,7 @@ namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
                     {
                         // right result
                         if (translationResult.Translations != null && translationResult.Translations.FirstOrDefault() is Translation rightTranslation)
-                            Clipboard.SetText(rightTranslation.Text);
+                            _hostContext.ClipboardApi.SetText(rightTranslation.Text);
 
                         return;
                     }
@@ -160,13 +161,23 @@ namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
 
                     translationResult = await GetTranslationResult(_sourceLanguage ?? string.Empty, realTargetLanguage, Text);
                     if (translationResult?.Translations != null && translationResult.Translations.FirstOrDefault() is Translation fallbackTranslation)
-                        Clipboard.SetText(fallbackTranslation.Text);
+                    {
+                        if (!_hostContext.IsAltKeyPressed())
+                            _hostContext.ClipboardApi.SetText(fallbackTranslation.Text);
+                        else
+                            _hostContext.Api.ShowText(fallbackTranslation.Text, Apis.TextOptions.Default);
+                    }
                 }
                 else
                 {
                     var translationResult = await GetTranslationResult(_sourceLanguage ?? string.Empty, _targetLanguage, Text);
                     if (translationResult?.Translations != null && translationResult.Translations.FirstOrDefault() is Translation translation)
-                        Clipboard.SetText(translation.Text);
+                    {
+                        if (!_hostContext.IsAltKeyPressed())
+                            _hostContext.ClipboardApi.SetText(translation.Text);
+                        else
+                            _hostContext.Api.ShowText(translation.Text, Apis.TextOptions.Default);
+                    }
                 }
             }
             catch (TranslateException ex)

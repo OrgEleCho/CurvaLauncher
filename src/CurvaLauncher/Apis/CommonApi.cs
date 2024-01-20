@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
-using CurvaLauncher.Utilities;
+using System.Windows.Media;
+using CurvaLauncher.Views.Dialogs;
 
 namespace CurvaLauncher.Apis
 {
@@ -23,9 +24,16 @@ namespace CurvaLauncher.Apis
                 UseShellExecute = false
             });
 
-        public void SetClipboardText(string text)
+        public void ShowImage(ImageSource image, ImageOptions options)
         {
-            ClipboardUtils.SetText(text);
+            new SimpleImageDialog(image, options)
+                .Show();
+        }
+
+        public void ShowText(string text, TextOptions options)
+        {
+            new SimpleTextDialog(text, options)
+                .Show();
         }
     }
 }

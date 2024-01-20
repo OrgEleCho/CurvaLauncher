@@ -42,6 +42,7 @@ namespace CurvaLauncher.PluginInteraction
         public override IFileApi FileApi => Apis.FileApi.Instance;
         public override IImageApi ImageApi => Apis.ImageApi.Instance;
         public override IStringApi StringApi => Apis.StringApi.Instance;
+        public override IClipboardApi ClipboardApi => Apis.ClipboardApi.Instance;
         public override ICommandLineApi CommandLineApi => Apis.CommandLineApi.Instance;
 
 

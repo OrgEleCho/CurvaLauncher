@@ -31,7 +31,7 @@ namespace CurvaLauncher.Plugins.Translator
         }
 
 
-        HttpClient? _httpClient;
+        internal HttpClient? _httpClient;
 
         public override ImageSource Icon { get; }
 
@@ -83,8 +83,8 @@ namespace CurvaLauncher.Plugins.Translator
 
             yield return TranslatorAPI switch
             {
-                TranslatorAPI.Youdao => new Youdao.YoudaoTranslationQueryResult(_httpClient, sourceLanguage, targetLanguage, text),
-                TranslatorAPI.MicrosoftEdge => new MicrosoftEdge.EdgeTranslationQueryResult(_httpClient, sourceLanguage, targetLanguage, text),
+                TranslatorAPI.Youdao => new Youdao.YoudaoTranslationQueryResult(this, _httpClient, sourceLanguage, targetLanguage, text),
+                TranslatorAPI.MicrosoftEdge => new MicrosoftEdge.EdgeTranslationQueryResult(HostContext, _httpClient, sourceLanguage, targetLanguage, text),
 
                 _ => throw new Exception("This would never happen")
             };

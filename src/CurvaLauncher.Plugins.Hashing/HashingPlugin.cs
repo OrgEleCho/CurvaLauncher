@@ -55,13 +55,13 @@ public class HashingPlugin : CommandSyncI18nPlugin
                     .Where(arg => File.Exists(arg.Value))
                     .Select(arg => (Func<Stream>)(() => File.OpenRead(arg.Value)));
 
-                yield return new HashingQueryResult(fileFactories,
+                yield return new HashingQueryResult(HostContext, fileFactories,
                                                     hashAlgorithm,
                                                     "Hash file",
                                                     $"Use {algorithmName} to get summary of file content",
                                                     1);
 
-                yield return new HashingQueryResult(textFactories,
+                yield return new HashingQueryResult(HostContext, textFactories,
                                                     hashAlgorithm,
                                                     "Hash text",
                                                     $"Use {algorithmName} to get summary of input text",
@@ -69,7 +69,7 @@ public class HashingPlugin : CommandSyncI18nPlugin
             }
             else
             {
-                yield return new HashingQueryResult(textFactories,
+                yield return new HashingQueryResult(HostContext, textFactories,
                                                     hashAlgorithm,
                                                     "Hash text",
                                                     $"Use {algorithmName} to get summary of input text",
