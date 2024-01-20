@@ -30,9 +30,12 @@
 
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{x:Static local:App.CloseLauncherCommand}"/>
-        <KeyBinding Key="Return" Command="{Binding ViewModel.InvokeSelectedCommand}"/>
         <KeyBinding Key="Up" Command="{Binding ViewModel.SelectPrevCommand}"/>
         <KeyBinding Key="Down" Command="{Binding ViewModel.SelectNextCommand}"/>
+        <KeyBinding Key="Return" Command="{Binding ViewModel.InvokeSelectedCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Return"  Command="{Binding ViewModel.InvokeSelectedCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="Return"  Command="{Binding ViewModel.InvokeSelectedCommand}"/>
+        <KeyBinding Modifiers="Ctrl+Alt" Key="Return"  Command="{Binding ViewModel.InvokeSelectedCommand}"/>
     </Window.InputBindings>
 
     <Window.Resources>

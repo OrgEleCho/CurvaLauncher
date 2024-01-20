@@ -40,7 +40,7 @@ namespace CurvaLauncher.Plugins.Calculator
             string expr = query.Substring(Prefix.Length);
 
             if (NCalc.TryEval(expr, out var result))
-                yield return new CalculatorQueryResult(result);
+                yield return new CalculatorQueryResult(HostContext, result);
         }
     }
 }

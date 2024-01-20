@@ -7,6 +7,7 @@ namespace CurvaLauncher.Plugins.Translator.Youdao
 {
     public class YoudaoTranslationQueryResult : IAsyncQueryResult
     {
+        private readonly TranslatorPlugin _plugin;
         private readonly HttpClient _httpClient;
         private readonly string? _sourceLanguage;
         private readonly string? _targetLanguage;
@@ -21,8 +22,9 @@ namespace CurvaLauncher.Plugins.Translator.Youdao
 
         public string Text { get; }
 
-        public YoudaoTranslationQueryResult(HttpClient httpClient, string? sourceLanguage, string? targetLanguage, string text)
+        public YoudaoTranslationQueryResult(TranslatorPlugin plugin, HttpClient httpClient, string? sourceLanguage, string? targetLanguage, string text)
         {
+            _plugin = plugin;
             _httpClient = httpClient;
             _sourceLanguage = sourceLanguage;
             _targetLanguage = targetLanguage;
@@ -48,7 +50,12 @@ namespace CurvaLauncher.Plugins.Translator.Youdao
             var result = await response.Content.ReadFromJsonAsync<YoudaoApiResult>(Converter.Settings, cancellationToken);
 
             if (result?.Translation != null && result.Translation.Any())
-                Clipboard.SetText(result.Translation[0]);
+            {
+                if (!_plugin.HostContext.IsAltKeyPressed())
+                    _plugin.HostContext.ClipboardApi.SetText(result.Translation[0]);
+                else
+                    _plugin.HostContext.Api.ShowText(result.Translation[0], Apis.TextOptions.Default);
+            }
         }
     }
 }

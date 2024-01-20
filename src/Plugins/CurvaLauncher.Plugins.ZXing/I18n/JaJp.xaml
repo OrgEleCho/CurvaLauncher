@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">翻訳機</sys:String>
+    <sys:String x:Key="StrPluginDescription">無料のAPIを使用してテキストを翻訳します</sys:String>
+
+    <sys:String x:Key="StrCommandName">コマンド名</sys:String>
+    <sys:String x:Key="StrTranslatorAPI">翻訳機API</sys:String>
+    <sys:String x:Key="StrSourceLanguage">元の言語</sys:String>
+    <sys:String x:Key="StrTargetLanguage">対象言語</sys:String>
+</ResourceDictionary>

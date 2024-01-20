@@ -4,7 +4,10 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
+    
     <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    
     <StartupObject>CurvaLauncher.EntryPoint</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>Icon128.ico</ApplicationIcon>

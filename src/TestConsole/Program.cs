@@ -1,18 +1,40 @@
 ﻿using CurvaLauncher.Apis;
 using CurvaLauncher.Utilities;
+using ZXing;
+using ZXing.Common;
+using ZXing.QrCode;
 
-
-while (true)
+var w = new QRCodeWriter();
+var b = w.encode("Fuck you world", BarcodeFormat.QR_CODE, 100, 100);
+var writer = new ZXing.Windows.Compatibility.BarcodeWriter()
 {
-    Console.Write(">>> ");
-    string? pinyin = Console.ReadLine();
-
-    if (TestConsole.Pinyin.Pronounce.TryParse(pinyin, out var pronounce))
+    Format = BarcodeFormat.EAN_13,
+    Options = new()
     {
-        Console.WriteLine($"结果: 声母{pronounce.Consonant}, 介母:{pronounce.SemiVowel}, 韵母: {pronounce.Vowel}, ToString: {pronounce}");
+        Width = 100,
+        Height = 100,
+        Margin = 0,
     }
-    else
+};
+
+var bmp = writer.Write("Fuck you world");
+bmp.Save("QWQ.png");
+//zzb.Write
+
+void PinyinTest()
+{
+    while (true)
     {
-        Console.WriteLine("无效拼音");
+        Console.Write(">>> ");
+        string? pinyin = Console.ReadLine();
+
+        if (TestConsole.Pinyin.Pronounce.TryParse(pinyin, out var pronounce))
+        {
+            Console.WriteLine($"结果: 声母{pronounce.Consonant}, 介母:{pronounce.SemiVowel}, 韵母: {pronounce.Vowel}, ToString: {pronounce}");
+        }
+        else
+        {
+            Console.WriteLine("无效拼音");
+        }
     }
 }

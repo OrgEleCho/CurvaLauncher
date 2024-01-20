@@ -8,6 +8,7 @@ namespace CurvaLauncher.Plugins.Hashing;
 
 public class HashingQueryResult : IAsyncQueryResult
 {
+    private readonly CurvaLauncherContext _hostContext;
     private readonly IEnumerable<Func<Stream>> _streamFactories;
     private readonly HashAlgorithm _hashAlgorithm;
     private readonly float weight;
@@ -19,12 +20,14 @@ public class HashingQueryResult : IAsyncQueryResult
     public string Description => description;
     public ImageSource? Icon => null;
 
-    public HashingQueryResult(IEnumerable<Func<Stream>> streamFactories, HashAlgorithm hashAlgorithm, string title, string description, float weight)
+
+    public HashingQueryResult(CurvaLauncherContext hostContext, IEnumerable<Func<Stream>> streamFactories, HashAlgorithm hashAlgorithm, string title, string description, float weight)
     {
         this.weight = weight;
         this.title = title;
         this.description = description;
 
+        _hostContext = hostContext;
         _streamFactories = streamFactories;
         _hashAlgorithm = hashAlgorithm;
     }
@@ -41,6 +44,6 @@ public class HashingQueryResult : IAsyncQueryResult
             results.Add(Convert.ToHexString(hash));
         }
 
-        Clipboard.SetText(string.Join(Environment.NewLine, results));
+        _hostContext.ClipboardApi.SetText(string.Join(Environment.NewLine, results));
     }
 }

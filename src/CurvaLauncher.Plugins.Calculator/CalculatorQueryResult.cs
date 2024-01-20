@@ -5,8 +5,11 @@ namespace CurvaLauncher.Plugins.Calculator
 {
     public class CalculatorQueryResult : ISyncQueryResult
     {
-        public CalculatorQueryResult(double value)
+        private readonly CurvaLauncherContext _hostContext;
+
+        public CalculatorQueryResult(CurvaLauncherContext hostContext, double value)
         {
+            _hostContext = hostContext;
             Value = value;
         }
 
@@ -24,7 +27,7 @@ namespace CurvaLauncher.Plugins.Calculator
 
         public void Invoke()
         {
-            Clipboard.SetText($"{Value}");
+            _hostContext.ClipboardApi.SetText($"{Value}");
         }
     }
 }

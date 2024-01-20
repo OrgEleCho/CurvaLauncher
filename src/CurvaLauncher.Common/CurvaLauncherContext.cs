@@ -23,6 +23,7 @@ namespace CurvaLauncher
         public abstract IFileApi FileApi { get; }
         public abstract IImageApi ImageApi { get; }
         public abstract IStringApi StringApi { get; }
+        public abstract IClipboardApi ClipboardApi { get; }
         public abstract ICommandLineApi CommandLineApi { get; }
 
 
