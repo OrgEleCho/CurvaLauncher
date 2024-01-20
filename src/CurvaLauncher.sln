@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.OpenU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.RunProgram", "Plugins\CurvaLauncher.Plugins.RunProgram\CurvaLauncher.Plugins.RunProgram.csproj", "{C4629C9C-ACAD-4062-968C-ACF8E38D4331}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "Plugins\TestConsole\TestConsole.csproj", "{8834754D-EB48-473A-A42E-DBE2EA4BEF82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestConsole", "TestConsole\TestConsole.csproj", "{8834754D-EB48-473A-A42E-DBE2EA4BEF82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.RunApplication", "Plugins\CurvaLauncher.Plugins.RunApplication\CurvaLauncher.Plugins.RunApplication.csproj", "{C7EF8568-6821-49CE-B2B2-8E0FAABDA7E2}"
 EndProject
@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Quick
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.ZXing", "Plugins\CurvaLauncher.Plugins.ZXing\CurvaLauncher.Plugins.ZXing.csproj", "{3781D17E-F339-4933-85BC-D821C5FCC131}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Test", "CurvaLauncher.Plugins.Test\CurvaLauncher.Plugins.Test.csproj", "{F3F6F783-4636-457F-80E1-CC489F524B43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Test", "Plugins\CurvaLauncher.Plugins.Test\CurvaLauncher.Plugins.Test.csproj", "{F3F6F783-4636-457F-80E1-CC489F524B43}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
