@@ -10,8 +10,10 @@
                     d:Background="White">
 
     <StackPanel>
-        <TextBlock>
-            <Run Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOption},Path=OptionName}"
+        <TextBlock VerticalAlignment="Center"
+                   HorizontalAlignment="Left">
+            <Run FontSize="14" 
+                 Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOption},Path=OptionName}"
                  d:Text="SomeOption"/>
             <Run Text=":"/>
         </TextBlock>

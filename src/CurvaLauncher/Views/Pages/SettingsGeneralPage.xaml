@@ -34,9 +34,10 @@
     <Grid>
         <ScrollViewer Focusable="False">
             <StackPanel Margin="15">
-                <StackPanel Margin="0 0 0 10">
+                <StackPanel Margin="0 0 0 20">
                     <StackPanel Orientation="Horizontal">
-                        <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                        <Label FontSize="14" 
+                               Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                             <TextBlock>
                             <Run Text="{DynamicResource StrLauncherHotkey}"/>
                             <Run Text=":"/>
@@ -81,8 +82,9 @@
                     </Grid>
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 10">
-                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <StackPanel Margin="0 0 0 20">
+                    <Label FontSize="14" 
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                         <TextBlock>
                         <Run Text="{DynamicResource StrLauncherWidth}"/>
                         <Run Text=":"/>
@@ -92,8 +94,9 @@
                          Text="{Binding ConfigService.Config.LauncherWidth}"/>
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 10">
-                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <StackPanel Margin="0 0 0 20">
+                    <Label FontSize="14"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                         <TextBlock>
                         <Run Text="{DynamicResource StrQueryResultViewCount}"/>
                         <Run Text=":"/>
@@ -103,8 +106,9 @@
                          Text="{Binding ConfigService.Config.LauncherResultViewCount}"/>
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 10">
-                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <StackPanel Margin="0 0 0 20">
+                    <Label FontSize="14" 
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                         <TextBlock>
                         <Run Text="{DynamicResource StrQueryResultIconSize}"/>
                         <Run Text=":"/>
@@ -114,8 +118,9 @@
                          Text="{Binding ConfigService.Config.QueryResultIconSize}"/>
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 10">
-                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <StackPanel Margin="0 0 0 20">
+                    <Label FontSize="14"
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                         <TextBlock>
                         <Run Text="{DynamicResource StrTheme}"/>
                         <Run Text=":"/>
@@ -132,8 +137,9 @@
                     </ComboBox>
                 </StackPanel>
 
-                <StackPanel Margin="0 0 0 10">
-                    <Label Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+                <StackPanel Margin="0 0 0 20">
+                    <Label FontSize="14" 
+                           Foreground="{DynamicResource TextFillColorPrimaryBrush}">
                         <TextBlock>
                             <Run Text="{DynamicResource StrLanguage}"/>
                             <Run Text=":"/>
@@ -155,7 +161,7 @@
                     </ComboBox>
                 </StackPanel>
 
-                <CheckBox Margin="0 15 0 0"
+                <CheckBox Margin="0 5 0 0"
                       IsChecked="{Binding ConfigService.Config.StartsWithWindows}">
 
                     <TextBlock>

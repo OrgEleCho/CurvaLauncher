@@ -6,15 +6,19 @@
                     xmlns:local="clr-namespace:CurvaLauncher.Views.Components"
                     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
                     mc:Ignorable="d" 
-                    d:DesignHeight="450" d:DesignWidth="800"
+                    d:DesignHeight="450" d:DesignWidth="500"
                     d:Background="White">
-    
-    <StackPanel>
-        <TextBlock>
-            <Run Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOption},Path=OptionName}"
+
+    <Grid>
+        <TextBlock VerticalAlignment="Center"
+                   HorizontalAlignment="Left">
+            <Run FontSize="14" 
+                 Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOption},Path=OptionName}"
                  d:Text="SomeOption"/>
             <Run Text=":"/>
         </TextBlock>
-        <CheckBox Name="input" Margin="3 3 0 5"/>
-    </StackPanel>
+        <ui:ToggleSwitch Name="input"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Right"/>
+    </Grid>
 </local:PluginOption>

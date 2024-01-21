@@ -44,9 +44,22 @@ static class ClipboardUtils
     [DllImport("user32.dll")]
     private static extern int ReleaseDC(nint hwnd, nint hdc);
 
+    static bool CoreIsClipboardFormatAvailable(int format, int remainCount)
+    {
+        if (!OpenClipboard(IntPtr.Zero))
+        {
+            if (remainCount == 0)
+                throw new InvalidOperationException("Failed to set clipboard text");
 
+            return CoreIsClipboardFormatAvailable(format, remainCount - 1);
+        }
 
+        EmptyClipboard();
+        bool available = IsClipboardFormatAvailable(format);
+        CloseClipboard();
 
+        return available;
+    }
 
     static void CoreSetText(string text, int remainCount)
     {
@@ -79,6 +92,12 @@ static class ClipboardUtils
         SetClipboardData(2, hBitmap);
         CloseClipboard();
     }
+
+    public static bool HasText() => CoreIsClipboardFormatAvailable(13, 3) || CoreIsClipboardFormatAvailable(1, 3);
+
+    public static bool HasImage() => CoreIsClipboardFormatAvailable(2, 3);
+
+
 
     /// <summary>
     /// 向剪贴板中添加文本

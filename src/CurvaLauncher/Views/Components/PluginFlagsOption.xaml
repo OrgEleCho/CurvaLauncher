@@ -11,7 +11,8 @@
     
     <StackPanel>
         <TextBlock>
-            <Run Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOption},Path=OptionName}"
+            <Run FontSize="14" 
+                 Text="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOption},Path=OptionName}"
                  d:Text="SomeOption"/>
             <Run Text=":"/>
         </TextBlock>

@@ -48,6 +48,7 @@ namespace CurvaLauncher.Plugins.ZXing
                         Width = Width,
                         Height = Height,
                         Margin = Margin,
+                        NoPadding = true,
                         Hints = { { EncodeHintType.CHARACTER_SET, "UTF-8" } }
                     },
                 };
