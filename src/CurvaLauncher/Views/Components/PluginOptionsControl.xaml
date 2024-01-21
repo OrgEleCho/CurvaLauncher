@@ -44,9 +44,10 @@
 
             <StackPanel Name="optionsPanel"
                         IsEnabled="{Binding RelativeSource={RelativeSource AncestorType=local:PluginOptionsControl},Path=PluginInstance.IsEnabled}">
-                <Grid Margin="0 0 0 15">
+                <Grid Margin="0 0 0 20">
                     <StackPanel>
-                        <TextBlock Margin="0 0 5 0">
+                        <TextBlock Margin="0 0 5 0"
+                                   FontSize="14">
                             <Run Text="{DynamicResource StrPluginWeight}"/>
                             <Run Text=":"/>
                         </TextBlock>

@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="StrPluginName">翻譯器</sys:String>
-    <sys:String x:Key="StrPluginDescription">使用免費的 API 進行文本翻譯</sys:String>
+    <sys:String x:Key="StrPluginName">ZXing</sys:String>
+    <sys:String x:Key="StrPluginDescription">二維碼生成與識別，條碼識別</sys:String>
 
-    <sys:String x:Key="StrCommandName">命令名稱</sys:String>
-    <sys:String x:Key="StrTranslatorAPI">翻譯器 API</sys:String>
-    <sys:String x:Key="StrSourceLanguage">源語言</sys:String>
-    <sys:String x:Key="StrTargetLanguage">目標語言</sys:String>
+    <sys:String x:Key="StrZXingCommandName">ZXing命令名稱</sys:String>
+    <sys:String x:Key="StrQrCodeCommandName">二維碼命令名稱</sys:String>
+    <sys:String x:Key="StrOutputImageWidth">輸出圖片寬度</sys:String>
+    <sys:String x:Key="StrOutputImageHeight">輸出圖片高度</sys:String>
+    <sys:String x:Key="StrAutoOpenDetectedLink">自動打開檢測到的鏈接</sys:String>
 </ResourceDictionary>

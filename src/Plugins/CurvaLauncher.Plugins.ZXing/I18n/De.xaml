@@ -1,11 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="StrPluginName">Übersetzer</sys:String>
-    <sys:String x:Key="StrPluginDescription">Texte mit kostenlosen APIs übersetzen</sys:String>
-    
-    <sys:String x:Key="StrCommandName">Befehlsname</sys:String>
-    <sys:String x:Key="StrTranslatorAPI">Übersetzer-API</sys:String>
-    <sys:String x:Key="StrSourceLanguage">Quellsprache</sys:String>
-    <sys:String x:Key="StrTargetLanguage">Zielsprache</sys:String>
+    <sys:String x:Key="StrPluginName">ZXing</sys:String>
+    <sys:String x:Key="StrPluginDescription">QR-Code Generierung und Erkennung, Barcode-Erkennung</sys:String>
+
+    <sys:String x:Key="StrZXingCommandName">ZXing Befehlsname</sys:String>
+    <sys:String x:Key="StrQrCodeCommandName">QR-Code Befehlsname</sys:String>
+    <sys:String x:Key="StrOutputImageWidth">Ausgabe-Bildbreite</sys:String>
+    <sys:String x:Key="StrOutputImageHeight">Ausgabe-Bildhöhe</sys:String>
+    <sys:String x:Key="StrAutoOpenDetectedLink">Automatisch erkannten Link öffnen</sys:String>
 </ResourceDictionary>

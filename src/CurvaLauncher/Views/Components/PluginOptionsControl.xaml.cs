@@ -85,7 +85,7 @@ public partial class PluginOptionsControl : UserControl
             {
                 if (CreateI18nOption(i18nAttr, prop) is PluginOption pluginOption)
                 {
-                    pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 15);
+                    pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 20);
                     optionsPanel.Children.Add(pluginOption);
                 }
             }
@@ -93,7 +93,7 @@ public partial class PluginOptionsControl : UserControl
             {
                 if (CreateOption(attr, prop) is PluginOption pluginOption)
                 {
-                    pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 15);
+                    pluginOption.Margin = new System.Windows.Thickness(0, 0, 0, 20);
                     optionsPanel.Children.Add(pluginOption);
                 }
             }

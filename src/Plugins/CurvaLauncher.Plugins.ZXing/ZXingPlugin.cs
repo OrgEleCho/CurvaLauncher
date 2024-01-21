@@ -11,14 +11,20 @@ namespace CurvaLauncher.Plugins.ZXing
         public override object NameKey => "StrPluginName";
         public override object DescriptionKey => "StrPluginDescription";
 
+        [PluginI18nOption("StrZXingCommandName")]
+        public string ZXingCommandName { get; set; } = "ZXing";
+
         [PluginI18nOption("StrQrCodeCommandName")]
-        public string QrCodeCommandName { get; set; } = "qrcode";
+        public string QrCodeCommandName { get; set; } = "QrCode";
 
         [PluginI18nOption("StrOutputImageWidth")]
         public int OutputImageWidth { get; set; } = 200;
 
         [PluginI18nOption("StrOutputImageHeight")]
         public int OutputImageHeight { get; set; } = 200;
+
+        [PluginI18nOption("StrAutoOpenDetectedLink")]
+        public bool AutoOpenDetectedLink { get; set; } = false;
 
         public override ImageSource Icon { get; }
 
@@ -56,16 +62,27 @@ namespace CurvaLauncher.Plugins.ZXing
 
             if (codeValues == null)
             {
+                if (commandName.Equals(ZXingCommandName, StringComparison.OrdinalIgnoreCase))
+                {
+                    if (string.IsNullOrWhiteSpace(content))
+                        yield return new ZXingRecognizeQueryResult(this, "Any code", null);
+                    else
+                        yield return new EmptyQueryResult($"ZXing", $"Copy some image for code recognition", 1, null);
+                }
+
                 yield break;
             }
 
             if (string.IsNullOrWhiteSpace(content))
             {
-                yield return new EmptyQueryResult($"Generate {codeValues.Value.codeName}", $"Enter the content to use to generate a {codeValues.Value.codeName}", 1, null);
+                if (!HostContext.ClipboardApi.HasImage())
+                    yield return new EmptyQueryResult($"Generate {codeValues.Value.codeName}", $"Enter the content to use to generate a {codeValues.Value.codeName}", 1, null);
+                else
+                    yield return new ZXingRecognizeQueryResult(this, codeValues.Value.codeName, BarcodeFormat.QR_CODE);
             }
             else
             {
-                yield return new ZXingGenerateQueryResult(HostContext, codeValues.Value.codeName, codeValues.Value.barcodeFormat, OutputImageWidth, OutputImageHeight, 0, content);
+                yield return new ZXingGenerateQueryResult(HostContext, codeValues.Value.codeName, codeValues.Value.barcodeFormat, OutputImageWidth, OutputImageHeight, 5, content);
             }
         }
     }
