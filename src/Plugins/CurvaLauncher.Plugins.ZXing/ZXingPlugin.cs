@@ -32,6 +32,7 @@ namespace CurvaLauncher.Plugins.ZXing
         {
             get
             {
+                yield return ZXingCommandName;
                 yield return QrCodeCommandName;
             }
         }
