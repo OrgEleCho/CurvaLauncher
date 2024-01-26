@@ -10,7 +10,7 @@ dotnet publish src/CurvaLauncher -c Release -o build -r win-x64 --self-contained
 
 Write-Output "Building plugins"
 
-foreach ($proj in Get-ChildItem "src/CurvaLauncher.Plugins.*") {
+foreach ($proj in Get-ChildItem "src/Plugins/CurvaLauncher.Plugins.*") {
     if ($proj.Name.Contains("Test")) {
         continue
     }
