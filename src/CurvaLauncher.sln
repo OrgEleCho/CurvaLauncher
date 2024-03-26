@@ -31,6 +31,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.ZXing
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Test", "Plugins\CurvaLauncher.Plugins.Test\CurvaLauncher.Plugins.Test.csproj", "{F3F6F783-4636-457F-80E1-CC489F524B43}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdditionalPlugins", "AdditionalPlugins", "{4A86F98E-B276-4F75-9847-8D0E4280D887}"
+EndProject
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "CurvaLauncher.Plugins.SHLoadIndirectStringList", "AdditionalPlugins\CurvaLauncher.Plugins.SHLoadIndirectStringList\CurvaLauncher.Plugins.SHLoadIndirectStringList.fsproj", "{8CFC1C29-51AA-45ED-A91F-01F513182002}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +93,10 @@ Global
 		{F3F6F783-4636-457F-80E1-CC489F524B43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3F6F783-4636-457F-80E1-CC489F524B43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3F6F783-4636-457F-80E1-CC489F524B43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CFC1C29-51AA-45ED-A91F-01F513182002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CFC1C29-51AA-45ED-A91F-01F513182002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CFC1C29-51AA-45ED-A91F-01F513182002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CFC1C29-51AA-45ED-A91F-01F513182002}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -103,6 +111,7 @@ Global
 		{2782D69A-3CE8-4222-83BE-50C6DBC4571F} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{3781D17E-F339-4933-85BC-D821C5FCC131} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{F3F6F783-4636-457F-80E1-CC489F524B43} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
+		{8CFC1C29-51AA-45ED-A91F-01F513182002} = {4A86F98E-B276-4F75-9847-8D0E4280D887}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3FC4E11A-3D67-43DE-84D8-DCA1841F0D71}
