@@ -9,4 +9,5 @@
     <sys:String x:Key="StrOutputImageWidth">Ausgabe-Bildbreite</sys:String>
     <sys:String x:Key="StrOutputImageHeight">Ausgabe-Bildhöhe</sys:String>
     <sys:String x:Key="StrAutoOpenDetectedLink">Automatisch erkannten Link öffnen</sys:String>
+    <sys:String x:Key="StrPlaceholderForEmptyResult">Platzhalter für leeres Ergebnis</sys:String>
 </ResourceDictionary>

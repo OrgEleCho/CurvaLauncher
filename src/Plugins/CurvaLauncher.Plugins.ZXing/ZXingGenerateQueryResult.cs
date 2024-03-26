@@ -38,6 +38,8 @@ namespace CurvaLauncher.Plugins.ZXing
 
         public Task InvokeAsync(CancellationToken cancellationToken)
         {
+            bool altPressed = HostContext.IsAltKeyPressed();
+
             return Task.Run(() =>
             {
                 var writer = new BarcodeWriter()
@@ -55,21 +57,26 @@ namespace CurvaLauncher.Plugins.ZXing
 
                 using var image = writer.Write(Content);
 
-                HostContext.ClipboardApi.SetImage(image);
-
-                MemoryStream ms = new MemoryStream();
-                image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-
-                HostContext.Dispatcher.Invoke(() =>
+                if (!altPressed)
                 {
-                    BitmapImage bmp = new BitmapImage();
+                    HostContext.ClipboardApi.SetImage(image);
+                }
+                else
+                {
+                    MemoryStream ms = new MemoryStream();
+                    image.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
 
-                    bmp.BeginInit();
-                    bmp.StreamSource = ms;
-                    bmp.EndInit();
+                    HostContext.Dispatcher.Invoke(() =>
+                    {
+                        BitmapImage bmp = new BitmapImage();
 
-                    HostContext.Api.ShowImage(bmp, ImageOptions.Default);
-                });
+                        bmp.BeginInit();
+                        bmp.StreamSource = ms;
+                        bmp.EndInit();
+
+                        HostContext.Api.ShowImage(bmp, ImageOptions.Default);
+                    });
+                }
             });
         }
     }

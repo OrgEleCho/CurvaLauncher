@@ -49,18 +49,19 @@ namespace CurvaLauncher.Plugins.ZXing
                 using Bitmap bmp = new Bitmap(ms);
 
                 var result = reader.Decode(bmp);
+                var resultText = result?.Text;
 
-                if (result == null)
-                    return;
+                if (resultText == null)
+                    resultText = _plugin.PlaceholderForEmptyResult;
 
                 _plugin.HostContext.Dispatcher.Invoke(() =>
                 {
                     if (!altPressed)
-                        _plugin.HostContext.ClipboardApi.SetText(result.Text);
+                        _plugin.HostContext.ClipboardApi.SetText(resultText);
                     else
-                        _plugin.HostContext.Api.ShowText(result.Text, Apis.TextOptions.Default);
+                        _plugin.HostContext.Api.ShowText(resultText, Apis.TextOptions.Default);
 
-                    if (_plugin.AutoOpenDetectedLink && Uri.TryCreate(result.Text, UriKind.Absolute, out var uri))
+                    if (_plugin.AutoOpenDetectedLink && Uri.TryCreate(resultText, UriKind.Absolute, out var uri))
                         _plugin.HostContext.Api.Open(uri.ToString());
                 });
             });

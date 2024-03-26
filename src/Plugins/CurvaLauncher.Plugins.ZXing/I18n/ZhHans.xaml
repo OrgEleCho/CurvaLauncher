@@ -9,4 +9,5 @@
     <sys:String x:Key="StrOutputImageWidth">输出图片宽度</sys:String>
     <sys:String x:Key="StrOutputImageHeight">输出图片高度</sys:String>
     <sys:String x:Key="StrAutoOpenDetectedLink">自动打开检测到的链接</sys:String>
+    <sys:String x:Key="StrPlaceholderForEmptyResult">空结果的占位符</sys:String>
 </ResourceDictionary>

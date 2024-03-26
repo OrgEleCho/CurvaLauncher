@@ -26,6 +26,9 @@ namespace CurvaLauncher.Plugins.ZXing
         [PluginI18nOption("StrAutoOpenDetectedLink")]
         public bool AutoOpenDetectedLink { get; set; } = false;
 
+        [PluginI18nOption("StrPlaceholderForEmptyResult")]
+        public string PlaceholderForEmptyResult { get; set; } = "[None]";
+
         public override ImageSource Icon { get; }
 
         public override IEnumerable<string> CommandNames

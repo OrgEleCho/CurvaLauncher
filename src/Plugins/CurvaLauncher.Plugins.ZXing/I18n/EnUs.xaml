@@ -9,5 +9,6 @@
     <sys:String x:Key="StrOutputImageWidth">Output image width</sys:String>
     <sys:String x:Key="StrOutputImageHeight">Output image height</sys:String>
     <sys:String x:Key="StrAutoOpenDetectedLink">Auto open detected link</sys:String>
+    <sys:String x:Key="StrPlaceholderForEmptyResult">Placeholder for empty result</sys:String>
     
 </ResourceDictionary>

@@ -9,4 +9,5 @@
     <sys:String x:Key="StrOutputImageWidth">出力画像の幅</sys:String>
     <sys:String x:Key="StrOutputImageHeight">出力画像の高さ</sys:String>
     <sys:String x:Key="StrAutoOpenDetectedLink">検出されたリンクを自動的に開く</sys:String>
+    <sys:String x:Key="StrPlaceholderForEmptyResult">空結果のプレースホルダー</sys:String>
 </ResourceDictionary>
