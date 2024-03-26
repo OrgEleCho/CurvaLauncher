@@ -1,6 +1,6 @@
 <div align="center">
 
-![Icon]([/assets/Icon128.png](https://github.com/Shomnipotence/CurvaLauncher/assets/6630660/41af6f02-d01d-43d4-b2da-b4d983d364bb))
+![Icon](https://github.com/Shomnipotence/CurvaLauncher/assets/6630660/15db0d13-49b9-4dcf-bd9c-4fdf559ddb70)
 
 # CurvaLauncher
 
