@@ -8,4 +8,5 @@
     <sys:String x:Key="StrTranslatorAPI">Translator API</sys:String>
     <sys:String x:Key="StrSourceLanguage">Source language</sys:String>
     <sys:String x:Key="StrTargetLanguage">Target language</sys:String>
+    <sys:String x:Key="StrPlaceholderForEmptyResult">Placeholder for empty result</sys:String>
 </ResourceDictionary>

@@ -49,13 +49,14 @@ namespace CurvaLauncher.Plugins.Translator.Youdao
             var response = await _httpClient.SendAsync(request, cancellationToken);
             var result = await response.Content.ReadFromJsonAsync<YoudaoApiResult>(Converter.Settings, cancellationToken);
 
-            if (result?.Translation != null && result.Translation.Any())
-            {
-                if (!_plugin.HostContext.IsAltKeyPressed())
-                    _plugin.HostContext.ClipboardApi.SetText(result.Translation[0]);
-                else
-                    _plugin.HostContext.Api.ShowText(result.Translation[0], Apis.TextOptions.Default);
-            }
+            var resultText = result?.Translation?.FirstOrDefault();
+            if (string.IsNullOrEmpty(resultText))
+                resultText = _plugin.PlaceholderForEmptyResult;
+
+            if (!_plugin.HostContext.IsAltKeyPressed())
+                _plugin.HostContext.ClipboardApi.SetText(resultText);
+            else
+                _plugin.HostContext.Api.ShowText(resultText, Apis.TextOptions.Default);
         }
     }
 }

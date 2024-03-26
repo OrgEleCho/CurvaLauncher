@@ -8,4 +8,5 @@
     <sys:String x:Key="StrTranslatorAPI">翻译 API</sys:String>
     <sys:String x:Key="StrSourceLanguage">源语言</sys:String>
     <sys:String x:Key="StrTargetLanguage">目标语言</sys:String>
+    <sys:String x:Key="StrPlaceholderForEmptyResult">空结果的占位符</sys:String>
 </ResourceDictionary>

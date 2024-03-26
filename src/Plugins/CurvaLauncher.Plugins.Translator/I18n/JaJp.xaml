@@ -8,4 +8,5 @@
     <sys:String x:Key="StrTranslatorAPI">翻訳機API</sys:String>
     <sys:String x:Key="StrSourceLanguage">元の言語</sys:String>
     <sys:String x:Key="StrTargetLanguage">対象言語</sys:String>
+    <sys:String x:Key="StrPlaceholderForEmptyResult">空結果のプレースホルダー</sys:String>
 </ResourceDictionary>

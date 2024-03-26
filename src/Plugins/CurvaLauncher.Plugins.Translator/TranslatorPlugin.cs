@@ -21,6 +21,9 @@ namespace CurvaLauncher.Plugins.Translator
         [PluginI18nOption("StrTargetLanguage")]
         public string TargetLanguage { get; set; } = "Auto";
 
+        [PluginI18nOption("StrPlaceholderForEmptyResult")]
+        public string PlaceholderForEmptyResult { get; set; } = "[None]";
+
 
         public override IEnumerable<string> CommandNames
         {
