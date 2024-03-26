@@ -84,7 +84,7 @@ public partial class PluginService
             if (config.Plugins.TryGetValue(typeName, out var pluginConfig))
             {
                 var props = pluginInstance.Plugin.GetType().GetProperties()
-                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null 
+                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null
                             || p.GetCustomAttribute<PluginI18nOptionAttribute>() is not null);
 
                 if (pluginConfig.Options != null)
@@ -117,10 +117,24 @@ public partial class PluginService
         }
     }
 
+    private void MoveCommandPluginsToTheBeginning(IList<CurvaLauncherPluginInstance> plugins)
+    {
+        int indexStart = 0;
+        for (int i = 1; i < plugins.Count; i++)
+        {
+            if (plugins[i].Plugin is CommandPlugin)
+            {
+                (plugins[indexStart], plugins[i]) = (plugins[i], plugins[indexStart]);
+                indexStart++;
+            }
+        }
+    }
+
     [RelayCommand]
     public void LoadAllPlugins()
     {
         CoreLoadPlugins(out var plugins);
+        MoveCommandPluginsToTheBeginning(plugins);
 
         PluginInstances.Clear();
         foreach (var plugin in plugins)
