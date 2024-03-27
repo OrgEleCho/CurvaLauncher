@@ -152,4 +152,16 @@ public partial class PluginService
                 await asyncPlugin.InitializeAsync();
         }
     }
+
+    [RelayCommand]
+    public async Task FinishAllPlugins()
+    {
+        foreach (var plugin in PluginInstances.Where(ins => ins.IsEnabled))
+        {
+            if (plugin.Plugin is ISyncPlugin syncPlugin)
+                syncPlugin.Finish();
+            else if (plugin.Plugin is IAsyncPlugin asyncPlugin)
+                await asyncPlugin.FinishAsync();
+        }
+    }
 }

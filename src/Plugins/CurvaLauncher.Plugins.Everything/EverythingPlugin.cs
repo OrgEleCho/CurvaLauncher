@@ -65,5 +65,10 @@ namespace CurvaLauncher.Plugins.Everything
                 weight -= float.Epsilon;
             }
         }
+
+        public override void Finish()
+        {
+            
+        }
     }
 }

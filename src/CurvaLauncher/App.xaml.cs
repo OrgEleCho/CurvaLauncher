@@ -123,6 +123,15 @@ namespace CurvaLauncher
             }
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            _ = App.ServiceProvider
+                .GetRequiredService<PluginService>()
+                .FinishAllPlugins();
+
+            base.OnExit(e);
+        }
+
         private bool EnsureAppSingleton()
         {
             EventWaitHandle singletonEvent =
