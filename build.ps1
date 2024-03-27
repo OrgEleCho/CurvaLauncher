@@ -6,7 +6,7 @@ New-Item -ItemType Directory -Force "build/Plugins" > $null
 
 Write-Output "Building app"
 
-dotnet publish src/CurvaLauncher -c Release -o build -r win-x64 --self-contained false /p:PublishSingleFile=true
+dotnet publish src/CurvaLauncher/CurvaLauncher.csproj -c Release -o build -r win-x64 --self-contained false /p:PublishSingleFile=true
 
 Write-Output "Building plugins"
 
