@@ -40,11 +40,11 @@ namespace CurvaLauncher.Plugins.Everything
         {
             if (_plugin.HostContext.IsAltKeyPressed())
             {
-
+                _plugin.HostContext.Api.ShowPropertiesWindow(_itemFullPath);
             }
             else if (_plugin.HostContext.IsCtrlKeyPressed())
             {
-
+                _plugin.HostContext.Api.ShowInFileExplorer(_itemFullPath);
             }
             else
             {
