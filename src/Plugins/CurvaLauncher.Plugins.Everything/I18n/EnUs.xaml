@@ -2,5 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="StrPluginName">Everything</sys:String>
-    <sys:String x:Key="StrPluginDescription">Use web browser to open URL</sys:String>
+    <sys:String x:Key="StrPluginDescription">Locate files and folders by name instantly.</sys:String>
+    <sys:String x:Key="StrPrefix">Prefix</sys:String>
+    <sys:String x:Key="StrResultMaxCount">Result max count</sys:String>
 </ResourceDictionary>

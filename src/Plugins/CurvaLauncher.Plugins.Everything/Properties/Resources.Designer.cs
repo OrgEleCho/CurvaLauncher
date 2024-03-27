@@ -69,5 +69,14 @@ namespace CurvaLauncher.Plugins.Everything.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;svg t=&quot;1711533357246&quot; class=&quot;icon&quot; viewBox=&quot;0 0 1024 1024&quot; version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; p-id=&quot;3669&quot; width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;path d=&quot;M352.6656 739.1744a378.88 378.88 0 1 0-79.36-79.36l-201.1648 201.0624a56.1664 56.1664 0 1 0 79.4624 79.4112l201.0624-201.1136z m19.1488-515.2256a294.656 294.656 0 1 1 2.2528 423.3216 56.7808 56.7808 0 0 0-8.8576-8.9088 294.656 294.656 0 0 1 6.656-414.4128z&quot; fill=&quot;#FF7C00&quot; p-id=&quot;3670&quot;&gt;&lt;/path&gt;&lt;/svg&gt;.
+        /// </summary>
+        internal static string IconSvg {
+            get {
+                return ResourceManager.GetString("IconSvg", resourceCulture);
+            }
+        }
     }
 }

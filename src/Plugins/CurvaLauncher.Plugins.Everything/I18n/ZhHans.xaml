@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="StrPluginName">打开网址</sys:String>
-    <sys:String x:Key="StrPluginDescription">使用网络浏览器打开网址</sys:String>
+    <sys:String x:Key="StrPluginName">Everything</sys:String>
+    <sys:String x:Key="StrPluginDescription">基于名称快速定位文件和文件夹</sys:String>
+    <sys:String x:Key="StrPrefix">前缀</sys:String>
+    <sys:String x:Key="StrResultMaxCount">结果最大数量</sys:String>
 </ResourceDictionary>

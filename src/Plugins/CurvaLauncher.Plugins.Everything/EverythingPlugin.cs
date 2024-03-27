@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using CurvaLauncher.Plugins.Everything.Properties;
 using EverythingSearchClient;
 
 namespace CurvaLauncher.Plugins.Everything
@@ -13,7 +14,7 @@ namespace CurvaLauncher.Plugins.Everything
     {
         public EverythingPlugin(CurvaLauncherContext context) : base(context)
         {
-            Icon = null!;
+            Icon = context.ImageApi.CreateFromSvg(Resources.IconSvg)!;
         }
 
         public override object NameKey => "StrPluginName";
