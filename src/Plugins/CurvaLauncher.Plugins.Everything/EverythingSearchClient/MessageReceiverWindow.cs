@@ -448,7 +448,7 @@ namespace EverythingSearchClient
 
 				ushort atom = RegisterClassExW(ref wcex);
 				int ec = Marshal.GetLastWin32Error();
-				if (atom == 0)
+				if (ec != 1410 && atom == 0)
 				{
 					throw new Exception($"Failed to register response message-only window class {ec}");
 				}
