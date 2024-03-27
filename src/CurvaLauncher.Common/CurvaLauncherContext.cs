@@ -14,6 +14,10 @@ namespace CurvaLauncher
     public abstract class CurvaLauncherContext
     {
         public abstract Dispatcher Dispatcher { get; }
+
+        /// <summary>
+        /// Required query result icon size
+        /// </summary>
         public abstract int RequiredIconSize { get; }
 
         public abstract CultureInfo CurrentCulture { get; }

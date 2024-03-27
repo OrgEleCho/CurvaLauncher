@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <!--<TargetFrameworks>net7.0-windows;net6.0-windows</TargetFrameworks>-->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Everything Search Client</Title>
+    <Version>0.8.0</Version>
+    <Authors>SGrottel</Authors>
+    <Description>A .NET client library for Voidtools' Everything search engine, without the native Everything SDK dll.</Description>
+    <Copyright>Copyright 2022-2024, by SGrottel</Copyright>
+    <PackageProjectUrl>https://go.grottel.net/EverythingSearchClient</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sgrottel/EverythingSearchClient.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <PackageIcon>MagnifyingGlass_x128.png</PackageIcon>
+    <PackageTags>Voidtools;Everything;Search</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\Images\MagnifyingGlass_x128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\README_nuget.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -67,6 +67,22 @@ namespace CurvaLauncher.Apis
             }
         }
 
+        public ImageSource? GetDefaultFileIcon(int iconSize)
+        {
+            var path = 
+                System.IO.Path.Combine(Environment.GetEnvironmentVariable("SYSTEMROOT") ?? @"C:\Windows", "System32", "imageres.dll");
+
+            return GetEmbededIconImage(path, iconSize, 2);
+        }
+
+        public ImageSource? GetDefaultFolderIcon(int iconSize)
+        {
+            var path =
+                System.IO.Path.Combine(Environment.GetEnvironmentVariable("SYSTEMROOT") ?? @"C:\Windows", "System32", "imageres.dll");
+
+            return GetEmbededIconImage(path, iconSize, 3);
+        }
+
         public ImageSource? CreateFromSvg(string svg)
         {
             try
