@@ -191,7 +191,7 @@ namespace CurvaLauncher
 
             mainWindow.Width = configService.Config.LauncherWidth;
             mainWindow.Left = (SystemParameters.PrimaryScreenWidth - mainWindow.AppConfig.LauncherWidth) / 2;
-            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 3;
+            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 4;
 
             mainWindow.Show();
             mainWindow.Activate();
@@ -209,7 +209,7 @@ namespace CurvaLauncher
 
             mainWindow.Width = configService.Config.LauncherWidth;
             mainWindow.Left = (SystemParameters.PrimaryScreenWidth - mainWindow.AppConfig.LauncherWidth) / 2;
-            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 3;
+            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 4;
 
             mainWindow.Show();
             mainWindow.Activate();
