@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Interop;
+using Accessibility;
 using CurvaLauncher.Utilities;
 using EleCho.GlobalHotkey;
 using EleCho.GlobalHotkey.Windows;
@@ -45,6 +46,8 @@ public class HotkeyService
 
     public bool IsLauncherHotkeyRegistered { get; private set; }
     public string? RegisteredHotkey { get; private set; }
+
+    public Hotkey RegisteredLauncherHotkey => _registeredLauncherHotkey;
 
     public void RegisterLauncherHotkey()
     {

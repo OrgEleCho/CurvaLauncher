@@ -84,9 +84,14 @@ namespace CurvaLauncher.Views.Pages
 
             foreach (var customHotkey in ConfigService.Config.CustomQueryHotkeys)
             {
-                if (!HotkeyUtils.TryParseHotkey(customHotkey.Hotkey, out var modifiers, out var key) ||
-                    !HotkeyService.IsCustomHotkeyRegistered(new EleCho.GlobalHotkey.Hotkey(modifiers, key)))
-                    ViewModel.ErrorHotkeys.Add(customHotkey.Hotkey);
+                if (HotkeyUtils.TryParseHotkey(customHotkey.Hotkey, out var modifiers, out var key))
+                    continue;
+
+                if (HotkeyService.RegisteredLauncherHotkey.Modifier != modifiers ||
+                    HotkeyService.RegisteredLauncherHotkey.Key != key)
+                    continue;
+
+                ViewModel.ErrorHotkeys.Add(customHotkey.Hotkey);
             }
         }
     }
