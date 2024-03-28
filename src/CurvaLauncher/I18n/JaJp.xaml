@@ -16,6 +16,7 @@
     <sys:String x:Key="StrGeneral">一般</sys:String>
     <sys:String x:Key="StrPlugin">プラグイン</sys:String>
     <sys:String x:Key="StrHotkey">ホットキー</sys:String>
+    <sys:String x:Key="StrHotkeyQueryText">ホットキーのクエリテキスト</sys:String>
     <sys:String x:Key="StrAbout">情報</sys:String>
     <sys:String x:Key="StrTheme">テーマ</sys:String>
     <sys:String x:Key="StrLanguage">言語</sys:String>

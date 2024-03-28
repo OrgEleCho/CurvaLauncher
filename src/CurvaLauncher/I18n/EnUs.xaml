@@ -17,6 +17,7 @@
     <sys:String x:Key="StrGeneral">General</sys:String>
     <sys:String x:Key="StrPlugin">Plugin</sys:String>
     <sys:String x:Key="StrHotkey">Hotkey</sys:String>
+    <sys:String x:Key="StrHotkeyQueryText">Hotkey query text</sys:String>
     <sys:String x:Key="StrAbout">About</sys:String>
     <sys:String x:Key="StrTheme">Theme</sys:String>
     <sys:String x:Key="StrLanguage">Language</sys:String>

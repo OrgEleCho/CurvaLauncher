@@ -16,6 +16,7 @@
     <sys:String x:Key="StrGeneral">常規</sys:String>
     <sys:String x:Key="StrPlugin">插件</sys:String>
     <sys:String x:Key="StrHotkey">熱鍵</sys:String>
+    <sys:String x:Key="StrHotkeyQueryText">熱鍵查詢文字</sys:String>
     <sys:String x:Key="StrAbout">關於</sys:String>
     <sys:String x:Key="StrTheme">主題</sys:String>
     <sys:String x:Key="StrLanguage">語言</sys:String>

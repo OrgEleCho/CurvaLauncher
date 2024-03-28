@@ -44,9 +44,11 @@
                                             <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBox MinWidth="120" Text="{Binding Hotkey}"/>
+                                        <ui:TextBox MinWidth="120" Text="{Binding Hotkey}"
+                                                    PlaceholderText="{DynamicResource StrHotkey}"/>
                                         <ui:SymbolIcon Grid.Column="1" Symbol="ArrowRight20"/>
-                                        <TextBox Grid.Column="2" Text="{Binding QueryText}"/>
+                                        <ui:TextBox Grid.Column="2" Text="{Binding QueryText}"
+                                                    PlaceholderText="{DynamicResource StrHotkeyQueryText}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

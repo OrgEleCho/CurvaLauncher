@@ -37,7 +37,14 @@ public partial class AppConfig : ObservableObject
     private AppLanguage _language = AppLanguage.Auto;
 
     [ObservableProperty]
-    private ObservableCollection<QueryHotkey> _customQueryHotkeys = new();
+    private ObservableCollection<QueryHotkey> _customQueryHotkeys = new()
+    {
+        new QueryHotkey()
+        {
+            Hotkey = "Ctrl+Alt+Space",
+            QueryText = ">"
+        }
+    };
 
     [ObservableProperty]
     private Dictionary<string, PluginConfig> _plugins = new();
