@@ -22,6 +22,8 @@ CurvaLauncher is a simple desktop launcher for Windows.
 - Calculate math expressions
 - Get a summary of data
 - Translate texts
+- Search everyting on your PC
+- Detect or generate QR code
 - ...
 
 <br />
@@ -65,6 +67,10 @@ Most of CurvaLauncher's features are available in the form of plugins
   (A space character is required between `>trans` and the text, you can also configure the source and target language or switch translation engine in the settings)
 - Hashing: Input `#` and a hashing method, then type a text or file path to get summary
   (For example, '#md5 123' or '#sha256 C:\Users\OrgEleCho\Desktop\test.txt'. Now support `md5`, `sha1`, `sha256`, `sha384`, `sha512`)
+- Everything: Input `*` and keyword to search everything on your PC.
+  (For example, `*qwq*` will search all folders and files which name contains 'qwq')
+- ZXing: Detect 2D Barcode and QR code or generate QR code.
+  (Input '>zxing' for detecting image in your clipboard, input '>qrcode' for generating QR code and save it to your clipboard) 
 
 <br />
 
@@ -85,6 +91,7 @@ Most of CurvaLauncher's features are available in the form of plugins
 ## Thanks
 
 - [Securify.ShellLink](https://github.com/securifybv/ShellLink/): A .NET Class Library for processing ShellLink (LNK) files
+- [ZXing.NET](https://github.com/micjahn/ZXing.Net): .Net port of the original java-based barcode reader and generator library zxing
 
 <br />
 
