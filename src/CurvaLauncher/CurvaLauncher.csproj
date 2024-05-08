@@ -10,7 +10,7 @@
     
     <StartupObject>CurvaLauncher.EntryPoint</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Icon128.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
 
     <Version>0.6.1-beta</Version>
 
@@ -21,10 +21,6 @@
   <ItemGroup>
     <None Remove="Assets\Icon128.png" />
     <None Remove="Assets\Icon32.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Icon128.ico" />
   </ItemGroup>
 
   <ItemGroup>
