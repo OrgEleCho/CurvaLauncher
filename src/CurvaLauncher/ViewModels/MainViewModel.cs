@@ -73,32 +73,39 @@ public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessa
 
                     await pluginInstance.InitTask;
 
-                    await foreach (var result in pluginInstance.QueryAsync(queryText))
+                    try
                     {
-                        if (cancellationToken.IsCancellationRequested)
-                            return;
-
-                        var model = QueryResultModel.Create(pluginInstance, result);
-                        queryResults.Add(model);
-
-                        dispatcher.Invoke(() =>
+                        await foreach (var result in pluginInstance.QueryAsync(queryText))
                         {
-                            model.SetFallbackIcon(() => pluginInstance.Plugin.Icon);
+                            if (cancellationToken.IsCancellationRequested)
+                                return;
 
-                            for (int i = 0; i < queryResults.Count; i++)
+                            var model = QueryResultModel.Create(pluginInstance, result);
+                            queryResults.Add(model);
+
+                            dispatcher.Invoke(() =>
                             {
-                                if (QueryResults.Count > i)
-                                    QueryResults[i] = queryResults[i];
-                                else
-                                    QueryResults.Add(queryResults[i]);
-                            }
+                                model.SetFallbackIcon(() => pluginInstance.Plugin.Icon);
 
-                            if (SelectedQueryResult == null)
-                                SelectedQueryResultIndex = 0;
-                        });
+                                for (int i = 0; i < queryResults.Count; i++)
+                                {
+                                    if (QueryResults.Count > i)
+                                        QueryResults[i] = queryResults[i];
+                                    else
+                                        QueryResults.Add(queryResults[i]);
+                                }
 
-                        if (cancellationToken.IsCancellationRequested)
-                            return;
+                                if (SelectedQueryResult == null)
+                                    SelectedQueryResultIndex = 0;
+                            });
+
+                            if (cancellationToken.IsCancellationRequested)
+                                return;
+                        }
+                    }
+                    catch
+                    {
+
                     }
                 }
             });
