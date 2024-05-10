@@ -9,5 +9,6 @@
     <sys:String x:Key="StrCustomIndexFolders">Custom index folders</sys:String>
     <sys:String x:Key="StrRegexsForExcludingApps">Regexs for excluding apps</sys:String>
     <sys:String x:Key="StrIgnoreCases">Ignore cases</sys:String>
+    <sys:String x:Key="StrEnableFileNameSearch">Enable file name search</sys:String>
     <sys:String x:Key="StrEnablePinyinSearch">Enable pinyin search</sys:String>
 </ResourceDictionary>

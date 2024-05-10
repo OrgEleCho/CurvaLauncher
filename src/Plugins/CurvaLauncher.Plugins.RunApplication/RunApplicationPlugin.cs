@@ -26,9 +26,13 @@ public class RunApplicationPlugin : AsyncI18nPlugin
     
     [PluginI18nOption("StrIgnoreCases")]
     public bool IgnoreCases { get; set; } = true;
-    
+
+    [PluginI18nOption("StrEnableFileNameSearch")]
+    public bool EnableFileNameSearch { get; set; } = true;
+
     [PluginI18nOption("StrEnablePinyinSearch")]
     public bool EnablePinyinSearch { get; set; } = false;
+
 
     [PluginI18nOption("StrIndexLocations")]
     public IndexLocations IndexLocations { get; set; } =
@@ -163,6 +167,8 @@ public class RunApplicationPlugin : AsyncI18nPlugin
         }
 
 
+        List<string> alterQueryRoots = new();
+
         foreach (var shortcut in allShotcutsInStartMenu)
         {
             if (GetWin32App(shortcut) is Win32AppInfo newApp &&
@@ -173,11 +179,21 @@ public class RunApplicationPlugin : AsyncI18nPlugin
 
                 _apps.Add(newApp);
 
+                alterQueryRoots.Clear();
+
+                if (EnableFileNameSearch)
+                {
+                    alterQueryRoots.Add(System.IO.Path.GetFileNameWithoutExtension(newApp.FilePath));
+                }
+
                 if (EnablePinyinSearch)
                 {
-                    newApp.AlterQueryRoots = _pinyinDictionary!.GetAllPinyins(newApp.Name)
-                        .Select(pinyin => string.Concat(pinyin))
-                        .ToArray();
+                    alterQueryRoots.AddRange(_pinyinDictionary!.GetAllPinyins(newApp.Name).Select(pinyin => string.Concat(pinyin)));
+                }
+
+                if (alterQueryRoots.Count > 0)
+                {
+                    newApp.AlterQueryRoots = alterQueryRoots.ToArray();
                 }
 
                 if (IgnoreCases)

@@ -9,5 +9,6 @@
     <sys:String x:Key="StrCustomFolders">自訂索引資料夾</sys:String>
     <sys:String x:Key="StrRegexsForExcludingApps">排除應用程式的正則表示式</sys:String>
     <sys:String x:Key="StrIgnoreCases">忽略大小寫</sys:String>
+    <sys:String x:Key="StrEnableFileNameSearch">啟用檔名搜尋</sys:String>
     <sys:String x:Key="StrEnablePinyinSearch">啟用拼音搜索</sys:String>
 </ResourceDictionary>

@@ -9,5 +9,6 @@
     <sys:String x:Key="StrCustomIndexFolders">Benutzerdefinierte Indexordner</sys:String>
     <sys:String x:Key="StrRegexsForExcludingApps">Regexs zum Ausschließen von Apps</sys:String>
     <sys:String x:Key="StrIgnoreCases">Groß- und Kleinschreibung ignorieren</sys:String>
+    <sys:String x:Key="StrEnableFileNameSearch">Aktiviere die Dateinamensuche</sys:String>
     <sys:String x:Key="StrEnablePinyinSearch">Pinyin-Suche aktivieren</sys:String>
 </ResourceDictionary>
