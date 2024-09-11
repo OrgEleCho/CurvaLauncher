@@ -99,7 +99,7 @@ public class RunApplicationPlugin : AsyncI18nPlugin
         var ext = Path.GetExtension(target.FileName);
         if (!string.Equals(ext, ".exe", StringComparison.OrdinalIgnoreCase))
             return null;
-        if (!File.Exists(target.FileName))
+        if (!File.Exists(Environment.ExpandEnvironmentVariables(target.FileName)))
             return null;
 
         var name = Path.GetFileNameWithoutExtension(shortcut);

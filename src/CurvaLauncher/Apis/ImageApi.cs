@@ -22,9 +22,6 @@ namespace CurvaLauncher.Apis
 
         public ImageSource? GetEmbededIconImage(string filename, int iconSize, int? iconIndex)
         {
-            if (!File.Exists(filename))
-                return null;
-
             try
             {
                 return FileIconHelper.GetEmbededIconImage(filename, iconSize, iconIndex);
@@ -37,9 +34,6 @@ namespace CurvaLauncher.Apis
 
         public ImageSource? GetAssociatedIconImage(string filename, int iconSize)
         {
-            if (!File.Exists(filename))
-                return null;
-
             try
             {
                 return FileIconHelper.GetAssociatedIconImage(filename, iconSize > 32);
@@ -52,9 +46,6 @@ namespace CurvaLauncher.Apis
 
         public ImageSource? GetFileIcon(string filename, int iconSize)
         {
-            if (!File.Exists(filename))
-                return null;
-
             try
             {
                 return

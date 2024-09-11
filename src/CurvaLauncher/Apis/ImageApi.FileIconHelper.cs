@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System;
+using System.IO;
 
 namespace CurvaLauncher.Apis
 {
@@ -87,6 +88,15 @@ namespace CurvaLauncher.Apis
 
             public static ImageSource? GetEmbededIconImage(string path, int iconSize, int? iconIndex)
             {
+                if (path.Contains('%'))
+                {
+                    path = Environment.ExpandEnvironmentVariables(path);
+                }
+
+                if (!File.Exists(path))
+                {
+                    return null;
+                }
 
                 // https://github.com/CoenraadS/Windows-Control-Panel-Items/
                 // https://gist.github.com/jnm2/79ed8330ceb30dea44793e3aa6c03f5b
@@ -161,6 +171,16 @@ namespace CurvaLauncher.Apis
 
             public static ImageSource? GetAssociatedIconImage(string path, bool large)
             {
+                if (path.Contains('%'))
+                {
+                    path = Environment.ExpandEnvironmentVariables(path);
+                }
+
+                if (!File.Exists(path))
+                {
+                    return null;
+                }
+
                 SHFILEINFO shFileInfo = new();
                 SHGFI flags = SHGFI.Icon;
 
