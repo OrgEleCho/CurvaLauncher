@@ -29,10 +29,25 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     public AppConfig AppConfig { get; }
     public MainViewModel ViewModel { get; }
 
+    private void WindowLoaded(object sender, RoutedEventArgs e)
+    {
+        Wpf.Ui.Appearance.Watcher.Watch(this, BackgroundType.Mica, true);
+
+        Width = AppConfig.LauncherWidth;
+        Left = (SystemParameters.PrimaryScreenWidth - AppConfig.LauncherWidth) / 2;
+        Top = SystemParameters.PrimaryScreenHeight / 4;
+    }
+
     private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
     {
         e.Cancel = true;
         App.CloseLauncher();
+    }
+
+    private void WindowActivated(object sender, EventArgs e)
+    {
+        FocusManager.SetFocusedElement(this, QueryBox);
+        Focus();
     }
 
     private void WindowDeactivated(object sender, EventArgs e)
@@ -41,11 +56,6 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
             return;
 
         App.CloseLauncher();
-    }
-
-    private void UiWindow_Loaded(object sender, RoutedEventArgs e)
-    {
-        Wpf.Ui.Appearance.Watcher.Watch(this, BackgroundType.Mica, true);
     }
 
 

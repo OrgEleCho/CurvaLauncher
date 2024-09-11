@@ -25,7 +25,9 @@
              WindowBackdropType="Mica"
              FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
              TextOptions.TextRenderingMode="ClearType"
+             Loaded="WindowLoaded"
              Closing="WindowClosing"
+             Activated="WindowActivated"
              Deactivated="WindowDeactivated">
 
     <Window.InputBindings>
