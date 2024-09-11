@@ -47,7 +47,7 @@ public class RunApplicationPlugin : AsyncI18nPlugin
     [PluginI18nOption("StrCustomIndexFolders", AllowTextMultiline = true)]
     public string CustomFolders { get; set; } = string.Empty;
 
-    [PluginI18nOption("StrRegexsForExcludingApps")]
+    [PluginI18nOption("StrRegexsForExcludingApps", AllowTextMultiline = true)]
     public string RegexsForExcludingApps { get; set; } = "^[Uu]ninstall";
 
     public override ImageSource Icon { get; }
