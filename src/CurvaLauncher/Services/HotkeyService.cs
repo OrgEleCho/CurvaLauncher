@@ -108,7 +108,7 @@ public class HotkeyService
         return _registeredCustomHotkeys.Contains(hotkey);
     }
 
-    public void Register()
+    public void RegisterAll()
     {
         RegisterLauncherHotkey();
         RegisterCustomHotkeys();

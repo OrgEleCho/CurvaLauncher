@@ -98,7 +98,7 @@ namespace CurvaLauncher
             pluginService.LoadAllPlugins();
 
             // 初始化热键
-            hotkeyService.Register();
+            hotkeyService.RegisterAll();
 
             // 初始化语言
             globalizationService.ApplyLanguage();
@@ -188,10 +188,6 @@ namespace CurvaLauncher
                 ServiceProvider.GetRequiredService<MainWindow>();
             var configService =
                 ServiceProvider.GetRequiredService<ConfigService>();
-
-            mainWindow.Width = configService.Config.LauncherWidth;
-            mainWindow.Left = (SystemParameters.PrimaryScreenWidth - mainWindow.AppConfig.LauncherWidth) / 2;
-            mainWindow.Top = SystemParameters.PrimaryScreenHeight / 4;
 
             mainWindow.Show();
             mainWindow.Activate();
