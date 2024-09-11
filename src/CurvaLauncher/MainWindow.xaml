@@ -8,8 +8,7 @@
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:utils="clr-namespace:CurvaLauncher.Utilities"
              xmlns:models="clr-namespace:CurvaLauncher.Models"
-             xmlns:wpfproxy="clr-namespace:EleCho.WpfUtilities;assembly=EleCho.WpfUtilities.BindingProxy"
-             xmlns:condition="clr-namespace:EleCho.WpfUtilities.ConditionControls;assembly=EleCho.WpfUtilities.ConditionControls"
+             xmlns:ws="https://schemas.elecho.dev/wpfsuite"
              xmlns:tb="http://www.hardcodet.net/taskbar"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
@@ -105,79 +104,77 @@
                         </ui:ProgressRing.LayoutTransform>
                     </ui:ProgressRing>
                 </Grid>
-                <condition:IfControl Condition="{Binding ViewModel.HasQueryResult}">
-                    <condition:IfControl.Then>
-                        <ListView Name="resultBox" Margin="0 5 0 0"  MinHeight="0"
-                                  Height="Auto"
-                                  MaxHeight="{Binding AppConfig.LauncherResultViewHeight}"
-                                  BorderThickness="0"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
-                                  SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
-                                  SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
-                            <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="SelectionChanged">
-                                    <behaviors:InvokeCommandAction Command="{Binding ScrollToSelectedQueryResultCommand}"/>
-                                </behaviors:EventTrigger>
-                            </behaviors:Interaction.Triggers>
-                            <ListView.ItemTemplate>
-                                <DataTemplate DataType="models:QueryResultModel">
-                                    <Border Padding="{DynamicResource QueryResultPaddingThickness}">
-                                        <Border.Resources>
-                                            <wpfproxy:BindingProxy x:Key="Proxy" Data="{Binding}"/>
-                                        </Border.Resources>
-                                        <Button Command="{Binding InvokeCommand}">
-                                            <Button.Template>
-                                                <ControlTemplate TargetType="Button">
-                                                    <ContentPresenter Content="{TemplateBinding Content}"/>
-                                                </ControlTemplate>
-                                            </Button.Template>
+                <ws:ConditionalControl Condition="{Binding ViewModel.HasQueryResult}">
+                    <ListView Name="resultBox" Margin="0 5 0 0"  MinHeight="0"
+                              Height="Auto"
+                              MaxHeight="{Binding AppConfig.LauncherResultViewHeight}"
+                              BorderThickness="0"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                              ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
+                              SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
+                              SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="SelectionChanged">
+                                <behaviors:InvokeCommandAction Command="{Binding ScrollToSelectedQueryResultCommand}"/>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                        <ListView.ItemTemplate>
+                            <DataTemplate DataType="models:QueryResultModel">
+                                <Border Padding="{DynamicResource QueryResultPaddingThickness}">
+                                    <Border.Resources>
+                                        <ws:BindingProxy x:Key="Proxy" Data="{Binding}"/>
+                                    </Border.Resources>
+                                    <Button Command="{Binding InvokeCommand}">
+                                        <Button.Template>
+                                            <ControlTemplate TargetType="Button">
+                                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                                            </ControlTemplate>
+                                        </Button.Template>
 
-                                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="8"/>
-                                                    <ColumnDefinition/>
-                                                </Grid.ColumnDefinitions>
+                                        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="8"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
 
-                                                <Border Width="{DynamicResource QueryResultIconSize}"
-                                                        Height="{DynamicResource QueryResultIconSize}"
-                                                        CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
-                                                    <Border.Background>
-                                                        <ImageBrush Stretch="Uniform"
-                                                                    ImageSource="{Binding Source={StaticResource Proxy}, Path=Data.Icon}"/>
-                                                    </Border.Background>
-                                                </Border>
+                                            <Border Width="{DynamicResource QueryResultIconSize}"
+                                                    Height="{DynamicResource QueryResultIconSize}"
+                                                    CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
+                                                <Border.Background>
+                                                    <ImageBrush Stretch="Uniform"
+                                                                ImageSource="{Binding Source={StaticResource Proxy}, Path=Data.Icon}"/>
+                                                </Border.Background>
+                                            </Border>
 
-                                                <Grid Grid.Column="2">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                    </Grid.RowDefinitions>
-                                                    <TextBlock Text="{Binding Title}"
-                                                               FontSize="{DynamicResource QueryResultTitleTextSize}"
-                                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                                                    <TextBlock Grid.Row="1"
-                                                               TextTrimming="WordEllipsis"
-                                                               Text="{Binding Description}"
-                                                               FontSize="{DynamicResource QueryResultDescriptionTextSize}"
-                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                </Grid>
+                                            <Grid Grid.Column="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Title}"
+                                                           FontSize="{DynamicResource QueryResultTitleTextSize}"
+                                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                <TextBlock Grid.Row="1"
+                                                           TextTrimming="WordEllipsis"
+                                                           Text="{Binding Description}"
+                                                           FontSize="{DynamicResource QueryResultDescriptionTextSize}"
+                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                                             </Grid>
-                                        </Button>
-                                    </Border>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                                    <Setter Property="BorderThickness" Value="0" />
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
-                        </ListView>
-                    </condition:IfControl.Then>
-                </condition:IfControl>
+                                        </Grid>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                    </ListView>
+                </ws:ConditionalControl>
             </StackPanel>
         </Border>
 

@@ -9,6 +9,7 @@
            xmlns:models="clr-namespace:CurvaLauncher.Models"
            xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
            xmlns:converters="clr-namespace:CurvaLauncher.Converters"
+           xmlns:utils="clr-namespace:CurvaLauncher.Utilities"
            mc:Ignorable="d"
            d:DesignHeight="450" d:DesignWidth="800"
            d:Background="White"
@@ -32,7 +33,8 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <ScrollViewer Focusable="False">
+        <ScrollViewer Focusable="False"
+                      utils:ScrollViewerUtils.EnableSmoothScrolling="True">
             <StackPanel Margin="15">
                 <StackPanel Margin="0 0 0 20">
                     <StackPanel Orientation="Horizontal">

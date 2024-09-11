@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
-public class RunWin32ApplicationQueryResult : ISyncQueryResult
+public class RunWin32ApplicationQueryResult : IAsyncQueryResult
 {
 
     private ImageSource? icon;
@@ -49,23 +49,37 @@ public class RunWin32ApplicationQueryResult : ISyncQueryResult
         });
     }
 
-    public void Invoke()
+    public async Task InvokeAsync(CancellationToken cancellationToken)
     {
         try
         {
             var process = Process.Start(
-            new ProcessStartInfo()
-            {
-                FileName = AppInfo.FilePath,
-                Arguments = AppInfo.Arguments,
-                WorkingDirectory = AppInfo.WorkingDirectory ?? Path.GetDirectoryName(AppInfo.FilePath),
-                Verb = AppInfo.IsUAC ? "runas" : null,
-                UseShellExecute = true,
-            });
-        }
-        catch (Exception ex)
-        {
+                new ProcessStartInfo()
+                {
+                    FileName = AppInfo.FilePath,
+                    Arguments = AppInfo.Arguments,
+                    WorkingDirectory = AppInfo.WorkingDirectory ?? Path.GetDirectoryName(AppInfo.FilePath),
+                    Verb = AppInfo.IsUAC ? "runas" : null,
+                    UseShellExecute = true,
+                });
 
+            if (process is null)
+            {
+                return;
+            }
+
+            try
+            {
+                await Task.Run(process.WaitForInputIdle);
+            }
+            catch (InvalidOperationException)
+            {
+                // can not wait process, ignore
+            }
+        }
+        catch (Exception)
+        {
+            // other exception, ignore
         }
     }
 }

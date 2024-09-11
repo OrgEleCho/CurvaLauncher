@@ -7,6 +7,7 @@
            xmlns:root="clr-namespace:CurvaLauncher"
            xmlns:local="clr-namespace:CurvaLauncher.Views.Pages"
            xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+           xmlns:utils="clr-namespace:CurvaLauncher.Utilities"
            mc:Ignorable="d" 
            d:DesignHeight="450" d:DesignWidth="800"
            d:Background="White"
@@ -16,7 +17,8 @@
         <BooleanToVisibilityConverter x:Key="bool2visibility"/>
     </ui:UiPage.Resources>
 
-    <Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                  utils:ScrollViewerUtils.EnableSmoothScrolling="True">
         <StackPanel Margin="10">
             <Grid Margin="0 0 0 20">
                 <Grid.ColumnDefinitions>
@@ -85,5 +87,5 @@
             <ui:Hyperlink Content="{x:Static root:App.RepositoryAddress}"
                           NavigateUri="{x:Static root:App.RepositoryAddress}"/>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </ui:UiPage>
