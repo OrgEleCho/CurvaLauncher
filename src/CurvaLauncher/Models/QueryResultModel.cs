@@ -53,6 +53,10 @@ public partial class QueryResultModel : ObservableObject
     [RelayCommand]
     public async Task Invoke()
     {
+        App.ServiceProvider
+            .GetRequiredService<IMessenger>()
+            .Send(SaveQueryMessage.Instance);
+
         if (_rawQueryResult is ISyncQueryResult syncQueryResult)
         {
             try
@@ -79,10 +83,6 @@ public partial class QueryResultModel : ObservableObject
                 MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        App.ServiceProvider
-            .GetRequiredService<IMessenger>()
-            .Send(SaveQueryMessage.Instance);
 
         App.CloseLauncher();
     }
