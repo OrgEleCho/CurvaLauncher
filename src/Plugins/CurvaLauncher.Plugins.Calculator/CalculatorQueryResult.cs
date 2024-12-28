@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace CurvaLauncher.Plugins.Calculator
 {
-    public class CalculatorQueryResult : ISyncQueryResult
+    public class CalculatorQueryResult : ISyncActionQueryResult
     {
         private readonly CurvaLauncherContext _hostContext;
 

@@ -1,6 +1,6 @@
 ﻿namespace CurvaLauncher;
 
-public interface ISyncQueryResult : IQueryResult
+public interface ISyncActionQueryResult : IQueryResult
 {
     public void Invoke();
 }

@@ -3,7 +3,7 @@ using CurvaLauncher.Apis;
 
 namespace CurvaLauncher.Plugins.QuickWebSearch
 {
-    public class QuickWebSearchQueryResult : ISyncQueryResult
+    public class QuickWebSearchQueryResult : ISyncActionQueryResult
     {
         private readonly CurvaLauncherContext _context;
         private readonly ImageSource? _icon;

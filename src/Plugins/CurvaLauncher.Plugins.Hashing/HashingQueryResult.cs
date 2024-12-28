@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace CurvaLauncher.Plugins.Hashing;
 
-public class HashingQueryResult : IAsyncQueryResult
+public class HashingQueryResult : IAsyncActionQueryResult
 {
     private readonly CurvaLauncherContext _hostContext;
     private readonly IEnumerable<Func<Stream>> _streamFactories;

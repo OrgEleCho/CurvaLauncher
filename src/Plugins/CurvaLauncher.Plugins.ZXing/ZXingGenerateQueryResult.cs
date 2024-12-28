@@ -7,7 +7,7 @@ using ZXing.Windows.Compatibility;
 
 namespace CurvaLauncher.Plugins.ZXing
 {
-    public class ZXingGenerateQueryResult : IAsyncQueryResult
+    public class ZXingGenerateQueryResult : IAsyncActionQueryResult
     {
         public string Title => $"Generate {CodeName}";
 

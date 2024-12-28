@@ -13,7 +13,7 @@ using System.Windows.Media;
 
 namespace CurvaLauncher.Plugins.Translator.MicrosoftEdge
 {
-    public class EdgeTranslationQueryResult : IAsyncQueryResult
+    public class EdgeTranslationQueryResult : IAsyncActionQueryResult
     {
         public string Title => "Translate text";
         public string Description => "Translate specified text with 'MicrosoftEdge'";

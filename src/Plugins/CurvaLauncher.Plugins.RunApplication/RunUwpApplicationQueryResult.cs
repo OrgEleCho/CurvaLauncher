@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
-public class RunUwpApplicationQueryResult : ISyncQueryResult
+public class RunUwpApplicationQueryResult : ISyncActionQueryResult
 {
     public UwpAppInfo AppInfo { get; }
 

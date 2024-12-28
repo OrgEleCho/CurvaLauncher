@@ -5,7 +5,7 @@ using System.Windows.Media;
 
 namespace CurvaLauncher.Plugins.Translator.Youdao
 {
-    public class YoudaoTranslationQueryResult : IAsyncQueryResult
+    public class YoudaoTranslationQueryResult : IAsyncActionQueryResult
     {
         private readonly TranslatorPlugin _plugin;
         private readonly HttpClient _httpClient;

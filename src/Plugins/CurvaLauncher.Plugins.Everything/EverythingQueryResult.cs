@@ -2,7 +2,7 @@
 
 namespace CurvaLauncher.Plugins.Everything
 {
-    public class EverythingQueryResult : ISyncQueryResult
+    public class EverythingQueryResult : ISyncActionQueryResult
     {
         private readonly EverythingPlugin _plugin;
         private readonly EverythingSearchClient.Result.Item _searchResult;

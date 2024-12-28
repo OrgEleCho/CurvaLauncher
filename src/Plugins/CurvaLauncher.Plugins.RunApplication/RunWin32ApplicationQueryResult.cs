@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace CurvaLauncher.Plugins.RunApplication;
 
-public class RunWin32ApplicationQueryResult : IAsyncQueryResult
+public class RunWin32ApplicationQueryResult : IAsyncActionQueryResult
 {
 
     private ImageSource? icon;

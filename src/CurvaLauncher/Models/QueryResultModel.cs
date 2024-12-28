@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -7,6 +8,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using CurvaLauncher.Messages;
+using CurvaLauncher.Models.ImmediateResults;
 using CurvaLauncher.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,14 +52,13 @@ public partial class QueryResultModel : ObservableObject
         }
     }
 
-    [RelayCommand]
-    public async Task Invoke()
+    public async Task<ImmediateResult?> Invoke(CancellationToken cancellationToken)
     {
         App.ServiceProvider
             .GetRequiredService<IMessenger>()
             .Send(SaveQueryMessage.Instance);
 
-        if (_rawQueryResult is ISyncQueryResult syncQueryResult)
+        if (_rawQueryResult is ISyncActionQueryResult syncQueryResult)
         {
             try
             {
@@ -67,8 +68,10 @@ public partial class QueryResultModel : ObservableObject
             {
                 MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            return null;
         }
-        else if (_rawQueryResult is IAsyncQueryResult asyncQueryResult)
+        else if (_rawQueryResult is IAsyncActionQueryResult asyncQueryResult)
         {
             try
             {
@@ -82,9 +85,39 @@ public partial class QueryResultModel : ObservableObject
             {
                 MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            return null;
+        }
+        else if (_rawQueryResult is ISyncDocumentQueryResult syncDocumentQueryResult)
+        {
+            try
+            {
+                return new DocumentResult(syncDocumentQueryResult.GenerateDocument());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return null;
+        }
+        else if (_rawQueryResult is IAsyncDocumentQueryResult asyncDocumentQueryResult)
+        {
+            try
+            {
+                var document = await asyncDocumentQueryResult.GenerateDocumentAsync(cancellationToken);
+                return new DocumentResult(document);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            return null;
         }
 
         App.CloseLauncher();
+        return null;
     }
 
     public static QueryResultModel Create(CurvaLauncherPluginInstance pluginInstance, IQueryResult queryResult)

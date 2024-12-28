@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CurvaLauncher.Plugins.RunProgram
 {
-    public class RunProgramQueryResult : ISyncQueryResult
+    public class RunProgramQueryResult : ISyncActionQueryResult
     {
         public RunProgramQueryResult(CurvaLauncherContext context, string filename, string arguments)
         {

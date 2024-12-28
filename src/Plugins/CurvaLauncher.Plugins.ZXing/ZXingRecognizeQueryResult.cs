@@ -5,7 +5,7 @@ using ZXing;
 
 namespace CurvaLauncher.Plugins.ZXing
 {
-    public class ZXingRecognizeQueryResult : IAsyncQueryResult
+    public class ZXingRecognizeQueryResult : IAsyncActionQueryResult
     {
         private readonly ZXingPlugin _plugin;
 

@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace CurvaLauncher.Plugins.Test
 {
-    public class TestQueryResult : IAsyncQueryResult
+    public class TestQueryResult : IAsyncActionQueryResult
     {
         public TestQueryResult(string title, string description, float weight)
         {
@@ -16,7 +16,7 @@ namespace CurvaLauncher.Plugins.Test
 
         public string Title { get; }
 
-        public string Description {get;}
+        public string Description { get; }
 
         public ImageSource? Icon => null;
 

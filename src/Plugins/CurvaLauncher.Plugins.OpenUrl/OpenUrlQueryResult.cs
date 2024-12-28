@@ -6,7 +6,7 @@ using System.Windows.Threading;
 
 namespace CurvaLauncher.Plugins.OpenUrl
 {
-    public class OpenUrlQueryResult : ISyncQueryResult
+    public class OpenUrlQueryResult : ISyncActionQueryResult
     {
         public OpenUrlQueryResult(CurvaLauncherContext context, Uri url)
         {

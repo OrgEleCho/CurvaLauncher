@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CurvaLauncher.Models;
 using CurvaLauncher.Services;
 using CurvaLauncher.ViewModels;
 using Wpf.Ui.Appearance;
@@ -47,6 +49,7 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     private void WindowActivated(object sender, EventArgs e)
     {
         FocusManager.SetFocusedElement(this, QueryBox);
+        ViewModel.QueryCommand.Execute(null);
         Focus();
     }
 
@@ -54,6 +57,11 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     {
         if (AppConfig.KeepLauncherWhenFocusLost)
             return;
+
+        ViewModel.QueryResults.Clear();
+        ViewModel.SelectedQueryResult = null;
+
+        resultBox.SelectedItem = null;
 
         App.CloseLauncher();
     }
@@ -73,7 +81,17 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     [RelayCommand]
     public void ScrollToSelectedQueryResult()
     {
-        resultBox.ScrollIntoView(resultBox.SelectedItem);
+        if (resultBox.SelectedItem is null ||
+            resultBox.SelectedIndex < 0)
+        {
+            return;
+        }
+
+        try
+        {
+            resultBox.ScrollIntoView(resultBox.SelectedItem);
+        }
+        catch { }
     }
 
     public void SetQueryText(string text)
@@ -81,5 +99,16 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
         QueryBox.Text = text;
         QueryBox.SelectionStart = text.Length;
         QueryBox.SelectionLength = 0;
+    }
+
+    private void ResultBoxItemMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is not ListBoxItem lbi ||
+            lbi.Content is not QueryResultModel queryResult)
+        {
+            return;
+        }
+
+        ViewModel.InvokeCommand.Execute(queryResult);
     }
 }

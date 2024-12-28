@@ -1,6 +1,6 @@
 ﻿namespace CurvaLauncher;
 
-public interface IAsyncQueryResult : IQueryResult
+public interface IAsyncActionQueryResult : IQueryResult
 {
     public Task InvokeAsync(CancellationToken cancellationToken);
 }
