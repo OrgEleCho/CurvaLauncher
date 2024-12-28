@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace CurvaLauncher.Utilities;
 
@@ -35,7 +36,7 @@ public static class NativeMethods
     }
 
     [DllImport("dwmapi.dll", PreserveSig = true)]
-    public static extern int DwmSetWindowAttribute(IntPtr hwnd, DwmWindowAttribute attr, ref int attrValue, int attrSize);
+    public static extern int DwmSetWindowAttribute(IntPtr hWnd, DwmWindowAttribute attr, ref int attrValue, int attrSize);
 
     public static bool EnableDarkModeForWindow(IntPtr hWnd, bool enable)
     {
@@ -45,9 +46,15 @@ public static class NativeMethods
     }
 
 
-    [DllImport("User32.dll", EntryPoint = "MessageBoxW",
-               ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
-    public extern static MessageBoxResult MessageBox(IntPtr hwnd, string text, string caption, MessageBoxFlags flags);
+    [DllImport("User32.dll", EntryPoint = "MessageBoxW", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
+    public extern static MessageBoxResult MessageBox(IntPtr hWnd, string text, string caption, MessageBoxFlags flags);
+
+
+    [DllImport("User32.dll", EntryPoint = "GetWindowRect", ExactSpelling = true)]
+    public extern static bool GetWindowRect(IntPtr hWnd, out Rect rect);
+
+    [DllImport("User32.dll", EntryPoint = "SetWindowPos", ExactSpelling = true)]
+    public extern static bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint flags);
 }
 
 public enum MessageBoxResult : int
@@ -101,4 +108,15 @@ public enum MessageBoxFlags : uint
     SetForeground       = 0x10000,
     Topmost             = 0x40000,
     ServiceNotification = 0x200000,
+}
+
+public struct Rect
+{
+    public int Left;
+    public int Top;
+    public int Right;
+    public int Bottom;
+
+    public int Width => Right - Left;
+    public int Height => Bottom - Top;
 }

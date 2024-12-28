@@ -2,10 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Models;
 using CurvaLauncher.Services;
+using CurvaLauncher.Utilities;
 using CurvaLauncher.ViewModels;
 using Wpf.Ui.Appearance;
 
@@ -17,6 +20,8 @@ namespace CurvaLauncher;
 [ObservableObject]
 public partial class MainWindow : Wpf.Ui.Controls.UiWindow
 {
+    private bool _firstShow = true;
+
     public MainWindow(
         MainViewModel viewModel,
         ConfigService configService)
@@ -31,13 +36,46 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     public AppConfig AppConfig { get; }
     public MainViewModel ViewModel { get; }
 
+    private void InitializeWindowRect()
+    {
+        var targetScreen = System.Windows.Forms.Screen.PrimaryScreen;
+
+        if (AppConfig.WindowStartupScreen == WindowStartupScreen.ScreenWithMouse)
+        {
+            var drawingMousePosition = System.Windows.Forms.Control.MousePosition;
+
+            foreach (var screen in System.Windows.Forms.Screen.AllScreens)
+            {
+                if (screen.WorkingArea.Contains(drawingMousePosition))
+                {
+                    targetScreen = screen;
+                    break;
+                }
+            }
+        }
+
+        if (targetScreen is null)
+        {
+            return;
+        }
+
+        var windowInteropHelper = new WindowInteropHelper(this);
+        var pixelLauncherWidth = (int)(AppConfig.LauncherWidth * VisualTreeHelper.GetDpi(this).DpiScaleX);
+
+        NativeMethods.GetWindowRect(windowInteropHelper.Handle, out var windowRect);
+        NativeMethods.SetWindowPos(windowInteropHelper.Handle, 0,
+            targetScreen.WorkingArea.Left + (targetScreen.WorkingArea.Width - pixelLauncherWidth) / 2,
+            targetScreen.WorkingArea.Top + (targetScreen.WorkingArea.Height / 4),
+            pixelLauncherWidth,
+            windowRect.Height,
+            0x0001);
+    }
+
     private void WindowLoaded(object sender, RoutedEventArgs e)
     {
         Wpf.Ui.Appearance.Watcher.Watch(this, BackgroundType.Mica, true);
 
-        Width = AppConfig.LauncherWidth;
-        Left = (SystemParameters.PrimaryScreenWidth - AppConfig.LauncherWidth) / 2;
-        Top = SystemParameters.PrimaryScreenHeight / 4;
+        InitializeWindowRect();
     }
 
     private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -120,7 +158,13 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     {
         if (IsVisible)
         {
+            if (!_firstShow)
+            {
+                InitializeWindowRect();
+            }
+
             ViewModel.QueryCommand.Execute(null);
+            _firstShow = false;
         }
     }
 }

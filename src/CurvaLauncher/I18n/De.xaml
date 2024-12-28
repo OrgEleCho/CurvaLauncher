@@ -13,6 +13,7 @@
     <sys:String x:Key="StrCheck">Überprüfen</sys:String>
     <sys:String x:Key="StrTips">Tipps</sys:String>
     <sys:String x:Key="StrApply">Übernehmen</sys:String>
+    <sys:String x:Key="StrOK">OK</sys:String>
     <sys:String x:Key="StrSave">Speichern</sys:String>
     <sys:String x:Key="StrGeneral">Allgemein</sys:String>
     <sys:String x:Key="StrPlugin">Plugin</sys:String>
@@ -31,6 +32,7 @@
 
     <!--SettingsGeneralPage-->
     <sys:String x:Key="StrLauncherHotkey">Tastenkombination für Launcher</sys:String>
+    <sys:String x:Key="StrWindowStartupScreen">Startbildschirm des Fensters</sys:String>
     <sys:String x:Key="StrNotRegistered">Nicht registriert</sys:String>
     <sys:String x:Key="StrInvalidHotkey">Ungültige Tastenkombination</sys:String>
     <sys:String x:Key="StrLauncherWidth">Breite des Launchers</sys:String>

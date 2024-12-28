@@ -12,6 +12,7 @@
     <sys:String x:Key="StrCheck">チェック</sys:String>
     <sys:String x:Key="StrTips">ヒント</sys:String>
     <sys:String x:Key="StrApply">適用</sys:String>
+    <sys:String x:Key="StrOK">OK</sys:String>
     <sys:String x:Key="StrSave">保存</sys:String>
     <sys:String x:Key="StrGeneral">一般</sys:String>
     <sys:String x:Key="StrPlugin">プラグイン</sys:String>
@@ -26,6 +27,7 @@
     <sys:String x:Key="StrExitLauncher">ランチャーを終了する</sys:String>
 
     <sys:String x:Key="StrLauncherHotkey">ランチャーホットキー</sys:String>
+    <sys:String x:Key="StrWindowStartupScreen">ウィンドウの起動画面</sys:String>
     <sys:String x:Key="StrNotRegistered">登録されていません</sys:String>
     <sys:String x:Key="StrInvalidHotkey">無効なホットキー</sys:String>
     <sys:String x:Key="StrLauncherWidth">ランチャーの幅</sys:String>

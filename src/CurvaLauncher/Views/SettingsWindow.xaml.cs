@@ -67,12 +67,19 @@ public partial class SettingsWindow : Wpf.Ui.Controls.UiWindow
     [RelayCommand]
     public void CloseSettings()
     {
-        Hide();
+        Close();
     }
 
     [RelayCommand]
-    public void SaveSettings()
+    public void ApplySettings()
     {
         ConfigService.Save();
+    }
+
+    [RelayCommand]
+    public void ApplyAndCloseSettings()
+    {
+        ConfigService.Save();
+        Close();
     }
 }

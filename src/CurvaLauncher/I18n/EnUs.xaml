@@ -13,6 +13,7 @@
     <sys:String x:Key="StrCheck">Check</sys:String>
     <sys:String x:Key="StrTips">Tips</sys:String>
     <sys:String x:Key="StrApply">Apply</sys:String>
+    <sys:String x:Key="StrOK">OK</sys:String>
     <sys:String x:Key="StrSave">Save</sys:String>
     <sys:String x:Key="StrGeneral">General</sys:String>
     <sys:String x:Key="StrPlugin">Plugin</sys:String>
@@ -31,6 +32,7 @@
 
     <!--SettingsGeneralPage-->
     <sys:String x:Key="StrLauncherHotkey">Launcher hotkey</sys:String>
+    <sys:String x:Key="StrWindowStartupScreen">Window startup screen</sys:String>
     <sys:String x:Key="StrNotRegistered">Not registered</sys:String>
     <sys:String x:Key="StrInvalidHotkey">Invalid hotkey</sys:String>
     <sys:String x:Key="StrLauncherWidth">Launcher width</sys:String>

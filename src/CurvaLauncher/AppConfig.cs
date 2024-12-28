@@ -37,6 +37,9 @@ public partial class AppConfig : ObservableObject
     private AppLanguage _language = AppLanguage.Auto;
 
     [ObservableProperty]
+    private WindowStartupScreen _windowStartupScreen = WindowStartupScreen.PrimaryScreen;
+
+    [ObservableProperty]
     private ObservableCollection<QueryHotkey> _customQueryHotkeys = new()
     {
         new QueryHotkey()
@@ -56,6 +59,7 @@ public partial class AppConfig : ObservableObject
 
     public static IReadOnlyCollection<AppTheme> AvailableThemes { get; } = [AppTheme.Auto, AppTheme.Light, AppTheme.Dark];
     public static IReadOnlyCollection<AppLanguage> AvailableLanguages { get; } = Enum.GetValues<AppLanguage>();
+    public static IReadOnlyCollection<WindowStartupScreen> AvailableWindowStartupScreens { get; } = Enum.GetValues<WindowStartupScreen>();
 
 
     public partial class PluginConfig : ObservableObject

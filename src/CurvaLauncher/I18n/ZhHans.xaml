@@ -13,6 +13,7 @@
     <sys:String x:Key="StrCheck">检查</sys:String>
     <sys:String x:Key="StrTips">提示</sys:String>
     <sys:String x:Key="StrApply">应用</sys:String>
+    <sys:String x:Key="StrOK">确定</sys:String>
     <sys:String x:Key="StrSave">保存</sys:String>
     <sys:String x:Key="StrGeneral">常规</sys:String>
     <sys:String x:Key="StrPlugin">插件</sys:String>
@@ -31,6 +32,7 @@
 
     <!--SettingsGeneralPage-->
     <sys:String x:Key="StrLauncherHotkey">启动器热键</sys:String>
+    <sys:String x:Key="StrWindowStartupScreen">窗口启动屏幕</sys:String>
     <sys:String x:Key="StrNotRegistered">未注册</sys:String>
     <sys:String x:Key="StrInvalidHotkey">无效热键</sys:String>
     <sys:String x:Key="StrLauncherWidth">启动器宽度</sys:String>

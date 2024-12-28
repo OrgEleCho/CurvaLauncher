@@ -12,6 +12,7 @@
     <sys:String x:Key="StrCheck">檢查</sys:String>
     <sys:String x:Key="StrTips">提示</sys:String>
     <sys:String x:Key="StrApply">套用</sys:String>
+    <sys:String x:Key="StrOK">確定</sys:String>
     <sys:String x:Key="StrSave">儲存</sys:String>
     <sys:String x:Key="StrGeneral">常規</sys:String>
     <sys:String x:Key="StrPlugin">插件</sys:String>
@@ -26,6 +27,7 @@
     <sys:String x:Key="StrExitLauncher">退出啟動器</sys:String>
 
     <sys:String x:Key="StrLauncherHotkey">啟動器熱鍵</sys:String>
+    <sys:String x:Key="StrWindowStartupScreen">視窗啟動畫面</sys:String>
     <sys:String x:Key="StrNotRegistered">未註冊</sys:String>
     <sys:String x:Key="StrInvalidHotkey">無效熱鍵</sys:String>
     <sys:String x:Key="StrLauncherWidth">啟動器寬度</sys:String>

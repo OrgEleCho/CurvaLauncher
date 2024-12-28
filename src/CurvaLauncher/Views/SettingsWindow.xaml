@@ -38,7 +38,7 @@
                         </Style>
                     </StackPanel.Resources>
                     <ui:Button Content="{DynamicResource StrExitLauncher}" Command="{x:Static root:App.ShutdownCommand}"/>
-                    <ui:Button Content="{DynamicResource StrSave}" Command="{Binding SaveSettingsCommand}" Appearance="Primary"/>
+                    <ui:Button Content="{DynamicResource StrOK}" Command="{Binding ApplyAndCloseSettingsCommand}" Appearance="Primary"/>
                 </StackPanel>
             </Border>
 
