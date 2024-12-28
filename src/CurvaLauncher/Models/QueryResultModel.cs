@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -26,6 +27,11 @@ public partial class QueryResultModel : ObservableObject
         _rawQueryResult = rawQueryResult;
         _icon = rawQueryResult.Icon;
 
+        if (rawQueryResult is IQueryResultWithPreview queryResultWithPreview)
+        {
+            Preview = queryResultWithPreview.GeneratePreview();
+        }
+
         SetupFallbackIcon(() => pluginInstance.Plugin.Icon);
     }
 
@@ -34,7 +40,9 @@ public partial class QueryResultModel : ObservableObject
     public float Weight => _pluginInstance.Weight * _rawQueryResult.Weight;
     public string Title => _rawQueryResult.Title;
     public string Description => _rawQueryResult.Description;
+    public bool HasPreview => Preview is not null;
     public ImageSource? Icon => _icon;
+    public FlowDocument? Preview { get; }
 
     private void SetupFallbackIcon(Func<ImageSource> iconFactory)
     {

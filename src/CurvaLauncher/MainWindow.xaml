@@ -196,73 +196,96 @@
                                 Content="{Binding ViewModel.CurrentImmediateResult}">
                     <ContentControl.Resources>
                         <DataTemplate DataType="{x:Type models_imr:MenuResult}">
-                            <ListView Name="MenuResultBox" Margin="0 5 0 0"  MinHeight="0"
-                                      Height="Auto"
-                                      MaxHeight="{Binding Source={StaticResource AppConfigProxy},Path=Data.LauncherResultViewHeight}"
-                                      BorderThickness="0"
-                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                      ItemsSource="{Binding Items}" d:ItemsSource="{d:SampleData ItemCount=5}"
-                                      SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
-                                      SelectedIndex="{Binding SelectedIndex}">
-                                <behaviors:Interaction.Triggers>
-                                    <behaviors:EventTrigger EventName="SelectionChanged">
-                                        <behaviors:InvokeCommandAction Command="{Binding Source={StaticResource WindowProxy},Path=Data.ScrollToSelectedItemCommand}"
-                                                                       CommandParameter="{x:Reference Name=MenuResultBox}"/>
-                                    </behaviors:EventTrigger>
-                                </behaviors:Interaction.Triggers>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate DataType="models:QueryResultModel">
-                                        <Border Padding="{DynamicResource QueryResultPaddingThickness}">
-                                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="8"/>
-                                                    <ColumnDefinition/>
-                                                </Grid.ColumnDefinitions>
+                            <Grid Margin="0 5 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="{Binding PreviewPaneWidth}"/>
+                                </Grid.ColumnDefinitions>
 
-                                                <Border Width="{DynamicResource QueryResultIconSize}"
-                                                        Height="{DynamicResource QueryResultIconSize}"
-                                                        CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
-                                                    <Border.Background>
-                                                        <ImageBrush Stretch="Uniform"
-                                                                    ImageSource="{Binding Icon}"/>
-                                                    </Border.Background>
-                                                </Border>
+                                <ListView Name="MenuResultBox" 
+                                          MinHeight="0"
+                                          Height="Auto"
+                                          MaxHeight="{Binding Source={StaticResource AppConfigProxy},Path=Data.LauncherResultViewHeight}"
+                                          BorderThickness="0"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                          ItemsSource="{Binding Items}" d:ItemsSource="{d:SampleData ItemCount=5}"
+                                          SelectedItem="{Binding SelectedItem,Mode=OneWayToSource}"
+                                          SelectedIndex="{Binding SelectedIndex}">
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="SelectionChanged">
+                                            <behaviors:InvokeCommandAction Command="{Binding Source={StaticResource WindowProxy},Path=Data.ScrollToSelectedItemCommand}"
+                                                                           CommandParameter="{x:Reference Name=MenuResultBox}"/>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate DataType="models:QueryResultModel">
+                                            <Border Padding="{DynamicResource QueryResultPaddingThickness}">
+                                                <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="8"/>
+                                                        <ColumnDefinition/>
+                                                    </Grid.ColumnDefinitions>
 
-                                                <Grid Grid.Column="2">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition/>
-                                                        <RowDefinition/>
-                                                    </Grid.RowDefinitions>
-                                                    <TextBlock Text="{Binding Title}"
-                                                               FontSize="{DynamicResource QueryResultTitleTextSize}"
-                                                               Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                                                    <TextBlock Grid.Row="1"
-                                                               TextTrimming="WordEllipsis"
-                                                               Text="{Binding Description}"
-                                                               FontSize="{DynamicResource QueryResultDescriptionTextSize}"
-                                                               Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    <Border Width="{DynamicResource QueryResultIconSize}"
+                                                            Height="{DynamicResource QueryResultIconSize}"
+                                                            CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
+                                                        <Border.Background>
+                                                            <ImageBrush Stretch="Uniform"
+                                                                        ImageSource="{Binding Icon}"/>
+                                                        </Border.Background>
+                                                    </Border>
+
+                                                    <Grid Grid.Column="2">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition/>
+                                                            <RowDefinition/>
+                                                        </Grid.RowDefinitions>
+                                                        <TextBlock Text="{Binding Title}"
+                                                                   FontSize="{DynamicResource QueryResultTitleTextSize}"
+                                                                   Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                        <TextBlock Grid.Row="1"
+                                                                   TextTrimming="WordEllipsis"
+                                                                   Text="{Binding Description}"
+                                                                   FontSize="{DynamicResource QueryResultDescriptionTextSize}"
+                                                                   Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                    </Grid>
                                                 </Grid>
-                                            </Grid>
-                                        </Border>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                                        <Setter Property="BorderThickness" Value="0" />
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                        <EventSetter Event="PreviewMouseDown"
-                                                     Handler="ResultBoxItemMouseDown"/>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                            </ListView>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                            <Setter Property="BorderThickness" Value="0" />
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            <EventSetter Event="PreviewMouseDown"
+                                                         Handler="ResultBoxItemMouseDown"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                </ListView>
+
+                                <Grid Grid.Column="1">
+                                    <GridSplitter VerticalAlignment="Stretch"
+                                                  HorizontalAlignment="Left"
+                                                  Background="Transparent"
+                                                  Width="3"/>
+                                    <Rectangle VerticalAlignment="Stretch"
+                                               HorizontalAlignment="Left"
+                                               Fill="#80777777"
+                                               Width="1"
+                                               Margin="1 0"/>
+                                    <Border Margin="3 0 0 0">
+                                        <FlowDocumentScrollViewer Document="{Binding SelectedItem.Preview}"/>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type models_imr:DocumentResult}">
                             <FlowDocumentScrollViewer Document="{Binding Document}"
-                                                      MinHeight="{Binding Source={StaticResource AppConfigProxy},Path=Data.LauncherResultViewHeight}">
-
-                            </FlowDocumentScrollViewer>
+                                                      FontFamily="Microsoft Yahei"
+                                                      MinHeight="{Binding Source={StaticResource AppConfigProxy},Path=Data.LauncherResultViewHeight}"/>
                         </DataTemplate>
                     </ContentControl.Resources>
                 </ContentControl>

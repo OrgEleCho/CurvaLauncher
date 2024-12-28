@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace CurvaLauncher.Plugins.Test
 {
@@ -16,6 +17,16 @@ namespace CurvaLauncher.Plugins.Test
         {
             yield return new TestQueryResult("Show test message box", string.Empty, 1);
             yield return new TestDocumentQueryResult();
+            yield return new TestQueryResultWithPreview("Show test message box", string.Empty, 1, new System.Windows.Documents.FlowDocument()
+            {
+                Blocks =
+                {
+                    new Paragraph(new Run("QWQ"))
+                    {
+                        FontSize = 22,
+                    }
+                }
+            });
         }
     }
 }

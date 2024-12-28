@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace CurvaLauncher.Models.ImmediateResults
@@ -10,7 +11,22 @@ namespace CurvaLauncher.Models.ImmediateResults
         private int _selectedIndex;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(PreviewPaneWidth))]
         private QueryResultModel? _selectedItem;
+
+        public GridLength PreviewPaneWidth
+        {
+            get
+            {
+                if (SelectedItem is null ||
+                    !SelectedItem.HasPreview)
+                {
+                    return new GridLength(0);
+                }
+
+                return new GridLength(2, GridUnitType.Star);
+            }
+        }
 
         public IReadOnlyList<QueryResultModel> Items { get; }
 

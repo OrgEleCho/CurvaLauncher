@@ -1,15 +1,19 @@
 ﻿using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace CurvaLauncher.Plugins.Test
 {
-    public class TestQueryResult : IAsyncActionQueryResult
+    public class TestQueryResultWithPreview : IAsyncActionQueryResult, IQueryResultWithPreview
     {
-        public TestQueryResult(string title, string description, float weight)
+        private readonly FlowDocument _preview;
+
+        public TestQueryResultWithPreview(string title, string description, float weight, FlowDocument preview)
         {
             Title = title;
             Description = description;
             Weight = weight;
+            this._preview = preview;
         }
 
         public float Weight { get; }
@@ -19,6 +23,8 @@ namespace CurvaLauncher.Plugins.Test
         public string Description { get; }
 
         public ImageSource? Icon => null;
+
+        public FlowDocument GeneratePreview() => _preview;
 
         public async Task InvokeAsync(CancellationToken cancellationToken)
         {
