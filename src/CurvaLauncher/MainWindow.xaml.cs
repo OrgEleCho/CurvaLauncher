@@ -46,13 +46,6 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
         App.CloseLauncher();
     }
 
-    private void WindowActivated(object sender, EventArgs e)
-    {
-        FocusManager.SetFocusedElement(this, QueryBox);
-        ViewModel.QueryCommand.Execute(null);
-        Focus();
-    }
-
     private void WindowDeactivated(object sender, EventArgs e)
     {
         if (AppConfig.KeepLauncherWhenFocusLost)
@@ -121,5 +114,13 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
         }
 
         ViewModel.InvokeCommand.Execute(queryResult);
+    }
+
+    private void WindowIsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+    {
+        if (IsVisible)
+        {
+            ViewModel.QueryCommand.Execute(null);
+        }
     }
 }

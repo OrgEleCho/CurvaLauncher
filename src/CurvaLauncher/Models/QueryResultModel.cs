@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -30,6 +31,17 @@ public partial class QueryResultModel : ObservableObject
         if (rawQueryResult is IQueryResultWithPreview queryResultWithPreview)
         {
             Preview = queryResultWithPreview.GeneratePreview();
+
+            if (Preview is not null &&
+                App.Current.MainWindow is not null)
+            {
+                var fontFamilyLocalValue = Preview.ReadLocalValue(FlowDocument.FontFamilyProperty);
+                if (fontFamilyLocalValue == DependencyProperty.UnsetValue ||
+                    fontFamilyLocalValue == Binding.DoNothing)
+                {
+                    Preview.FontFamily = App.Current.MainWindow.FontFamily;
+                }
+            }
         }
 
         SetupFallbackIcon(() => pluginInstance.Plugin.Icon);

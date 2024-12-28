@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -28,10 +29,14 @@ public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessa
     private string _queryText = string.Empty;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PreviewPaneWidth))]
     private QueryResultModel? _selectedQueryResult;
 
     [ObservableProperty]
     private int _selectedQueryResultIndex = 0;
+
+    public GridLength PreviewPaneWidth => 
+        _selectedQueryResult is not null && _selectedQueryResult.HasPreview ? new GridLength(2, GridUnitType.Star) : new GridLength(0);
 
     public ObservableCollection<QueryResultModel> QueryResults { get; } = new();
     public ObservableCollection<ImmediateResult> ImmediateResults { get; } = new();

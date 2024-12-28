@@ -14,7 +14,8 @@
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=local:MainWindow}"
-             Title="CurvaLauncher" d:Width="800"
+             Title="CurvaLauncher" 
+             d:Width="800"
              Width="{Binding AppConfig.LauncherWidth,Mode=OneWay}"
              Height="Auto" MinHeight="0"
              ResizeMode="NoResize"
@@ -25,9 +26,9 @@
              WindowBackdropType="Mica"
              FocusManager.FocusedElement="{Binding ElementName=QueryBox}"
              TextOptions.TextRenderingMode="ClearType"
+             IsVisibleChanged="WindowIsVisibleChanged"
              Loaded="WindowLoaded"
              Closing="WindowClosing"
-             Activated="WindowActivated"
              Deactivated="WindowDeactivated">
 
     <Window.InputBindings>
@@ -129,67 +130,92 @@
                 </Grid>
 
                 <ws:ConditionalControl Condition="{Binding ViewModel.ShowQueryResult}">
-                    <ListView Name="ResultBox" Margin="0 5 0 0"  MinHeight="0"
-                              Height="Auto"
-                              MaxHeight="{Binding AppConfig.LauncherResultViewHeight}"
-                              BorderThickness="0"
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ScrollViewer.VerticalScrollBarVisibility="Auto"
-                              ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
-                              SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
-                              SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="SelectionChanged">
-                                <behaviors:InvokeCommandAction Command="{Binding ScrollToSelectedItemCommand}"
-                                                               CommandParameter="{x:Reference Name=ResultBox}"/>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                        <ListView.ItemTemplate>
-                            <DataTemplate DataType="models:QueryResultModel">
-                                <Border Padding="{DynamicResource QueryResultPaddingThickness}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="8"/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
+                    <Grid Margin="0 5 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"
+                                              MinWidth="100"/>
+                            <ColumnDefinition Width="{Binding ViewModel.PreviewPaneWidth}"/>
+                        </Grid.ColumnDefinitions>
 
-                                        <Border Width="{DynamicResource QueryResultIconSize}"
-                                                Height="{DynamicResource QueryResultIconSize}"
-                                                CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
-                                            <Border.Background>
-                                                <ImageBrush Stretch="Uniform"
-                                                            ImageSource="{Binding Icon}"/>
-                                            </Border.Background>
-                                        </Border>
+                        <ListView Name="ResultBox" MinHeight="0"
+                                  Height="Auto"
+                                  MaxHeight="{Binding AppConfig.LauncherResultViewHeight}"
+                                  BorderThickness="0"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                  ItemsSource="{Binding ViewModel.QueryResults}" d:ItemsSource="{d:SampleData ItemCount=5}"
+                                  SelectedItem="{Binding ViewModel.SelectedQueryResult,Mode=OneWayToSource}"
+                                  SelectedIndex="{Binding ViewModel.SelectedQueryResultIndex}">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="SelectionChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding ScrollToSelectedItemCommand}"
+                                                                   CommandParameter="{x:Reference Name=ResultBox}"/>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <ListView.ItemTemplate>
+                                <DataTemplate DataType="models:QueryResultModel">
+                                    <Border Padding="{DynamicResource QueryResultPaddingThickness}">
+                                        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="8"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Grid Grid.Column="2">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Title}"
-                                                       FontSize="{DynamicResource QueryResultTitleTextSize}"
-                                                       Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
-                                            <TextBlock Grid.Row="1"
-                                                       TextTrimming="WordEllipsis"
-                                                       Text="{Binding Description}"
-                                                       FontSize="{DynamicResource QueryResultDescriptionTextSize}"
-                                                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                            <Border Width="{DynamicResource QueryResultIconSize}"
+                                                    Height="{DynamicResource QueryResultIconSize}"
+                                                    CornerRadius="{DynamicResource QueryResultIconCornerRadius}">
+                                                <Border.Background>
+                                                    <ImageBrush Stretch="Uniform"
+                                                                ImageSource="{Binding Icon}"/>
+                                                </Border.Background>
+                                            </Border>
+
+                                            <Grid Grid.Column="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{Binding Title}"
+                                                           FontSize="{DynamicResource QueryResultTitleTextSize}"
+                                                           Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                <TextBlock Grid.Row="1"
+                                                           TextTrimming="WordEllipsis"
+                                                           Text="{Binding Description}"
+                                                           FontSize="{DynamicResource QueryResultDescriptionTextSize}"
+                                                           Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
-                                <Setter Property="BorderThickness" Value="0" />
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                <EventSetter Event="PreviewMouseDown"
-                                             Handler="ResultBoxItemMouseDown"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                    </ListView>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListViewItem}}">
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <EventSetter Event="PreviewMouseDown"
+                                                 Handler="ResultBoxItemMouseDown"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+
+                        <GridSplitter Grid.Column="1"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Left"
+                                      Background="Transparent"
+                                      Width="3"/>
+                        <Rectangle Grid.Column="1"
+                                   VerticalAlignment="Stretch"
+                                   HorizontalAlignment="Left"
+                                   Fill="#80777777"
+                                   Width="1"
+                                   Margin="1 0"/>
+                        <Border Grid.Column="1"
+                                Margin="3 0 0 0"
+                                Visibility="{Binding ViewModel.SelectedQueryResult.HasPreview,Converter={StaticResource bool2visibility}}">
+                            <FlowDocumentScrollViewer Document="{Binding ViewModel.SelectedQueryResult.Preview}"/>
+                        </Border>
+                    </Grid>
                 </ws:ConditionalControl>
 
                 <ContentControl Visibility="{Binding ViewModel.ShowImmediateResults,Converter={StaticResource bool2visibility}}"
@@ -198,11 +224,12 @@
                         <DataTemplate DataType="{x:Type models_imr:MenuResult}">
                             <Grid Margin="0 5 0 0">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="1*"
+                                                      MinWidth="100"/>
                                     <ColumnDefinition Width="{Binding PreviewPaneWidth}"/>
                                 </Grid.ColumnDefinitions>
 
-                                <ListView Name="MenuResultBox" 
+                                <ListView Name="MenuResultBox"
                                           MinHeight="0"
                                           Height="Auto"
                                           MaxHeight="{Binding Source={StaticResource AppConfigProxy},Path=Data.LauncherResultViewHeight}"
@@ -265,20 +292,22 @@
                                     </ListView.ItemContainerStyle>
                                 </ListView>
 
-                                <Grid Grid.Column="1">
-                                    <GridSplitter VerticalAlignment="Stretch"
-                                                  HorizontalAlignment="Left"
-                                                  Background="Transparent"
-                                                  Width="3"/>
-                                    <Rectangle VerticalAlignment="Stretch"
-                                               HorizontalAlignment="Left"
-                                               Fill="#80777777"
-                                               Width="1"
-                                               Margin="1 0"/>
-                                    <Border Margin="3 0 0 0">
-                                        <FlowDocumentScrollViewer Document="{Binding SelectedItem.Preview}"/>
-                                    </Border>
-                                </Grid>
+                                <GridSplitter Grid.Column="1"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalAlignment="Left"
+                                              Background="Transparent"
+                                              Width="3"/>
+                                <Rectangle Grid.Column="1"
+                                           VerticalAlignment="Stretch"
+                                           HorizontalAlignment="Left"
+                                           Fill="#80777777"
+                                           Width="1"
+                                           Margin="1 0"/>
+                                <Border Grid.Column="1"
+                                        Margin="3 0 0 0"
+                                        Visibility="{Binding SelectedItem.HasPreview,Converter={StaticResource bool2visibility}}">
+                                    <FlowDocumentScrollViewer Document="{Binding SelectedItem.Preview}"/>
+                                </Border>
                             </Grid>
 
                         </DataTemplate>

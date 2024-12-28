@@ -21,7 +21,7 @@ namespace CurvaLauncher.Plugins.Test
             {
                 Blocks =
                 {
-                    new Paragraph(new Run("QWQ"))
+                    new Paragraph(new Run("QWQ 你好世界!"))
                     {
                         FontSize = 22,
                     }
