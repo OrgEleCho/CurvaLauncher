@@ -41,11 +41,12 @@ namespace CurvaLauncher.Plugins.Test
 
         public override IEnumerable<IQueryResult> Query(string query)
         {
-            for (int i = 0; i < ResultCount - 1; i++)
+            for (int i = 0; i < ResultCount - 2; i++)
             {
                 yield return new TestQueryResult($"{Title} {i}", Description, (float)i / ResultCount);
             }
 
+            yield return new TestMenuQueryResult();
             yield return new TestDocumentQueryResult();
         }
 

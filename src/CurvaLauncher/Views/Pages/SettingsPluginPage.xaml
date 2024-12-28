@@ -45,7 +45,7 @@
             </behaviors:Interaction.Triggers>
 
             <ListView.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:CurvaLauncherPluginInstance}">
+                <DataTemplate DataType="{x:Type models:PluginInstance}">
                     <StackPanel Margin="3 5">
                         <TextBlock Text="{Binding Plugin.Name}" FontSize="16"/>
                         <TextBlock Text="{Binding Plugin.Description}"

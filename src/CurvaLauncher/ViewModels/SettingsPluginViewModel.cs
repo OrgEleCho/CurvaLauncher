@@ -6,5 +6,5 @@ namespace CurvaLauncher.ViewModels;
 public partial class SettingsPluginViewModel : ObservableObject
 {
     [ObservableProperty]
-    private CurvaLauncherPluginInstance? _selectedPluginInstance;
+    private PluginInstance? _selectedPluginInstance;
 }

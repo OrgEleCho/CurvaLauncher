@@ -52,7 +52,7 @@ public partial class ConfigService : ObservableObject
         config = JsonSerializer.Deserialize<AppConfig>(fs, JsonUtils.Options) ?? new AppConfig();
     }
 
-    private AppConfig.PluginConfig GetPluginConfig(CurvaLauncherPluginInstance pluginInstance)
+    private AppConfig.PluginConfig GetPluginConfig(PluginInstance pluginInstance)
     {
         return new()
         {

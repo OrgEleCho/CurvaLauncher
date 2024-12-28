@@ -11,13 +11,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace CurvaLauncher.Models;
 
-public partial class CurvaLauncherPluginInstance : ObservableObject
+public partial class PluginInstance : ObservableObject
 {
     public IPlugin Plugin { get; }
     public Task InitTask { get; private set; } = Task.CompletedTask;
 
 
-    private CurvaLauncherPluginInstance(IPlugin plugin)
+    private PluginInstance(IPlugin plugin)
     {
         Plugin = plugin;
         if (plugin is II18nPlugin i18nPlugin)
@@ -78,7 +78,7 @@ public partial class CurvaLauncherPluginInstance : ObservableObject
         }
     }
 
-    public static bool TryCreate(Type type, [NotNullWhen(true)] out CurvaLauncherPluginInstance? curvaLauncherPlugin)
+    public static bool TryCreate(Type type, [NotNullWhen(true)] out PluginInstance? curvaLauncherPlugin)
     {
         curvaLauncherPlugin = null;
 
@@ -90,9 +90,9 @@ public partial class CurvaLauncherPluginInstance : ObservableObject
             var plugin = Activator.CreateInstance(type, CurvaLauncherContextImpl.Instance);
 
             if (plugin is IAsyncPlugin asyncPlugin)
-                curvaLauncherPlugin = new CurvaLauncherPluginInstance(asyncPlugin);
+                curvaLauncherPlugin = new PluginInstance(asyncPlugin);
             else if (plugin is ISyncPlugin syncPlugin)
-                curvaLauncherPlugin = new CurvaLauncherPluginInstance(syncPlugin);
+                curvaLauncherPlugin = new PluginInstance(syncPlugin);
 
             return curvaLauncherPlugin != null;
         }

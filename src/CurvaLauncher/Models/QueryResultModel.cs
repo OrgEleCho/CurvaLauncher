@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,25 +17,26 @@ namespace CurvaLauncher.Models;
 
 public partial class QueryResultModel : ObservableObject
 {
+    private readonly PluginInstance _pluginInstance;
     private readonly IQueryResult _rawQueryResult;
 
-    private QueryResultModel(float weight, string title, string description, ImageSource? icon, IQueryResult rawQueryResult)
+    public QueryResultModel(PluginInstance pluginInstance, IQueryResult rawQueryResult)
     {
-        Weight = weight;
-        Title = title;
-        Description = description;
-        _icon = icon;
+        _pluginInstance = pluginInstance;
         _rawQueryResult = rawQueryResult;
+        _icon = rawQueryResult.Icon;
+
+        SetupFallbackIcon(() => pluginInstance.Plugin.Icon);
     }
 
     private ImageSource? _icon;
 
-    public float Weight { get; }
-    public string Title { get; }
-    public string Description { get; }
+    public float Weight => _pluginInstance.Weight * _rawQueryResult.Weight;
+    public string Title => _rawQueryResult.Title;
+    public string Description => _rawQueryResult.Description;
     public ImageSource? Icon => _icon;
 
-    public void SetFallbackIcon(Func<ImageSource> iconFactory)
+    private void SetupFallbackIcon(Func<ImageSource> iconFactory)
     {
         if (_icon == null)
         {
@@ -58,70 +60,47 @@ public partial class QueryResultModel : ObservableObject
             .GetRequiredService<IMessenger>()
             .Send(SaveQueryMessage.Instance);
 
-        if (_rawQueryResult is ISyncActionQueryResult syncQueryResult)
+        try
         {
-            try
+            if (_rawQueryResult is ISyncActionQueryResult syncQueryResult)
             {
                 syncQueryResult.Invoke();
+                App.CloseLauncher();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            return null;
-        }
-        else if (_rawQueryResult is IAsyncActionQueryResult asyncQueryResult)
-        {
-            try
+            else if (_rawQueryResult is IAsyncActionQueryResult asyncQueryResult)
             {
                 await asyncQueryResult.InvokeAsync(App.GetLauncherCancellationToken());
+                App.CloseLauncher();
             }
-            catch (OperationCanceledException)
-            {
-                // pass
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            return null;
-        }
-        else if (_rawQueryResult is ISyncDocumentQueryResult syncDocumentQueryResult)
-        {
-            try
+            else if (_rawQueryResult is ISyncDocumentQueryResult syncDocumentQueryResult)
             {
                 return new DocumentResult(syncDocumentQueryResult.GenerateDocument());
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            return null;
-        }
-        else if (_rawQueryResult is IAsyncDocumentQueryResult asyncDocumentQueryResult)
-        {
-            try
+            else if (_rawQueryResult is IAsyncDocumentQueryResult asyncDocumentQueryResult)
             {
                 var document = await asyncDocumentQueryResult.GenerateDocumentAsync(cancellationToken);
                 return new DocumentResult(document);
             }
-            catch (Exception ex)
+            else if (_rawQueryResult is ISyncMenuQueryResult syncMenuQueryResult)
             {
-                MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
+                var menuItems = syncMenuQueryResult.GetMenuItems();
+                return new MenuResult(_pluginInstance, menuItems.ToList());
             }
-
-            return null;
+            else if (_rawQueryResult is IAsyncMenuQueryResult asyncMenuQueryResult)
+            {
+                var menuItems = await asyncMenuQueryResult.GetMenuItemsAsync(cancellationToken);
+                return new MenuResult(_pluginInstance, menuItems.ToList());
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // pass
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"{ex.Message}", "CurvaLauncher Result Invoke failed", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        App.CloseLauncher();
         return null;
-    }
-
-    public static QueryResultModel Create(CurvaLauncherPluginInstance pluginInstance, IQueryResult queryResult)
-    {
-        return new QueryResultModel(pluginInstance.Weight * queryResult.Weight, queryResult.Title, queryResult.Description, queryResult.Icon, queryResult);
     }
 }

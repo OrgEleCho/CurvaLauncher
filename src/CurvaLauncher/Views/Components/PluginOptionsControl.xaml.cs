@@ -10,9 +10,9 @@ namespace CurvaLauncher.Views.Components;
 
 public partial class PluginOptionsControl : UserControl
 {
-    public CurvaLauncherPluginInstance PluginInstance { get; }
+    public PluginInstance PluginInstance { get; }
 
-    public PluginOptionsControl(CurvaLauncherPluginInstance pluginInstance)
+    public PluginOptionsControl(PluginInstance pluginInstance)
     {
         PluginInstance = pluginInstance;
 

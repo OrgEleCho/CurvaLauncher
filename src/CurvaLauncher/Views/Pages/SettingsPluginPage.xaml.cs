@@ -25,7 +25,7 @@ namespace CurvaLauncher.Views.Pages
     /// </summary>
     public partial class SettingsPluginPage : Wpf.Ui.Controls.UiPage
     {
-        private readonly Dictionary<CurvaLauncherPluginInstance, PluginOptionsControl> _cachedPluginOptions = new();
+        private readonly Dictionary<PluginInstance, PluginOptionsControl> _cachedPluginOptions = new();
 
         public SettingsPluginPage(
             SettingsPluginViewModel viewModel,
@@ -47,7 +47,7 @@ namespace CurvaLauncher.Views.Pages
 
 
         [RelayCommand]
-        public void NavigateToPluginSettings(CurvaLauncherPluginInstance? pluginInstance)
+        public void NavigateToPluginSettings(PluginInstance? pluginInstance)
         {
             if (pluginInstance is null)
                 return;

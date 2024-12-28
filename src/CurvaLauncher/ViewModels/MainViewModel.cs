@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,16 +22,16 @@ public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessa
     private readonly ConfigService _configService;
 
     [ObservableProperty]
-    string? _lastInvokedQueryText;
+    private string? _lastInvokedQueryText;
 
     [ObservableProperty]
-    private string queryText = string.Empty;
+    private string _queryText = string.Empty;
 
     [ObservableProperty]
-    private QueryResultModel? selectedQueryResult;
+    private QueryResultModel? _selectedQueryResult;
 
     [ObservableProperty]
-    private int selectedQueryResultIndex = 0;
+    private int _selectedQueryResultIndex = 0;
 
     public ObservableCollection<QueryResultModel> QueryResults { get; } = new();
     public ObservableCollection<ImmediateResult> ImmediateResults { get; } = new();
@@ -83,13 +84,11 @@ public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessa
                         if (cancellationToken.IsCancellationRequested)
                             return;
 
-                        var model = QueryResultModel.Create(pluginInstance, result);
+                        var model = new QueryResultModel(pluginInstance, result);
                         queryResults.Add(model);
 
                         dispatcher.Invoke(() =>
                         {
-                            model.SetFallbackIcon(() => pluginInstance.Plugin.Icon);
-
                             for (int i = 0; i < queryResults.Count; i++)
                             {
                                 if (QueryResults.Count > i)
@@ -140,52 +139,105 @@ public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessa
     [RelayCommand]
     public async Task Invoke(QueryResultModel queryResult, CancellationToken cancellationToken)
     {
-        var imResult = await queryResult.Invoke(cancellationToken);
-
-        if (imResult is not null)
+        try
         {
-            ImmediateResults.Add(imResult);
+            var imResult = await queryResult.Invoke(cancellationToken);
 
-            OnPropertyChanged(nameof(ShowQueryResult));
-            OnPropertyChanged(nameof(ShowImmediateResults));
-            OnPropertyChanged(nameof(CurrentImmediateResult));
+            if (imResult is not null)
+            {
+                ImmediateResults.Add(imResult);
+
+                OnPropertyChanged(nameof(ShowQueryResult));
+                OnPropertyChanged(nameof(ShowImmediateResults));
+                OnPropertyChanged(nameof(CurrentImmediateResult));
+            }
+        }
+        catch (Exception)
+        {
+            // pass now
         }
     }
 
     [RelayCommand]
     public Task InvokeSelected(CancellationToken cancellationToken)
     {
-        if (SelectedQueryResult == null)
-            return Task.CompletedTask;
+        if (ImmediateResults.Count == 0)
+        {
+            if (SelectedQueryResult == null)
+                return Task.CompletedTask;
 
-        return InvokeCommand.ExecuteAsync(SelectedQueryResult);
+            var task = InvokeCommand.ExecuteAsync(SelectedQueryResult);
+
+            return task;
+        }
+        else if (CurrentImmediateResult is MenuResult menuResult)
+        {
+            if (menuResult.SelectedItem == null)
+                return Task.CompletedTask;
+
+            var task = InvokeCommand.ExecuteAsync(menuResult.SelectedItem);
+
+            return task;
+        }
+
+        return Task.CompletedTask;
     }
 
     [RelayCommand]
     public void SelectNext()
     {
-        if (QueryResults.Count == 0)
-            return;
+        if (ImmediateResults.Count == 0)
+        {
+            if (QueryResults.Count == 0)
+            {
+                return;
+            }
 
-        SelectedQueryResultIndex = (SelectedQueryResultIndex + 1) % QueryResults.Count;
+            SelectedQueryResultIndex = (SelectedQueryResultIndex + 1) % QueryResults.Count;
+        }
+        else if (CurrentImmediateResult is MenuResult menuResult)
+        {
+            if (menuResult.Items.Count == 0)
+            {
+                return;
+            }
+
+            menuResult.SelectedIndex = (menuResult.SelectedIndex + 1) % menuResult.Items.Count;
+        }
     }
 
     [RelayCommand]
     public void SelectPrev()
     {
-        if (QueryResults.Count == 0)
+        if (ImmediateResults.Count == 0)
         {
-            if (LastInvokedQueryText != null && string.IsNullOrWhiteSpace(QueryText))
-                QueryText = LastInvokedQueryText;
+            if (QueryResults.Count == 0)
+            {
+                if (LastInvokedQueryText != null && string.IsNullOrWhiteSpace(QueryText))
+                    QueryText = LastInvokedQueryText;
 
-            return;
+                return;
+            }
+
+            int newIndex = (SelectedQueryResultIndex - 1) % QueryResults.Count;
+            if (newIndex == -1)
+                newIndex = QueryResults.Count - 1;
+
+            SelectedQueryResultIndex = newIndex;
         }
+        else if (CurrentImmediateResult is MenuResult menuResult)
+        {
+            if (menuResult.Items.Count == 0)
+            {
+                return;
+            }
 
-        int newIndex = (SelectedQueryResultIndex - 1) % QueryResults.Count;
-        if (newIndex == -1)
-            newIndex = QueryResults.Count - 1;
+            int newIndex = (menuResult.SelectedIndex - 1) % menuResult.Items.Count;
+            if (newIndex == -1)
+                newIndex = menuResult.Items.Count - 1;
 
-        SelectedQueryResultIndex = newIndex;
+            menuResult.SelectedIndex = newIndex;
+        }
     }
 
     [RelayCommand]

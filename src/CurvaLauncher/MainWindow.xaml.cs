@@ -61,7 +61,7 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
         ViewModel.QueryResults.Clear();
         ViewModel.SelectedQueryResult = null;
 
-        resultBox.SelectedItem = null;
+        ResultBox.SelectedItem = null;
 
         App.CloseLauncher();
     }
@@ -69,8 +69,14 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
 
     private void QueryBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        if (ViewModel.ImmediateResults.Count != 0)
+        {
+            return;
+        }
+
         if (e.Key == Key.Up &&
             string.IsNullOrWhiteSpace(ViewModel.QueryText) &&
+            !string.IsNullOrWhiteSpace(ViewModel.LastInvokedQueryText) &&
             ViewModel.LastInvokedQueryText is string lastInvokedQueryText)
         {
             SetQueryText(lastInvokedQueryText);
@@ -79,17 +85,22 @@ public partial class MainWindow : Wpf.Ui.Controls.UiWindow
     }
 
     [RelayCommand]
-    public void ScrollToSelectedQueryResult()
+    public void ScrollToSelectedItem(ListView? listView)
     {
-        if (resultBox.SelectedItem is null ||
-            resultBox.SelectedIndex < 0)
+        if (listView is null)
+        {
+            return;
+        }
+
+        if (listView.SelectedItem is null ||
+            listView.SelectedIndex < 0)
         {
             return;
         }
 
         try
         {
-            resultBox.ScrollIntoView(resultBox.SelectedItem);
+            listView.ScrollIntoView(listView.SelectedItem);
         }
         catch { }
     }

@@ -24,7 +24,7 @@ public partial class PluginService
 
     public string Path { get; set; } = "Plugins";
 
-    public ObservableCollection<CurvaLauncherPluginInstance> PluginInstances { get; } = new();
+    public ObservableCollection<PluginInstance> PluginInstances { get; } = new();
 
     public PluginService(
         PathService pathService,
@@ -45,9 +45,9 @@ public partial class PluginService
         return dir;
     }
 
-    private void CoreLoadPlugins(out List<CurvaLauncherPluginInstance> plugins)
+    private void CoreLoadPlugins(out List<PluginInstance> plugins)
     {
-        plugins = new List<CurvaLauncherPluginInstance>();
+        plugins = new List<PluginInstance>();
 
         var dir = EnsurePluginDirectory();
         var dllFiles = dir.GetFiles("*.dll");
@@ -55,13 +55,13 @@ public partial class PluginService
         AppConfig config = _configService.Config;
 
         foreach (FileInfo dllFile in dllFiles)
-            if (CoreLoadPlugin(config, dllFile.FullName, out CurvaLauncherPluginInstance? plugin))
+            if (CoreLoadPlugin(config, dllFile.FullName, out PluginInstance? plugin))
             {
                 plugins.Add(plugin);
             }
     }
 
-    private bool CoreLoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out CurvaLauncherPluginInstance? pluginInstance)
+    private bool CoreLoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out PluginInstance? pluginInstance)
     {
         pluginInstance = null;
 
@@ -76,7 +76,7 @@ public partial class PluginService
             if (pluginType == null)
                 return false;
 
-            if (!CurvaLauncherPluginInstance.TryCreate(pluginType, out pluginInstance))
+            if (!PluginInstance.TryCreate(pluginType, out pluginInstance))
                 return false;
 
             var typeName = pluginType.FullName!;
@@ -117,7 +117,7 @@ public partial class PluginService
         }
     }
 
-    private void MoveCommandPluginsToTheBeginning(IList<CurvaLauncherPluginInstance> plugins)
+    private void MoveCommandPluginsToTheBeginning(IList<PluginInstance> plugins)
     {
         int indexStart = 0;
         for (int i = 1; i < plugins.Count; i++)
