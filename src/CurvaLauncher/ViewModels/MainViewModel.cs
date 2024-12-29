@@ -89,11 +89,11 @@ public partial class MainViewModel : ObservableObject, IRecipient<SaveQueryMessa
                         if (cancellationToken.IsCancellationRequested)
                             return;
 
-                        var model = new QueryResultModel(pluginInstance, result);
-                        queryResults.Add(model);
-
                         dispatcher.Invoke(() =>
                         {
+                            var model = new QueryResultModel(pluginInstance, result);
+                            queryResults.Add(model);
+
                             for (int i = 0; i < queryResults.Count; i++)
                             {
                                 if (QueryResults.Count > i)
