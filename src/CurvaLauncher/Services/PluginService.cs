@@ -14,6 +14,8 @@ using CurvaLauncher.Models;
 using CurvaLauncher.Plugins;
 using CurvaLauncher.PluginInteraction;
 using System.Diagnostics;
+using System.IO.Compression;
+using System.Runtime.Loader;
 
 namespace CurvaLauncher.Services;
 
@@ -50,65 +52,123 @@ public partial class PluginService
         plugins = new List<PluginInstance>();
 
         var dir = EnsurePluginDirectory();
-        var dllFiles = dir.GetFiles("*.dll");
 
         AppConfig config = _configService.Config;
 
-        foreach (FileInfo dllFile in dllFiles)
-            if (CoreLoadPlugin(config, dllFile.FullName, out PluginInstance? plugin))
+        foreach (var dllFile in dir.GetFiles("*.dll"))
+        {
+            if (CoreLoadDllPlugin(config, dllFile.FullName, out PluginInstance? plugin))
             {
                 plugins.Add(plugin);
             }
+        }
+
+        foreach (var zipFile in dir.GetFiles("*.zip"))
+        {
+            if (CoreLoadZipPlugin(config, zipFile.FullName, out PluginInstance? plugin))
+            {
+                plugins.Add(plugin);
+            }
+        }
     }
 
-    private bool CoreLoadPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out PluginInstance? pluginInstance)
+    private bool CoreLoadPluginFromAssembly(AppConfig config, Assembly assembly, [NotNullWhen(true)] out PluginInstance? pluginInstance)
+    {
+        pluginInstance = null;
+
+        Type? pluginType = assembly.ExportedTypes
+                .Where(type => type.IsAssignableTo(typeof(ISyncPlugin)) || type.IsAssignableTo(typeof(IAsyncPlugin)))
+                .FirstOrDefault();
+
+        if (pluginType == null)
+            return false;
+
+        if (!PluginInstance.TryCreate(pluginType, out pluginInstance))
+            return false;
+
+        var typeName = pluginType.FullName!;
+
+        if (config.Plugins.TryGetValue(typeName, out var pluginConfig))
+        {
+            var props = pluginInstance.Plugin.GetType().GetProperties()
+                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null
+                            || p.GetCustomAttribute<PluginI18nOptionAttribute>() is not null);
+
+            if (pluginConfig.Options != null)
+            {
+                foreach (var property in props)
+                {
+                    if (pluginConfig.Options.TryGetPropertyValue(property.Name, out var value))
+                    {
+                        var type = property.PropertyType;
+                        var val = JsonSerializer.Deserialize(value, type);
+                        property.SetValue(pluginInstance.Plugin, val);
+                    }
+                }
+            }
+
+            pluginInstance.IsEnabled = pluginConfig.IsEnabled;
+            pluginInstance.Weight = pluginConfig.Weight;
+        }
+        else
+        {
+            pluginInstance.IsEnabled = true;
+        }
+
+        return true;
+    }
+
+    private bool CoreLoadDllPlugin(AppConfig config, string dllFilePath, [NotNullWhen(true)] out PluginInstance? pluginInstance)
     {
         pluginInstance = null;
 
         try
         {
             var assembly = Assembly.LoadFile(dllFilePath);
+            return CoreLoadPluginFromAssembly(config, assembly, out pluginInstance);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Plugin load failed, {ex}");
+            return false;
+        }
+    }
 
-            Type? pluginType = assembly.ExportedTypes
-                .Where(type => type.IsAssignableTo(typeof(ISyncPlugin)) || type.IsAssignableTo(typeof(IAsyncPlugin)))
-                .FirstOrDefault();
+    private bool CoreLoadZipPlugin(AppConfig config, string zipFilePath, [NotNullWhen(true)] out PluginInstance? pluginInstance)
+    {
+        pluginInstance = null;
 
-            if (pluginType == null)
-                return false;
+        try
+        {
+            using var zipFile = File.OpenRead(zipFilePath);
+            using var zipArchive = new ZipArchive(zipFile, ZipArchiveMode.Read);
+            var assemblyLoadContext = new AssemblyLoadContext(null, false);
 
-            if (!PluginInstance.TryCreate(pluginType, out pluginInstance))
-                return false;
-
-            var typeName = pluginType.FullName!;
-
-            if (config.Plugins.TryGetValue(typeName, out var pluginConfig))
+            foreach (var entry in zipArchive.Entries)
             {
-                var props = pluginInstance.Plugin.GetType().GetProperties()
-                        .Where(p => p.GetCustomAttribute<PluginOptionAttribute>() is not null
-                            || p.GetCustomAttribute<PluginI18nOptionAttribute>() is not null);
-
-                if (pluginConfig.Options != null)
+                if (!entry.FullName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (var property in props)
-                    {
-                        if (pluginConfig.Options.TryGetPropertyValue(property.Name, out var value))
-                        {
-                            var type = property.PropertyType;
-                            var val = JsonSerializer.Deserialize(value, type);
-                            property.SetValue(pluginInstance.Plugin, val);
-                        }
-                    }
+                    continue;
                 }
 
-                pluginInstance.IsEnabled = pluginConfig.IsEnabled;
-                pluginInstance.Weight = pluginConfig.Weight;
-            }
-            else
-            {
-                pluginInstance.IsEnabled = true;
+                using var entryStream = entry.Open();
+
+                try
+                {
+                    var assembly = assemblyLoadContext.LoadFromStream(entryStream);
+
+                    if (pluginInstance is null)
+                    {
+                        CoreLoadPluginFromAssembly(config, assembly, out pluginInstance);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"DLL load failed, {ex}");
+                }
             }
 
-            return true;
+            return pluginInstance is not null;
         }
         catch (Exception ex)
         {

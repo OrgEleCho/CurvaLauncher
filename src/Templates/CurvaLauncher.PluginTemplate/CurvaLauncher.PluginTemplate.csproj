@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CurvaLauncher.Plugins" Version="0.7.1-beta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="I18n\EnUs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="I18n\ZhHans.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+</Project>

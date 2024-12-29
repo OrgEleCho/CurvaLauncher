@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "EleCho",
+    "identity": "CurvaLauncher.PluginTemplate",
+    "classifications": [
+        "CurvaLauncher",
+        "Library"
+    ],
+    "name": "CurvaLauncher Plugin",
+    "description": "Creates a CurvaLauncher plugin",
+    "tags": {
+        "language": "C#",
+        "type": "project"
+    },
+    "shortName": "clp",
+    "sourceName": "CurvaLauncher.PluginTemplate",
+    "symbols": {
+        "EnableI18n": {
+            "type": "parameter",
+            "datatype": "bool",
+            "defaultValue": "true"
+        }
+    },
+    "sources": [
+        {
+            "modifiers": [
+                {
+                    "condition": "(!EnableI18n)",
+                    "exclude": [
+                        "I18n/EnUs.xaml",
+                        "I18n/ZhHans.xaml"
+                    ]
+                }
+            ]
+        }
+    ]
+}

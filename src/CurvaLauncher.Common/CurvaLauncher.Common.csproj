@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="../CurvaLauncher.props" />
+
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -11,6 +13,18 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RootNamespace>CurvaLauncher</RootNamespace>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Description>Common library of CurvaLauncher</Description>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/OrgEleCho/CurvaLauncher</RepositoryUrl>
+    <PackageIcon>Icon128.png</PackageIcon>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\assets\Icon128.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

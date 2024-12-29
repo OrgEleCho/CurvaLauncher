@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <sys:String x:Key="StrPluginName">Sample Plugin</sys:String>
+    <sys:String x:Key="StrPluginDescription">This is a plugin with i18n support</sys:String>
+
+    <sys:String x:Key="StrTestResultTitle">Test Plugin</sys:String>
+    <sys:String x:Key="StrTestResultDescription">Your plugin is running well</sys:String>
+</ResourceDictionary>
