@@ -5,6 +5,7 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <GenerateDependencyFile>true</GenerateDependencyFile>
     
     <!-- 自动复制NuGet包到输出目录 -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
