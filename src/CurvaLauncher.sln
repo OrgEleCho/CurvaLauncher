@@ -39,12 +39,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CurvaLauncher.Plugins.Every
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F36EDE5B-9C67-44F4-87A9-792390FECF85}"
 	ProjectSection(SolutionItems) = preProject
+		Plugins\CopyAfterBuild.targets = Plugins\CopyAfterBuild.targets
 		CurvaLauncher.props = CurvaLauncher.props
+		Plugins\PackAfterBuild.targets = Plugins\PackAfterBuild.targets
+		Plugins\Plugin.props = Plugins\Plugin.props
 	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{45D0660D-436E-4419-AEB9-B6ED5BC3E0ED}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurvaLauncher.PluginTemplate", "Templates\CurvaLauncher.PluginTemplate\CurvaLauncher.PluginTemplate.csproj", "{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -174,14 +173,6 @@ Global
 		{C7AC6C75-89C6-42E5-8D2A-D06994949F05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C7AC6C75-89C6-42E5-8D2A-D06994949F05}.Release|x64.ActiveCfg = Release|x64
 		{C7AC6C75-89C6-42E5-8D2A-D06994949F05}.Release|x64.Build.0 = Release|x64
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Debug|x64.Build.0 = Debug|Any CPU
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Release|Any CPU.Build.0 = Release|Any CPU
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Release|x64.ActiveCfg = Release|Any CPU
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -198,7 +189,6 @@ Global
 		{F3F6F783-4636-457F-80E1-CC489F524B43} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
 		{8CFC1C29-51AA-45ED-A91F-01F513182002} = {4A86F98E-B276-4F75-9847-8D0E4280D887}
 		{C7AC6C75-89C6-42E5-8D2A-D06994949F05} = {BAACD50D-2F94-4A65-8B13-49031D617CAC}
-		{702E5FF3-99D0-4FD3-86E2-04C0A2E82560} = {45D0660D-436E-4419-AEB9-B6ED5BC3E0ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3FC4E11A-3D67-43DE-84D8-DCA1841F0D71}

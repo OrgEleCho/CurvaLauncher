@@ -1,0 +1,10 @@
+<Project>
+  
+  <Target Name="CopyOutput" AfterTargets="Build">
+    <MakeDir Directories="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins"/>
+    <ZipDirectory SourceDirectory="$(OutputPath)"
+                  DestinationFile="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(AssemblyName).zip" 
+                  Overwrite="true"/>
+  </Target>
+
+</Project>

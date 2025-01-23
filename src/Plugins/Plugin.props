@@ -1,0 +1,19 @@
+<Project>
+
+  <!-- 所有自带插件公共属性 -->
+  
+  <PropertyGroup>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CurvaLauncher.Common\CurvaLauncher.Common.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    
+    <PackageId>CurvaLauncher.PluginTemplate</PackageId>
+    <PackageVersion>0.7.1-beta</PackageVersion>
+    <Authors>EleCho</Authors>
+    <PackageProjectUrl>https://github.com/OrgEleCho/CurvaLauncher</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <PackageType>Template</PackageType>
+    <LocalizeTemplates>false</LocalizeTemplates>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <PackageIcon>Icon128.png</PackageIcon>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <NoWarn>$(NoWarn);NU5110;NU5111;NU5128</NoWarn>
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.TemplateEngine.Tasks" Version="*" PrivateAssets="all" IsImplicitlyDefined="true"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="content/**/*" />
+    <Compile Remove="**\*" />
+    <None Include="..\CurvaLauncher\Assets\Icon128.png" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+</Project>

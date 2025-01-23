@@ -6,16 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization.Metadata;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using CurvaLauncher.Models;
 using CurvaLauncher.Plugins;
-using CurvaLauncher.PluginInteraction;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Runtime.Loader;
+using IOPath = System.IO.Path;
 
 namespace CurvaLauncher.Services;
 
@@ -141,34 +139,20 @@ public partial class PluginService
         try
         {
             using var zipFile = File.OpenRead(zipFilePath);
-            using var zipArchive = new ZipArchive(zipFile, ZipArchiveMode.Read);
-            var assemblyLoadContext = new AssemblyLoadContext(null, false);
+            string extractDir = IOPath.Combine(".cache", IOPath.GetFileNameWithoutExtension(zipFilePath));
+            if (Directory.Exists(extractDir))
+                Directory.Delete(extractDir, true);
+            ZipFile.ExtractToDirectory(zipFile, extractDir);
 
-            foreach (var entry in zipArchive.Entries)
-            {
-                if (!entry.FullName.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
+            var manifestJson = File.ReadAllText(IOPath.Combine(extractDir, "Manifest.json"));
+            var manifest = JsonSerializer.Deserialize<PluginManifest>(manifestJson);
+            if (manifest is null)
+                return false;
 
-                using var entryStream = entry.Open();
-
-                try
-                {
-                    var assembly = assemblyLoadContext.LoadFromStream(entryStream);
-
-                    if (pluginInstance is null)
-                    {
-                        CoreLoadPluginFromAssembly(config, assembly, out pluginInstance);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine($"DLL load failed, {ex}");
-                }
-            }
-
-            return pluginInstance is not null;
+            var assemblyPath = IOPath.GetFullPath(IOPath.Combine(extractDir, manifest.Assembly));
+            var alc = new PluginAssemblyLoadContext(manifest.ID, assemblyPath);
+            Assembly assembly = alc.LoadFromAssemblyPath(assemblyPath);
+            return CoreLoadPluginFromAssembly(config, assembly, out pluginInstance);
         }
         catch (Exception ex)
         {

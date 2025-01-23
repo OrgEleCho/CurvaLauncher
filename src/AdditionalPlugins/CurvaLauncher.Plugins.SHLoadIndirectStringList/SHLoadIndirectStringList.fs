@@ -31,20 +31,6 @@ type public StringQueryResult(title, desc, weight) =
 type public SHLoadIndirectStringPlugin(context: CurvaLauncherContext) = 
     inherit SyncPlugin(context)
 
-    static do
-        AppDomain.CurrentDomain.add_AssemblyResolve(fun _ args ->
-            let asmName = new AssemblyName(args.Name)
-            let dllName = "FSharp.Core.dll"
-            if asmName.Name = "FSharp.Core" then
-                [|
-                    (Path.Combine(AppContext.BaseDirectory, dllName))
-                    (Path.Combine(AppContext.BaseDirectory, "Libraries", dllName));
-                    (Path.Combine(Directory.GetCurrentDirectory(), dllName))
-                |].Where(File.Exists).First() |> Assembly.LoadFrom
-            else
-                null
-        )
-
     [<DllImport("shlwapi.dll", EntryPoint = "SHLoadIndirectString", CharSet = CharSet.Unicode, ExactSpelling = true)>]
     static extern uint SHLoadIndirectString(string pszSource, char& pszOutBuf, int cchOutBuf, nativeint ppvReserved)
 

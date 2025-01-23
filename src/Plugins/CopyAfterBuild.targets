@@ -1,0 +1,13 @@
+<Project>
+  
+  <Target Name="CopyOutput" AfterTargets="Build">
+    <ItemGroup>
+      <_CompileOutput Include="$(OutputPath)\**"/>
+    </ItemGroup>
+
+    <Copy SourceFiles="@(_CompileOutput)"
+          DestinationFolder="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\%(RecursiveDir)"
+          SkipUnchangedFiles="true"/>
+  </Target>
+
+</Project>

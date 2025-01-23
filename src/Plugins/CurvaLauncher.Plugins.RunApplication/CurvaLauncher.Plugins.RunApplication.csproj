@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Plugin.props" />
+  
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -11,10 +13,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,12 +30,6 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="CopyOutput" AfterTargets="Build">
-    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).dll" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).dll"></Copy>
-  </Target>
-
-  <Target Name="CopyOutputPdb" AfterTargets="Build" Condition="'$(Configuration)'=='Debug'">
-    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).pdb" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).pdb"></Copy>
-  </Target>
+  <Import Project="..\CopyAfterBuild.targets" />
   
 </Project>

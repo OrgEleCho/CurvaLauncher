@@ -1,0 +1,25 @@
+<Project>
+
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <RuntimeIdentifier>win</RuntimeIdentifier>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+
+    <CurvaLauncherPath>../CurvaLauncher/build</CurvaLauncherPath>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="CurvaLauncher.Plugins" Version="0.7.1-beta">
+      <Private>false</Private>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  
+</Project>

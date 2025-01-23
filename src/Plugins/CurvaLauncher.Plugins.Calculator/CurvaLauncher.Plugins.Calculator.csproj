@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\Plugin.props" />
+  
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -7,10 +9,6 @@
     <UseWPF>true</UseWPF>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -27,12 +25,6 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <Target Name="CopyOutput" AfterTargets="Build">
-    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).dll" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).dll"></Copy>
-  </Target>
+  <Import Project="..\CopyAfterBuild.targets" />
 
-  <Target Name="CopyOutputPdb" AfterTargets="Build" Condition="'$(Configuration)'=='Debug'">
-    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).pdb" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).pdb"></Copy>
-  </Target>
-  
 </Project>
