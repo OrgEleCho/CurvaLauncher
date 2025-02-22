@@ -1,0 +1,16 @@
+<Project>
+
+  <Target Name="PackPlugin" AfterTargets="AfterBuild">
+    <PropertyGroup>
+      <ZipFileDestinationFolder Condition="$(ZipFileDestinationFolder) == ''">$(CurvaLauncherPath)/Plugins</ZipFileDestinationFolder>
+    </PropertyGroup>
+
+    <ZipDirectory
+        Condition="$(NoZipOutputPlugin) != 'true' And Exists($(ZipFileDestinationFolder))"
+        SourceDirectory="$(OutputPath)"
+        DestinationFile="$(ZipFileDestinationFolder)/$(AssemblyName).zip"
+        Overwrite="true"
+      />
+  </Target>
+
+</Project>

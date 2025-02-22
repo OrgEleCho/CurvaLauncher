@@ -1,9 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="StrPluginName">示例插件</sys:String>
-    <sys:String x:Key="StrPluginDescription">这是一个支持本地化的插件</sys:String>
-
-    <sys:String x:Key="StrTestResultTitle">测试插件</sys:String>
-    <sys:String x:Key="StrTestResultDescription">你的插件运行良好</sys:String>
-</ResourceDictionary>

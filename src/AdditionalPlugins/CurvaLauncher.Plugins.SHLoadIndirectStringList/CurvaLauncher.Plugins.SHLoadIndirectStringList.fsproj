@@ -1,11 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\Plugins\Plugin.props" />
+  
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
+    <GenerateDependencyFile>true</GenerateDependencyFile>
     
     <!-- 自动复制NuGet包到输出目录 -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,25 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\CurvaLauncher.Plugins\CurvaLauncher.Plugins.csproj" />
+    <Content Include="Manifest.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="8.0.101" />
   </ItemGroup>
 
-
-  <Target Name="CopyFSharpCore" AfterTargets="Build">
-    <Copy SourceFiles="$(OutDir)\FSharp.Core.dll" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Libraries\FSharp.Core.dll"></Copy>
-  </Target>
-
-  <Target Name="CopyOutputDebug" AfterTargets="Build" Condition="'$(Configuration)'=='Debug'">
-    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).dll" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).dll"></Copy>
-    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).pdb" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\Plugins\$(MSBuildProjectName).pdb"></Copy>
-  </Target>
-
-  <Target Name="CopyOutputRelease" AfterTargets="Build" Condition="'$(Configuration)'=='Release'">
-    <Copy SourceFiles="$(OutDir)\$(MSBuildProjectName).dll" DestinationFiles="..\..\CurvaLauncher\bin\$(Configuration)\$(TargetFramework)\AdditionalPlugins\$(MSBuildProjectName).dll"></Copy>
-  </Target>
+  <Import Project="..\..\Plugins\PackAfterBuild.targets" />
 
 </Project>

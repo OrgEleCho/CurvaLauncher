@@ -52,7 +52,6 @@ namespace CurvaLauncher
             services.AddSingleton<HotkeyService>();
             services.AddSingleton<PluginService>();
             services.AddSingleton<ConfigService>();
-            services.AddSingleton<LibraryService>();
             services.AddSingleton<ThemeService>();
             services.AddSingleton<I18nService>();
             services.AddTransient<PageService>();
@@ -81,8 +80,6 @@ namespace CurvaLauncher
                 .GetRequiredService<HotkeyService>();
             var themeService = ServiceProvider
                 .GetRequiredService<ThemeService>();
-            var libraryService = ServiceProvider
-                .GetRequiredService<LibraryService>();
             var globalizationService = ServiceProvider
                 .GetRequiredService<I18nService>();
 
@@ -90,9 +87,6 @@ namespace CurvaLauncher
             //// 初始化窗口
             //new WindowInteropHelper(mainWindow)
             //    .EnsureHandle();
-
-            // 加载库
-            libraryService.Setup();
 
             // 加载插件
             pluginService.LoadAllPlugins();
@@ -215,7 +209,7 @@ namespace CurvaLauncher
 
         public static void CloseLauncher()
         {
-            var mainWindow = 
+            var mainWindow =
                 ServiceProvider.GetRequiredService<MainWindow>();
 
             mainWindow.ViewModel.QueryText = string.Empty;
